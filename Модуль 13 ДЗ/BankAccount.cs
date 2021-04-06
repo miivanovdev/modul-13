@@ -9,12 +9,27 @@ using System.Threading.Tasks;
 namespace Модуль_13_ДЗ
 {
     class BankAccount : INotifyPropertyChanged
-    {
-        public decimal Amount { get; set; }
+    {        
         public bool IsCapitalized { get; protected set; }
         public int ClientId { get; set; }
         public DateTime CreatedDate { get; set; }
         public int DepartmentId { get; set; }
+
+        public decimal amount;
+        public decimal Amount
+        {
+            get
+            {
+                return amount;
+            }
+            set
+            {
+                if (value < 0)
+                    value *= (-1);
+
+                amount = value;
+            }
+        }
 
         private DateTime currentDate;
         public DateTime CurrentDate

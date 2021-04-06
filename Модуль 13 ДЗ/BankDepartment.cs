@@ -36,6 +36,23 @@ namespace Модуль_13_ДЗ
         
         public uint MinTerm { get; set; }
 
+        public decimal minAmount;
+        public decimal MinAmount
+        {
+            get
+            {
+                return minAmount;
+            }
+            set
+            {
+                if (value < 0)
+                    value *= (-1);
+
+                minAmount = value;
+            }
+
+        }
+
         protected int departmentId;
         public int DepartmentId
         {
@@ -62,11 +79,12 @@ namespace Модуль_13_ДЗ
             id = 0;
         }
 
-        public BankDepartment(string name, uint minTerm, decimal rate, bool isEmpty = false)
+        public BankDepartment(string name, decimal minAmount, uint minTerm, decimal rate, bool isEmpty = false)
         {
             Name = name;
             MinTerm = minTerm;
             InterestRate = rate;
+            MinAmount = minAmount;
 
             if (!isEmpty)
                 DepartmentId = NextId();
@@ -96,6 +114,11 @@ namespace Модуль_13_ДЗ
 
             if (clientId > 0 && DepartmentId > 0)
                 Accounts = new ObservableCollection<BankAccount>(accounts.Where(x => x.ClientId == clientId && x.DepartmentId == DepartmentId));
-        }                
+        }      
+        
+        public void OpenAccount(List<BankAccount> accounts, Client client)
+        {
+            accounts.Add(new BankAccount(MinAmount, InterestRate, client.ClientId, DepartmentId, DateTime.Now));
+        }
     }
 }

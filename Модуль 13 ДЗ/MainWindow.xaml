@@ -142,7 +142,7 @@
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition/>
-                                <ColumnDefinition MaxWidth="18"/>
+                                <ColumnDefinition MinWidth="18"/>
                             </Grid.ColumnDefinitions>
                             <TextBox Name="PART_EditableTextBox"
                                  Style="{StaticResource ComboBoxTextBoxStyle}"
@@ -153,7 +153,7 @@
                                      Style="{StaticResource ComboBoxButtonStyle}"
                                      Focusable="False"
                                      IsChecked="{Binding Path=IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
-                                      ClickMode="Press">
+                                     ClickMode="Press">
                                 <Path Grid.Column="1"
                                   HorizontalAlignment="Center"
                                   VerticalAlignment="Center"
@@ -213,21 +213,36 @@
         <DockPanel Grid.Column="0">
             <Grid DockPanel.Dock="Top">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="3*"/>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-                <ComboBox Grid.Column="0" x:Name="department"  
+                <StackPanel Grid.Column="0">
+                    <TextBlock Text="Департамент"/>
+                    <ComboBox  x:Name="department"  
                       ItemsSource="{Binding BankDepartments}"
                       DisplayMemberPath="Name" 
                       SelectedValuePath="Name"
-                      SelectedItem="{Binding SelectedDepartment, Mode=TwoWay}"
+                      SelectedItem="{Binding SelectedDepartment, Mode=TwoWay}"                      
                       />
-                
-                <TextBox Grid.Column="1" ToolTip="Ставка по вкладам" Text="{Binding ElementName = department, Path = SelectedItem.InterestRate}" Style="{StaticResource bxStyle}"/>
+                </StackPanel>
 
-                <TextBox Grid.Column="2" ToolTip="Минимальный срок вклада" Text="{Binding ElementName = department, Path = SelectedItem.MinTerm}" Style="{StaticResource bxStyle}"/>
+                <StackPanel Grid.Column ="1">
+                    <TextBlock  Text="Ставка по вкладам"/>
+                    <TextBox Padding="2" ToolTip="Ставка по вкладам" Text="{Binding ElementName = department, Path = SelectedItem.InterestRate}" Style="{StaticResource bxStyle}"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="2">
+                    <TextBlock Text="Минимальная сумма вклада"/>
+                    <TextBox Padding="2" ToolTip="Минимальная сумма вклада" Text="{Binding ElementName = department, Path = SelectedItem.MinAmount}" Style="{StaticResource bxStyle}"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column ="3">
+                    <TextBlock Text="Минимальный срок вклада"/>
+                    <TextBox Padding="2"  ToolTip="Минимальный срок вклада" Text="{Binding ElementName = department, Path = SelectedItem.MinTerm}" Style="{StaticResource bxStyle}"/>
+                </StackPanel>                
             </Grid>
             
 

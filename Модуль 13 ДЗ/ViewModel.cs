@@ -38,10 +38,10 @@ namespace Модуль_13_ДЗ
                         
             BankDepartments = new List<BankDepartment>()
             {
-                new BankDepartment("Не выбрано!", 0, 0, true),
-                new BankDepartment("Отдел по работе с физическими лицами", 6, 15),
-                new BankDepartment("Отдел по работе с юридическими лицами", 12, 15),
-                new BankDepartment("Отдел по работе с привелигированными клиентами", 18, 20)
+                new BankDepartment("Не выбрано!", 0, 0, 0, true),
+                new BankDepartment("Отдел по работе с физическими лицами", 50000, 6, 15),
+                new BankDepartment("Отдел по работе с юридическими лицами", 30000, 12, 15),
+                new BankDepartment("Отдел по работе с привелигированными клиентами", 100000, 18, 20)
             };
             
             Accounts = new List<BankAccount>()
@@ -181,29 +181,46 @@ namespace Модуль_13_ДЗ
             }      
         }
 
-        /// <summary>
-        /// Команда добавления счета
-        /// </summary>
-        private RelayCommand addAccountCommand;
 
-        public RelayCommand AddAccountCommand
+        #region.Commands
+        /// <summary>
+        /// Команда открытия счета
+        /// </summary>
+        private RelayCommand openAccountCommand;
+
+        public RelayCommand OpenAccountCommand
         {
             get
             {
-                return addAccountCommand ??
-                (addAccountCommand = new RelayCommand(new Action<object>(AddAccount)
+                return openAccountCommand ??
+                (openAccountCommand = new RelayCommand(new Action<object>(OpenAccount),
+                                                      new Func<object, bool>(AccountCanBeOpened)
                 ));
             }
         }
 
         /// <summary>
-        /// Метод добавления счета
+        /// Метод проверки возможности вызова команды открытия счета
         /// </summary>
         /// <param name="o"></param>
-        private void AddAccount(object o)
+        /// <returns></returns>
+        private bool AccountCanBeOpened(object o)
         {
-            //SelectedDepartment.Accounts.Add(new BankAccount(0, 0, SelectedDepartment.InterestRate, SelectedClient.ClientId, SelectedDepartment.DepartmentId, DateTime.Now));
-        }        
+            return SelectedDepartment != null && 
+                   SelectedClient != null &&
+                   SelectedDepartment.DepartmentId > 0;
+        }
+
+        /// <summary>
+        /// Метод открытия счета
+        /// </summary>
+        /// <param name="o"></param>
+        private void OpenAccount(object o)
+        {
+            SelectedDepartment.OpenAccount(Accounts, SelectedClient);
+            SelectedDepartment.GetAccounts(Accounts, SelectedClient == null ? 0 : SelectedClient.ClientId);
+        }
+        #endregion
 
         /// <summary>
         /// Метод запуска события изменения свойства
