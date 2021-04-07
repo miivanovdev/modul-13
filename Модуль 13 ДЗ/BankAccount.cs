@@ -15,7 +15,7 @@ namespace Модуль_13_ДЗ
         public DateTime CreatedDate { get; set; }
         public int DepartmentId { get; set; }
 
-        public decimal amount;
+        private decimal amount;
         public decimal Amount
         {
             get
@@ -28,6 +28,7 @@ namespace Модуль_13_ДЗ
                     value *= (-1);
 
                 amount = value;
+                NotifyPropertyChanged(nameof(Amount));
             }
         }
 

@@ -10,11 +10,13 @@ using System.Runtime.CompilerServices;
 using System.Collections.Specialized;
 using System.Collections.ObjectModel;
 using System.Collections;
+using System.Windows;
 
 namespace Модуль_13_ДЗ
 {
     class ViewModel : INotifyPropertyChanged
     {
+        private DialogWindow dialogWindow;
         public ObservableCollection<Client> Clients { get; set; }
         public List<BankAccount> Accounts { get; set; }
         public List<BankDepartment> BankDepartments { get; set; }
@@ -24,7 +26,7 @@ namespace Модуль_13_ДЗ
         public ViewModel()
         {
             #region.Начальная инициализация
-            
+            /*
             Clients = new ObservableCollection<Client>()
             {
                 new Client("Кулибяка", "Вадим", "Натанович", 27450, 12300),
@@ -58,9 +60,9 @@ namespace Модуль_13_ДЗ
                 new BankAccount(3012250,20,6, 3, new DateTime(2018, 10, 12), true),
                 new BankAccount(2012250,15,7, 3, new DateTime(2019, 11, 21), true),
             };
-            
+            */
             #endregion
-            //InitData();
+            InitData();
             PropertyChanged += new PropertyChangedEventHandler(SelectionChangeHandler);
 
             SelectedDepartment = BankDepartments.First();
@@ -149,7 +151,7 @@ namespace Модуль_13_ДЗ
             File.WriteAllText("Departments.json", jsonDepartments);
 
             string jsonClients = JsonConvert.SerializeObject(Clients);
-            File.WriteAllText("Clients.json", jsonDepartments);
+            File.WriteAllText("Clients.json", jsonClients);
 
             string jsonAccounts = JsonConvert.SerializeObject(Accounts);
             File.WriteAllText("Accounts.json", jsonAccounts);
@@ -221,6 +223,54 @@ namespace Модуль_13_ДЗ
             SelectedDepartment.GetAccounts(Accounts, SelectedClient == null ? 0 : SelectedClient.ClientId);
         }
         #endregion
+
+        /// <summary>
+        /// Команда для списания средств со счета
+        /// </summary>
+        private RelayCommand withdrawCommand;
+
+        public RelayCommand WithdrawCommand
+        {
+            get
+            {
+                return withdrawCommand ??
+                (withdrawCommand = new RelayCommand(new Action<object>(Withdraw)));
+            }
+        }
+
+        /// <summary>
+        /// Метод снятия со счета
+        /// </summary>
+        /// <param name="o"></param>
+        private void Withdraw(object o)
+        {
+            try
+            {
+                SelectedAccount.Amount -= ShowDialog();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }            
+        }
+
+        private decimal ShowDialog()
+        {
+            decimal result = 0;
+            bool flag = false;
+
+            while(!flag)
+            {
+                dialogWindow = new DialogWindow("Снятие средств со счета");
+
+                if (dialogWindow.ShowDialog() == true)
+                {
+                    flag = Decimal.TryParse(dialogWindow.Amount, out result);
+                }
+            }
+            
+            return result;
+        }
 
         /// <summary>
         /// Метод запуска события изменения свойства

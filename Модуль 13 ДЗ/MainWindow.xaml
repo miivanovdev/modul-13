@@ -141,8 +141,8 @@
                     <ControlTemplate TargetType="{x:Type ComboBox}">
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition/>
-                                <ColumnDefinition MinWidth="18"/>
+                                <ColumnDefinition Width="9*"/>
+                                <ColumnDefinition Width="1*"/>
                             </Grid.ColumnDefinitions>
                             <TextBox Name="PART_EditableTextBox"
                                  Style="{StaticResource ComboBoxTextBoxStyle}"
@@ -199,13 +199,14 @@
 
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition MinWidth="500" Width="*"/>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition MinWidth="500" Width="*"/>
+            <ColumnDefinition Width="4*"/>
+            <ColumnDefinition MinWidth="5"  Width="Auto"/>
+            <ColumnDefinition Width="3*"/>
         </Grid.ColumnDefinitions>
         <GridSplitter Grid.Column="1" 
                       ShowsPreview="False" 
-                      Width="2"
+                      MinWidth="3"
+                      BorderThickness="0.5"
                       Background="AntiqueWhite"
                       HorizontalAlignment="Center"
                       VerticalAlignment="Stretch" />
@@ -225,7 +226,10 @@
                       ItemsSource="{Binding BankDepartments}"
                       DisplayMemberPath="Name" 
                       SelectedValuePath="Name"
-                      SelectedItem="{Binding SelectedDepartment, Mode=TwoWay}"                      
+                      SelectedItem="{Binding SelectedDepartment, Mode=TwoWay}" 
+                      Margin="0 5 0 0"
+                      HorizontalContentAlignment="Stretch"
+                      Height="22"
                       />
                 </StackPanel>
 
@@ -256,23 +260,39 @@
                         <GridViewColumn DisplayMemberBinding="{Binding Path=FirstName}">Имя</GridViewColumn>
                         <GridViewColumn DisplayMemberBinding="{Binding Path=Surname}" Width="100">Фамилия</GridViewColumn>
                         <GridViewColumn DisplayMemberBinding="{Binding Path=SecondName}">Отчество</GridViewColumn>
-                        <GridViewColumn DisplayMemberBinding="{Binding Path=CurrentIncome}">Текущие доходы</GridViewColumn>
-                        <GridViewColumn DisplayMemberBinding="{Binding Path=CurrentCosts}">Текущие расходы</GridViewColumn>
-                        <GridViewColumn DisplayMemberBinding="{Binding Path=CurrentBalance}">Текущие баланс</GridViewColumn>
                     </GridView>
                 </ListView.View>
             </ListView>
         </DockPanel>
         <DockPanel Grid.Column="2">
-            <GroupBox DockPanel.Dock="Top">
-                <StackPanel  Orientation="Horizontal">
-                    <TextBox Text="{Binding ElementName=clients, Path = SelectedItem.FirstName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource bxStyle}" />
-                    <TextBox Text="{Binding ElementName=clients, Path = SelectedItem.Surname, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource bxStyle}" />
-                    <TextBox Text="{Binding ElementName=clients, Path = SelectedItem.SecondName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource bxStyle}" />
-                    <TextBox Text="{Binding ElementName=clients, Path = SelectedItem.Income, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource bxStyle}" />
-                    <TextBox Text="{Binding ElementName=clients, Path = SelectedItem.Costs, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource bxStyle}" />
+            <Grid DockPanel.Dock="Top">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0">
+                    <TextBlock Text="Фамилия"/>
+                    <TextBox Text="{Binding ElementName=clients, Path = SelectedItem.FirstName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource bxStyle}" />    
                 </StackPanel>
-            </GroupBox>
+
+                <StackPanel Grid.Column="1">
+                    <TextBlock Text="Имя"/>
+                    <TextBox Text="{Binding ElementName=clients, Path = SelectedItem.Surname, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource bxStyle}" />
+                </StackPanel>
+
+                <StackPanel Grid.Column="2">
+                    <TextBlock Text="Отчество"/>
+                    <TextBox Grid.Column="2" Text="{Binding ElementName=clients, Path = SelectedItem.SecondName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource bxStyle}" />
+                </StackPanel>
+
+                <StackPanel Grid.Column="3">
+                    <TextBlock Text="Итого по вкладам"/>
+                    <TextBox Text="{Binding ElementName=clients, Path = SelectedItem.Income, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource bxStyle}" />
+                </StackPanel>
+                               
+            </Grid>
 
             <DataGrid x:Name="accounts" 
                       DockPanel.Dock="Top" 
@@ -304,7 +324,8 @@
                 </DataGrid.Columns>
                 <DataGrid.ContextMenu>
                     <ContextMenu>
-                        <MenuItem Header="Открыть счет" Command="{Binding AddAccountCommand}" />
+                        <MenuItem Header="Открыть счет" Command="{Binding OpenAccountCommand}" />
+                        <MenuItem Header="Снять со счета" Command="{Binding WithdrawCommand}" />
                     </ContextMenu>                    
                 </DataGrid.ContextMenu>
             </DataGrid>
