@@ -19,20 +19,11 @@ namespace Модуль_13_ДЗ
     /// </summary>
     public partial class DialogWindow : Window
     {
-        public DialogWindow(string title)
+        public DialogWindow(DialogViewModel viewModel, string title)
         {
-            Title = title;
             InitializeComponent();
-        }
-
-        private void Accept_Click(object sender, RoutedEventArgs e)
-        {
-            this.DialogResult = true;
-        }
-
-        public string Amount
-        {
-            get { return AmountTb.Text; }
+            Title = title;
+            DataContext = viewModel;
         }
     }
 }

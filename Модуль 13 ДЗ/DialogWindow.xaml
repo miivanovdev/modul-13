@@ -5,22 +5,50 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         xmlns:local="clr-namespace:Модуль_13_ДЗ"
+        local:DialogCloser.DialogResult="{Binding DialogResult}"
         mc:Ignorable="d"
         Title="" Height="250" Width="400">
+
+    <Window.Resources>
+
+        <Style TargetType="TextBox">
+        <Style.Triggers>
+            <Trigger Property="Validation.HasError" Value="True">
+                <Setter Property="ToolTip"
+                Value="{Binding RelativeSource={RelativeSource Self},
+                    Path=(Validation.Errors)[0].ErrorContent}" />
+                <Setter Property="Foreground" Value="Red" />
+            </Trigger>
+        </Style.Triggers>
+        </Style>
+    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition/>
-            <RowDefinition/>
-            <RowDefinition/>
+            <RowDefinition MinHeight="50" Height="3*"/>
+            <RowDefinition MinHeight="50" Height="2*"/>
         </Grid.RowDefinitions>
 
-        <StackPanel Grid.Row="1" Margin="5">
+        <StackPanel Grid.Row="0" Margin="5" VerticalAlignment="Center">
             <TextBlock FontSize="14" Text="Сумма :"/>
-            <TextBox Padding="5" Name="AmountTb" MinWidth="250" Text="{Binding Amount}"/>
+            <TextBox Padding="5" Name="AmountTb" MinWidth="250">
+                <TextBox.Text>
+                    <Binding Path="Data.Amount" NotifyOnValidationError="True">
+                        <Binding.ValidationRules>
+                            <DataErrorValidationRule />
+                        </Binding.ValidationRules>
+                    </Binding>
+                </TextBox.Text>
+            </TextBox>
         </StackPanel>
 
-        <WrapPanel Grid.Row="2" HorizontalAlignment="Right" Margin="0,15,10,0">
-            <Button IsDefault="True" Click="Accept_Click" MinWidth="60" Margin="0,0,10,0">OK</Button>
+        <WrapPanel Grid.Row="1" HorizontalAlignment="Right" Margin="0,15,10,0">
+            <Button IsDefault="True" MinWidth="60" Margin="0,0,10,0">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Click">
+                        <i:InvokeCommandAction
+                            Command="{Binding OkCommand}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>OK</Button>
             <Button IsCancel="True" MinWidth="60" >Отмена</Button>
         </WrapPanel>
     </Grid>

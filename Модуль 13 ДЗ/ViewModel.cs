@@ -256,20 +256,13 @@ namespace Модуль_13_ДЗ
 
         private decimal ShowDialog()
         {
-            decimal result = 0;
-            bool flag = false;
+            DialogViewModel dialogVM = new DialogViewModel(SelectedAccount.Amount);
+            dialogWindow = new DialogWindow(dialogVM, "Снятие средств со счета");
 
-            while(!flag)
-            {
-                dialogWindow = new DialogWindow("Снятие средств со счета");
-
-                if (dialogWindow.ShowDialog() == true)
-                {
-                    flag = Decimal.TryParse(dialogWindow.Amount, out result);
-                }
-            }
+            if (dialogWindow.ShowDialog() == true)
+                return dialogVM.Amount;
             
-            return result;
+            return 0;
         }
 
         /// <summary>
