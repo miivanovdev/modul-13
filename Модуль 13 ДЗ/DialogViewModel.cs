@@ -12,9 +12,9 @@ namespace Модуль_13_ДЗ
     {
         public DialogDataModel Data { get; set; }
 
-        public DialogViewModel(decimal totalAmount)
+        public DialogViewModel(string label, decimal totalAmount, bool isWithdraw)
         {
-            Data = new DialogDataModel(totalAmount);
+            Data = new DialogDataModel(label, totalAmount, isWithdraw);
         }
 
         public decimal Amount

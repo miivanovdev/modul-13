@@ -9,19 +9,26 @@ namespace Модуль_13_ДЗ
 {
     public class DialogDataModel : IDataErrorInfo
     {
-        public DialogDataModel(decimal totalAmount)
+        public DialogDataModel(string label, decimal totalAmount, bool isWithdraw)
         {
             TotalAmount = totalAmount;
+            IsWithdraw = isWithdraw;
+            Label = label;
         }
 
+        public string Label { get; set; }
         public decimal Amount { get; set; }
         public decimal TotalAmount { get; private set; }
+        public bool IsWithdraw { get; private set; }
 
         public bool IsValid
         {
             get
             {
-                return Amount > 0 && Amount < TotalAmount;
+                if(IsWithdraw)
+                    return Amount > 0 && Amount < TotalAmount;
+
+                return Amount > 0 && Amount < decimal.MaxValue;
             }
         }
 
@@ -35,10 +42,18 @@ namespace Модуль_13_ДЗ
                 switch (columnName)
                 {
                     case "Amount":
-                        if ((Amount < 0) || (Amount > TotalAmount))
+                        
+                        if(IsWithdraw)
                         {
-                            error = "Нельзя снять больше суммы вклада!";                            
-                        }                        
+                            if ((Amount < 0) || (Amount > TotalAmount))
+                                error = "Нельзя снять больше суммы вклада!";                            
+                        }
+                        else
+                        {
+                            if ((Amount < 0) || (Amount > decimal.MaxValue))
+                                error = "Нельзя внести отрицательную сумму!";
+                        }
+                        
                         break;                    
                 }
                 return error;

@@ -246,7 +246,7 @@ namespace Модуль_13_ДЗ
         {
             try
             {
-                SelectedAccount.Amount -= ShowDialog();
+                SelectedAccount.Amount -= ShowDialog("Снятие средств со счета", true);
             }
             catch (Exception ex)
             {
@@ -254,10 +254,46 @@ namespace Модуль_13_ДЗ
             }            
         }
 
-        private decimal ShowDialog()
+        /// <summary>
+        /// Команда внесения средств на счет
+        /// </summary>
+        private RelayCommand addCommand;
+
+        public RelayCommand AddCommand
         {
-            DialogViewModel dialogVM = new DialogViewModel(SelectedAccount.Amount);
-            dialogWindow = new DialogWindow(dialogVM, "Снятие средств со счета");
+            get
+            {
+                return addCommand ??
+                (addCommand = new RelayCommand(new Action<object>(Add)));
+            }
+        }
+
+        /// <summary>
+        /// Метод внесения средств на счет
+        /// </summary>
+        /// <param name="o"></param>
+        private void Add(object o)
+        {
+            try
+            {
+                SelectedAccount.Amount += ShowDialog("Внесение средств на счет");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Вывод диалогового окна для внесения/снятия
+        /// </summary>
+        /// <param name="operationName"></param>
+        /// <param name="isWithdraw"></param>
+        /// <returns></returns>
+        private decimal ShowDialog(string operationName, bool isWithdraw = false)
+        {
+            DialogViewModel dialogVM = new DialogViewModel(operationName, SelectedAccount.Amount, isWithdraw);
+            dialogWindow = new DialogWindow(dialogVM, operationName);
 
             if (dialogWindow.ShowDialog() == true)
                 return dialogVM.Amount;

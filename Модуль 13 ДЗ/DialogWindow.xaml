@@ -48,7 +48,9 @@
                         <i:InvokeCommandAction
                             Command="{Binding OkCommand}"/>
                     </i:EventTrigger>
-                </i:Interaction.Triggers>OK</Button>
+                </i:Interaction.Triggers>
+                OK
+            </Button>
             <Button IsCancel="True" MinWidth="60" >Отмена</Button>
         </WrapPanel>
     </Grid>
