@@ -10,6 +10,24 @@ namespace ConsoleApp1
 {
     class Program
     {
+        class Department<T> where T : Account
+        {
+            public virtual void Show()
+            {
+                Console.WriteLine("Parent");
+            }
+
+            public T Account { get; set; }
+        }
+
+        class DepositDepartment<DepositeAccount> : Department<Account>
+        {
+            public override void Show()
+            {
+                Console.WriteLine("Child");
+            }
+        }
+
         class Bank : IBank<Account>
         {
             public virtual Account CreateAccount(decimal sum)
@@ -131,7 +149,27 @@ namespace ConsoleApp1
 
         static void Main(string[] args)
         {
-            Account[] accounts = new Account[3]
+            Department<Account>[] departments = new Department<Account>[]
+            {
+                new Department<Account>()
+                {
+                    Account = new Account(31250)
+                },
+                new DepositDepartment<DepositeAccount>()
+                {
+                    Account = new DepositeAccount(50123)
+                }
+            };
+
+            foreach (var d in departments)
+            {
+                d.Show();
+                d.Account.Show();
+            }                
+
+            Console.ReadKey();
+
+           Account[] accounts = new Account[3]
             {
                 new Account(32321),
                 new DepositeAccount(30000),

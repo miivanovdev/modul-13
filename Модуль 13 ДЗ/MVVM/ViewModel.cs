@@ -1,68 +1,62 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Newtonsoft.Json;
 using System.IO;
 using System.ComponentModel;
-using System.Runtime.CompilerServices;
 using System.Collections.Specialized;
 using System.Collections.ObjectModel;
-using System.Collections;
 using System.Windows;
+using Модуль_13_ДЗ.MVVM.Model;
 
 namespace Модуль_13_ДЗ
 {
-    class ViewModel : INotifyPropertyChanged
+    class ViewModel : ObservableObject
     {
-        private DialogWindow dialogWindow;
         public ObservableCollection<Client> Clients { get; set; }
         public List<BankAccount> Accounts { get; set; }
-        public List<BankDepartment> BankDepartments { get; set; }
-        
-        public event PropertyChangedEventHandler PropertyChanged;
+        public List<BankDepartment<BankAccount>> BankDepartments { get; set; }
 
         public ViewModel()
         {
             #region.Начальная инициализация
-            /*
+            
             Clients = new ObservableCollection<Client>()
             {
-                new Client("Кулибяка", "Вадим", "Натанович", 27450, 12300),
-                new Client("Пыпырин", "Владимир", "Юльевич", 38850, 17640),
-                new Client("Прокопов", "Алексей", "Александрович", 40450, 22300),
-                new Client("Никишин", "Олег", "Викторович", 120250, 33400),
-                new Client("Крупская", "Анна", "Сергеевна", 117300, 52300),
-                new Client("Коняев", "Станислав", "Валерьевич", 301200, 72300),
-                new Client("Чизмар", "Валентина", "Витальевна", 178500, 42500)
+                new Client("Кулибяка", "Вадим", "Натанович", 27450, true),
+                new Client("Пыпырин", "Владимир", "Юльевич", 38850),
+                new Client("Прокопов", "Алексей", "Александрович", 40450),
+                new Client("Никишин", "Олег", "Викторович", 120250),
+                new Client("Крупская", "Анна", "Сергеевна", 117300),
+                new Client("Коняев", "Станислав", "Валерьевич", 301200),
+                new Client("Чизмар", "Валентина", "Витальевна", 178500)
             };
                         
-            BankDepartments = new List<BankDepartment>()
+            BankDepartments = new List<BankDepartment<BankAccount>>()
             {
-                new BankDepartment("Не выбрано!", 0, 0, 0, true),
-                new BankDepartment("Отдел по работе с физическими лицами", 50000, 6, 15),
-                new BankDepartment("Отдел по работе с юридическими лицами", 30000, 12, 15),
-                new BankDepartment("Отдел по работе с привелигированными клиентами", 100000, 18, 20)
+                new BankDepartment<BankAccount>("Не выбрано!", 0, 0, 0, true),
+                new PhysicalDepartment("Отдел по работе с физическими лицами", 50000, 6, 15),
+                new IndividualDepartment("Отдел по работе с юридическими лицами", 30000, 12, 15),
+                new PrivilegedDepartment("Отдел по работе с привелигированными клиентами", 100000, 18, 20)
             };
             
             Accounts = new List<BankAccount>()
             {
-                new BankAccount(40000,10,1, 1, new DateTime(2020, 11, 05)),
-                new BankAccount(78540,12,1, 1, new DateTime(2019, 10, 23)),
-                new BankAccount(63400,10,2, 1, new DateTime(2020, 09, 04)),
-                new BankAccount(-48900,10,2, 1, new DateTime(2020, 06, 12)),
-                new BankAccount(34000,10,2, 2, new DateTime(2019, 01, 24)),
-                new BankAccount(-500000,10,3, 2, new DateTime(2021, 01, 13)),
-                new BankAccount(1240000,10,3, 2, new DateTime(2020, 08, 07)),
-                new BankAccount(12700,10,4, 3, new DateTime(2020, 02, 14)),
-                new BankAccount(-481500,15,5, 3, new DateTime(2020, 07, 15)),
-                new BankAccount(3012250,20,6, 3, new DateTime(2018, 10, 12), true),
-                new BankAccount(2012250,15,7, 3, new DateTime(2019, 11, 21), true),
+                new PhysicalAccount(40000, 10, 1, 1, 6, new DateTime(2020, 11, 05)),
+                new PhysicalAccount(78540, 12, 1, 1, 6, new DateTime(2019, 10, 23)),
+                new PhysicalAccount(63400, 10, 2, 1, 6, new DateTime(2020, 09, 04)),
+                new PhysicalAccount(-48900, 10, 2, 1, 6, new DateTime(2020, 06, 12)),
+                new IndividualAccount(34000, 10, 2, 2, 12, new DateTime(2019, 01, 24), 2),
+                new IndividualAccount(-500000, 10, 3, 2, 12, new DateTime(2021, 01, 13), 2),
+                new IndividualAccount(1240000, 10,3, 2, 12, new DateTime(2020, 08, 07), 2),
+                new IndividualAccount(12700, 10, 4, 2, 12, new DateTime(2020, 02, 14), 2),
+                new IndividualAccount(481500, 15, 5, 2, 12, new DateTime(2020, 07, 15), 2),
+                new PrivilegedAccount(3012250, 20, 6, 3, 18, new DateTime(2018, 10, 12)),
+                new PrivilegedAccount(2012250, 15, 7, 3, 18, new DateTime(2019, 11, 21)),
             };
-            */
+            
             #endregion
-            InitData();
+            //InitData();
             PropertyChanged += new PropertyChangedEventHandler(SelectionChangeHandler);
 
             SelectedDepartment = BankDepartments.First();
@@ -71,9 +65,9 @@ namespace Модуль_13_ДЗ
             SelectedAccount = SelectedDepartment.Accounts.First();
         }
 
-        private BankDepartment selectedDepartment;
+        private BankDepartment<BankAccount> selectedDepartment;
 
-        public BankDepartment SelectedDepartment
+        public BankDepartment<BankAccount> SelectedDepartment
         {
             get
             {
@@ -147,13 +141,18 @@ namespace Модуль_13_ДЗ
         /// <param name="args"></param>
         private void SaveData(object args)
         {
-            string jsonDepartments = JsonConvert.SerializeObject(BankDepartments);
-            File.WriteAllText("Departments.json", jsonDepartments);
-
             string jsonClients = JsonConvert.SerializeObject(Clients);
             File.WriteAllText("Clients.json", jsonClients);
 
-            string jsonAccounts = JsonConvert.SerializeObject(Accounts);
+            JsonSerializerSettings settings = new JsonSerializerSettings()
+            {
+                TypeNameHandling = Newtonsoft.Json.TypeNameHandling.All
+            };
+
+            string jsonDepartments = JsonConvert.SerializeObject(BankDepartments, settings);
+            File.WriteAllText("Departments.json", jsonDepartments);            
+
+            string jsonAccounts = JsonConvert.SerializeObject(Accounts, settings);
             File.WriteAllText("Accounts.json", jsonAccounts);
         }
         #endregion
@@ -164,27 +163,68 @@ namespace Модуль_13_ДЗ
         /// </summary>
         private void InitData()
         {
-            if(File.Exists("Departments.json"))
-            {
-                string jsonDepartments = File.ReadAllText("Departments.json");
-                BankDepartments = JsonConvert.DeserializeObject<List<BankDepartment>>(jsonDepartments);
-            }
-
             if (File.Exists("Clients.json"))
             {
                 string jsonDepartments = File.ReadAllText("Clients.json");
                 Clients = JsonConvert.DeserializeObject<ObservableCollection<Client>>(jsonDepartments);
             }
 
+            JsonSerializerSettings settings = new JsonSerializerSettings()
+            {
+                TypeNameHandling = Newtonsoft.Json.TypeNameHandling.All
+            };
+
+            if (File.Exists("Departments.json"))
+            {
+                string jsonDepartments = File.ReadAllText("Departments.json");
+                BankDepartments = JsonConvert.DeserializeObject<List<BankDepartment<BankAccount>>>(jsonDepartments, settings);
+            }            
+
             if (File.Exists("Accounts.json"))
             {
                 string jsonDepartments = File.ReadAllText("Accounts.json");
-                Accounts = JsonConvert.DeserializeObject<List<BankAccount>>(jsonDepartments);
+                Accounts = JsonConvert.DeserializeObject<List<BankAccount>>(jsonDepartments, settings);
             }      
         }
 
 
         #region.Commands
+        /// <summary>
+        /// Команда добавления клиента
+        /// </summary>
+        private RelayCommand addClientCommand;
+
+        public RelayCommand AddClientCommand
+        {
+            get
+            {
+                return addClientCommand ??
+                (addClientCommand = new RelayCommand(new Action<object>(AddClient),
+                                                     new Func<object, bool>(ClientCanBeAdded)
+                ));
+            }
+        }
+
+        /// <summary>
+        /// Проверка возможности вызова команды добавления клиента
+        /// </summary>
+        /// <param name="o"></param>
+        /// <returns></returns>
+        private bool ClientCanBeAdded(object o)
+        {
+            return SelectedDepartment != null;
+        }
+
+        /// <summary>
+        /// Метод добавления нового клиента
+        /// </summary>
+        /// <param name="o"></param>
+        private void AddClient(object o)
+        {
+            SelectedDepartment.AddClient(Clients);
+            NotifyPropertyChanged(nameof(Clients));
+        }
+
         /// <summary>
         /// Команда открытия счета
         /// </summary>
@@ -234,8 +274,22 @@ namespace Модуль_13_ДЗ
             get
             {
                 return withdrawCommand ??
-                (withdrawCommand = new RelayCommand(new Action<object>(Withdraw)));
+                (withdrawCommand = new RelayCommand(new Action<object>(Withdraw), new Func<object, bool>(AccountCanBeWithdrawed)));
             }
+        }
+
+        /// <summary>
+        /// Метод проверки возможности снятия средств
+        /// </summary>
+        /// <param name="o"></param>
+        /// <returns></returns>
+        private bool AccountCanBeWithdrawed(object o)
+        {
+            return SelectedDepartment != null &&
+                   SelectedClient != null &&
+                   SelectedAccount != null &&
+                   SelectedDepartment.DepartmentId > 0 &&
+                   SelectedAccount.CanWithdrawed;
         }
 
         /// <summary>
@@ -264,9 +318,24 @@ namespace Модуль_13_ДЗ
             get
             {
                 return addCommand ??
-                (addCommand = new RelayCommand(new Action<object>(Add)));
+                (addCommand = new RelayCommand(new Action<object>(Add), new Func<object, bool>(AccountCanBeAdd)));
             }
         }
+
+        /// <summary>
+        /// Метод проверки возможности добавления средств
+        /// </summary>
+        /// <param name="o"></param>
+        /// <returns></returns>
+        private bool AccountCanBeAdd(object o)
+        {
+            return SelectedDepartment != null &&
+                   SelectedClient != null &&
+                   SelectedAccount != null &&
+                   SelectedDepartment.DepartmentId > 0 &&
+                   SelectedAccount.CanAdded;
+        }
+
 
         /// <summary>
         /// Метод внесения средств на счет
@@ -293,23 +362,14 @@ namespace Модуль_13_ДЗ
         private decimal ShowDialog(string operationName, bool isWithdraw = false)
         {
             DialogViewModel dialogVM = new DialogViewModel(operationName, SelectedAccount.Amount, isWithdraw);
-            dialogWindow = new DialogWindow(dialogVM, operationName);
+            DialogWindow dialogWindow = new DialogWindow(dialogVM, operationName);
 
             if (dialogWindow.ShowDialog() == true)
                 return dialogVM.Amount;
             
             return 0;
         }
-
-        /// <summary>
-        /// Метод запуска события изменения свойства
-        /// </summary>
-        /// <param name="propertyName">Изменеяемое свойство</param>
-        private void NotifyPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
+                
         /// <summary>
         /// Действия при смене департамента
         /// </summary>

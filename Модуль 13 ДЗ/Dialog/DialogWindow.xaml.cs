@@ -17,7 +17,7 @@ namespace Модуль_13_ДЗ
     /// <summary>
     /// Interaction logic for DialogWindow.xaml
     /// </summary>
-    public partial class DialogWindow : Window
+    partial class DialogWindow : Window
     {
         public DialogWindow(DialogViewModel viewModel, string title)
         {

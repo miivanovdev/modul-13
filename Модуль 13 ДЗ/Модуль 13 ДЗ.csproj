@@ -61,14 +61,23 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="BankAccount.cs" />
-    <Compile Include="BankDepartment.cs" />
-    <Compile Include="DialogCloser.cs" />
-    <Compile Include="DialogDataModel.cs" />
-    <Compile Include="DialogViewModel.cs" />
+    <Compile Include="MVVM\Model\AccountType.cs" />
+    <Compile Include="MVVM\Model\BankAccount.cs" />
+    <Compile Include="MVVM\Model\BankDepartment.cs" />
+    <Compile Include="Dialog\DialogCloser.cs" />
+    <Compile Include="Dialog\DialogDataModel.cs" />
+    <Compile Include="Dialog\DialogViewModel.cs" />
+    <Compile Include="MVVM\Model\IAccountable.cs" />
+    <Compile Include="MVVM\Model\IndividualAccount.cs" />
+    <Compile Include="MVVM\Model\IndividualDepartment.cs" />
+    <Compile Include="MVVM\Model\PhysicalAccount.cs" />
+    <Compile Include="MVVM\Model\PhysicalDepartment.cs" />
+    <Compile Include="MVVM\Model\PrivilegedAccount.cs" />
+    <Compile Include="MVVM\Model\PrivilegedDepartment.cs" />
+    <Compile Include="ObservableObject.cs" />
     <Compile Include="RelayCommand.cs" />
-    <Compile Include="ViewModel.cs" />
-    <Compile Include="DialogWindow.xaml.cs">
+    <Compile Include="MVVM\ViewModel.cs" />
+    <Compile Include="Dialog\DialogWindow.xaml.cs">
       <DependentUpon>DialogWindow.xaml</DependentUpon>
     </Compile>
     <Page Include="MainWindow.xaml">
@@ -79,12 +88,12 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Client.cs" />
+    <Compile Include="MVVM\Model\Client.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="DialogWindow.xaml">
+    <Page Include="Dialog\DialogWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Модуль_13_ДЗ
 {
-    public class DialogViewModel : INotifyPropertyChanged
+    public class DialogViewModel : ObservableObject
     {
         public DialogDataModel Data { get; set; }
 
@@ -39,14 +39,7 @@ namespace Модуль_13_ДЗ
                 NotifyPropertyChanged(nameof(DialogResult));
             }
         }
-                
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        private void NotifyPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
+        
         private RelayCommand okCommand;
 
         public RelayCommand OkCommand
