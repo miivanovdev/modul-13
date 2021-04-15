@@ -8,13 +8,24 @@ using System.Threading.Tasks;
 
 namespace Модуль_13_ДЗ.MVVM.Model
 {
-    class BankAccount : ObservableObject
+    public class BankAccount : ObservableObject
     {        
-        public int ClientId { get; set; }
+        public int OwnerId { get; set; }
+        public string OwnerName { get; set; }
         public DateTime CreatedDate { get; set; }
         protected int MinTerm { get; set; }
 
         public int DepartmentId { get; set; }
+
+        public virtual string AccountName
+        {
+            get { return $"Базовый на имя {OwnerName}"; }
+        }
+
+        public virtual AccountType Type
+        {
+            get { return AccountType.Basic; }
+        }
 
         public virtual bool CanWithdrawed
         {
@@ -27,6 +38,11 @@ namespace Модуль_13_ДЗ.MVVM.Model
         }
        
         public virtual bool CanClose
+        {
+            get { return false; }
+        }
+
+        public virtual bool CanTransact
         {
             get { return false; }
         }
@@ -96,11 +112,12 @@ namespace Модуль_13_ДЗ.MVVM.Model
             return 0;
         }        
 
-        public BankAccount(decimal amount, decimal interestRate, int clientId, int departmentId, int minTerm, DateTime dateTime)
+        public BankAccount(decimal amount, decimal interestRate, int ownerId, string ownerName , int departmentId, int minTerm, DateTime dateTime)
         {
             Amount = amount;
             InterestRate = interestRate;
-            ClientId = clientId;
+            OwnerId = ownerId;
+            OwnerName = ownerName;
             DepartmentId = departmentId;
             CreatedDate = dateTime;
             MinTerm = minTerm;

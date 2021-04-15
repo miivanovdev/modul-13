@@ -8,10 +8,20 @@ namespace Модуль_13_ДЗ.MVVM.Model
 {
     class PhysicalAccount : BankAccount
     {
-        public PhysicalAccount(decimal amount, decimal interestRate, int clientId, int departmentId, int minTerm, DateTime dateTime)
-            : base(amount, interestRate, clientId, departmentId, minTerm, dateTime)
+        public PhysicalAccount(decimal amount, decimal interestRate, int ownerId, string ownerName, int departmentId, int minTerm, DateTime dateTime)
+            : base(amount, interestRate, ownerId, ownerName, departmentId, minTerm, dateTime)
         {
 
+        }
+
+        public override AccountType Type
+        {
+            get { return AccountType.PhysicalAccount; }
+        }
+
+        public override string AccountName
+        {
+            get { return $"Физический счет {OwnerName}"; }
         }
 
         public override bool CanAdded => true;
@@ -36,6 +46,11 @@ namespace Модуль_13_ДЗ.MVVM.Model
 
                 return false;
             }
+        }
+
+        public override bool CanTransact
+        {
+            get { return CanWithdrawed;  }
         }
     }
 }

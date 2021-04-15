@@ -102,10 +102,10 @@ namespace Модуль_13_ДЗ.MVVM.Model
                 Accounts = new ObservableCollection<T>(accounts.Where(x => x.DepartmentId == DepartmentId));
 
             if(clientId > 0 && DepartmentId == 0)
-                Accounts = new ObservableCollection<T>(accounts.Where(x => x.ClientId == clientId));
+                Accounts = new ObservableCollection<T>(accounts.Where(x => x.OwnerId == clientId));
 
             if (clientId > 0 && DepartmentId > 0)
-                Accounts = new ObservableCollection<T>(accounts.Where(x => x.ClientId == clientId && x.DepartmentId == DepartmentId));
+                Accounts = new ObservableCollection<T>(accounts.Where(x => x.OwnerId == clientId && x.DepartmentId == DepartmentId));
         }   
         
         public void AddClient(IList<Client> clients)
@@ -131,19 +131,19 @@ namespace Модуль_13_ДЗ.MVVM.Model
             switch(AccountType)
             {
                 case AccountType.Basic:
-                    newAccount = new BankAccount(MinAmount, InterestRate, client.ClientId, DepartmentId, (int)MinTerm, DateTime.Now) as T;
+                    newAccount = new BankAccount(MinAmount, InterestRate, client.ClientId, client.FIO, DepartmentId, (int)MinTerm, DateTime.Now) as T;
                     break;
 
                 case AccountType.PhysicalAccount:
-                    newAccount = new PhysicalAccount(MinAmount, InterestRate, client.ClientId, DepartmentId, (int)MinTerm, DateTime.Now) as T;
+                    newAccount = new PhysicalAccount(MinAmount, InterestRate, client.ClientId, client.FIO,  DepartmentId, (int)MinTerm, DateTime.Now) as T;
                     break;
 
                 case AccountType.IndividualAccount:
-                    newAccount = new IndividualAccount(MinAmount, InterestRate, client.ClientId, DepartmentId, (int)MinTerm, DateTime.Now, (int)Delay) as T;
+                    newAccount = new IndividualAccount(MinAmount, InterestRate, client.ClientId, client.FIO,  DepartmentId, (int)MinTerm, DateTime.Now, (int)Delay) as T;
                     break;
 
                 case AccountType.PrivilegedAccount:
-                    newAccount = new PrivilegedAccount(MinAmount, InterestRate, client.ClientId, DepartmentId, (int)MinTerm, DateTime.Now) as T;
+                    newAccount = new PrivilegedAccount(MinAmount, InterestRate, client.ClientId, client.FIO,  DepartmentId, (int)MinTerm, DateTime.Now) as T;
                     break;
 
             }

@@ -18,7 +18,7 @@ namespace Модуль_13_ДЗ
 
         public string Label { get; set; }
         public decimal Amount { get; set; }
-        public decimal TotalAmount { get; private set; }
+        public decimal TotalAmount { get; set; }
         public bool IsWithdraw { get; private set; }
 
         public bool IsValid

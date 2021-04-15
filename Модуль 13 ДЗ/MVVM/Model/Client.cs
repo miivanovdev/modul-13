@@ -56,6 +56,11 @@ namespace Модуль_13_ДЗ.MVVM.Model
             Amount = amount;
             BadHistory = badHistory;
             ClientId = NextId();
-        }             
+        }     
+        
+        public string FIO
+        {
+            get { return $"{Surname} {FirstName} {SecondName}"; }
+        }
     }
 }

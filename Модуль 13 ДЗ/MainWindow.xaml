@@ -348,6 +348,7 @@
                         <MenuItem Header="Открыть счет" Command="{Binding OpenAccountCommand}" />
                         <MenuItem Header="Снять со счета" Command="{Binding WithdrawCommand}" />
                         <MenuItem Header="Внести на счет" Command="{Binding AddCommand}" />
+                        <MenuItem Header="Перевод на счет" Command="{Binding TransactCommand}" />
                     </ContextMenu>                    
                 </DataGrid.ContextMenu>
             </DataGrid>

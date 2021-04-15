@@ -8,10 +8,20 @@ namespace Модуль_13_ДЗ.MVVM.Model
 {
     class PrivilegedAccount : BankAccount
     {
-        public PrivilegedAccount(decimal amount, decimal interestRate, int clientId, int departmentId, int minTerm, DateTime dateTime)
-           : base(amount, interestRate, clientId, departmentId, minTerm, dateTime)
+        public PrivilegedAccount(decimal amount, decimal interestRate, int ownerId, string ownerName, int departmentId, int minTerm, DateTime dateTime)
+            : base(amount, interestRate, ownerId, ownerName, departmentId, minTerm, dateTime)
         {
 
+        }
+
+        public override AccountType Type
+        {
+            get { return AccountType.PrivilegedAccount; }
+        }
+
+        public override string AccountName
+        {
+            get { return $"Привелигированный счет {OwnerName}"; }
         }
 
         protected override decimal CountIncome()
@@ -32,5 +42,6 @@ namespace Модуль_13_ДЗ.MVVM.Model
 
         public override bool CanWithdrawed => true;
         public override bool CanAdded => true;
+        public override bool CanTransact => true;
     }
 }

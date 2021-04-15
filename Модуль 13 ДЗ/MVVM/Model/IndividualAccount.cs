@@ -8,10 +8,20 @@ namespace Модуль_13_ДЗ.MVVM.Model
 {
     class IndividualAccount : BankAccount
     {
-        public IndividualAccount(decimal amount, decimal interestRate, int clientId, int departmentId, int minTerm, DateTime dateTime, int delay)
-           : base(amount, interestRate, clientId, departmentId, minTerm, dateTime)
+        public IndividualAccount(decimal amount, decimal interestRate, int ownerId, string ownerName, int departmentId, int minTerm, DateTime dateTime, int delay)
+            : base(amount, interestRate, ownerId, ownerName, departmentId, minTerm, dateTime)
         {
             Delay = delay;
+        }
+
+        public override AccountType Type
+        {
+            get { return AccountType.IndividualAccount; }
+        }
+
+        public override string AccountName
+        {
+            get { return $"Индивидуальный счет {OwnerName}"; }
         }
 
         private int delay;
@@ -52,5 +62,9 @@ namespace Модуль_13_ДЗ.MVVM.Model
             }
         }
 
+        public override bool CanTransact
+        {
+            get { return CanWithdrawed; }
+        }
     }
 }

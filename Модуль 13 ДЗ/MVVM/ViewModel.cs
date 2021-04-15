@@ -42,17 +42,17 @@ namespace Модуль_13_ДЗ
             
             Accounts = new List<BankAccount>()
             {
-                new PhysicalAccount(40000, 10, 1, 1, 6, new DateTime(2020, 11, 05)),
-                new PhysicalAccount(78540, 12, 1, 1, 6, new DateTime(2019, 10, 23)),
-                new PhysicalAccount(63400, 10, 2, 1, 6, new DateTime(2020, 09, 04)),
-                new PhysicalAccount(-48900, 10, 2, 1, 6, new DateTime(2020, 06, 12)),
-                new IndividualAccount(34000, 10, 2, 2, 12, new DateTime(2019, 01, 24), 2),
-                new IndividualAccount(-500000, 10, 3, 2, 12, new DateTime(2021, 01, 13), 2),
-                new IndividualAccount(1240000, 10,3, 2, 12, new DateTime(2020, 08, 07), 2),
-                new IndividualAccount(12700, 10, 4, 2, 12, new DateTime(2020, 02, 14), 2),
-                new IndividualAccount(481500, 15, 5, 2, 12, new DateTime(2020, 07, 15), 2),
-                new PrivilegedAccount(3012250, 20, 6, 3, 18, new DateTime(2018, 10, 12)),
-                new PrivilegedAccount(2012250, 15, 7, 3, 18, new DateTime(2019, 11, 21)),
+                new PhysicalAccount(40000, 10, Clients[0].ClientId, Clients[0].FIO, 1 , 6, new DateTime(2020, 11, 05)),
+                new PhysicalAccount(78540, 12, Clients[0].ClientId, Clients[0].FIO, 1, 6, new DateTime(2019, 10, 23)),
+                new PhysicalAccount(63400, 10, Clients[1].ClientId, Clients[1].FIO, 1, 6, new DateTime(2020, 09, 04)),
+                new PhysicalAccount(-48900, 10, Clients[1].ClientId, Clients[1].FIO, 1, 6, new DateTime(2020, 06, 12)),
+                new IndividualAccount(34000, 10, Clients[2].ClientId, Clients[2].FIO, 2, 12, new DateTime(2019, 01, 24), 2),
+                new IndividualAccount(-500000, 10, Clients[2].ClientId, Clients[2].FIO, 2, 12, new DateTime(2021, 01, 13), 2),
+                new IndividualAccount(1240000, 10, Clients[3].ClientId, Clients[3].FIO, 2, 12, new DateTime(2020, 08, 07), 2),
+                new IndividualAccount(12700, 10, Clients[3].ClientId, Clients[3].FIO, 2, 12, new DateTime(2020, 02, 14), 2),
+                new IndividualAccount(481500, 15, Clients[4].ClientId, Clients[4].FIO, 2, 12, new DateTime(2020, 07, 15), 2),
+                new PrivilegedAccount(3012250, 20, Clients[5].ClientId, Clients[5].FIO, 3, 18, new DateTime(2018, 10, 12)),
+                new PrivilegedAccount(2012250, 15, Clients[6].ClientId, Clients[6].FIO, 3, 18, new DateTime(2019, 11, 21)),
             };
             
             #endregion
@@ -369,7 +369,58 @@ namespace Модуль_13_ДЗ
             
             return 0;
         }
-                
+
+        /// <summary>
+        /// Команда вызова транзакции
+        /// </summary>
+        private RelayCommand transactCommand;
+
+        public RelayCommand TransactCommand
+        {
+            get
+            {
+                return transactCommand ??
+                (transactCommand = new RelayCommand(new Action<object>(TransactionDialog), new Func<object, bool>(CanTransact)));
+            }
+        }
+
+        private void TransactionDialog(object o)
+        {
+            try
+            {
+                TransactionDialog();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private bool CanTransact(object o)
+        {
+            return SelectedAccount != null && SelectedAccount.CanTransact;
+        }
+
+        /// <summary>
+        /// Вывод диалогового окна для внесения/снятия
+        /// </summary>
+        /// <param name="operationName"></param>
+        /// <param name="isWithdraw"></param>
+        /// <returns></returns>
+        private decimal TransactionDialog()
+        {
+            TransactionViewModel transactionViewModel = new TransactionViewModel(Accounts.Where( x => x != SelectedAccount).ToList());
+            DialogTransaction dialogTransaction = new DialogTransaction(transactionViewModel);
+
+            if (dialogTransaction.ShowDialog() == true)
+            {
+                SelectedAccount.Amount -= transactionViewModel.Amount;
+                transactionViewModel.SelectedAccount.Amount += transactionViewModel.Amount;
+            }
+
+            return 0;
+        }
+
         /// <summary>
         /// Действия при смене департамента
         /// </summary>
