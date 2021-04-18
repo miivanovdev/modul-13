@@ -43,5 +43,6 @@ namespace Модуль_13_ДЗ.MVVM.Model
         public override bool CanWithdrawed => true;
         public override bool CanAdded => true;
         public override bool CanTransact => true;
+        public override bool CanClose => true;
     }
 }

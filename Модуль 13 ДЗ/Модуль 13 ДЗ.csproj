@@ -73,7 +73,6 @@
     <Compile Include="Dialog\DialogViewModel.cs" />
     <Compile Include="EnumHelper.cs" />
     <Compile Include="EnumToCollectionConverter .cs" />
-    <Compile Include="MVVM\Model\IAccountable.cs" />
     <Compile Include="MVVM\Model\IndividualAccount.cs" />
     <Compile Include="MVVM\Model\IndividualDepartment.cs" />
     <Compile Include="MVVM\Model\PhysicalAccount.cs" />

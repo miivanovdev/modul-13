@@ -10,44 +10,84 @@ namespace Модуль_13_ДЗ.MVVM.Model
 {
     public class BankAccount : ObservableObject
     {        
+        /// <summary>
+        /// Идентификатор владельца
+        /// </summary>
         public int OwnerId { get; set; }
-        public string OwnerName { get; set; }
-        public DateTime CreatedDate { get; set; }
-        protected int MinTerm { get; set; }
 
+        /// <summary>
+        /// Имя владельца
+        /// </summary>
+        public string OwnerName { get; set; }
+
+        /// <summary>
+        /// Дата создания
+        /// </summary>
+        public DateTime CreatedDate { get; set; }
+
+        /// <summary>
+        /// Минимальный срок вклада в месяцах
+        /// </summary>
+        public int MinTerm { get; set; }
+
+        /// <summary>
+        /// Идентификатор департамента
+        /// </summary>
         public int DepartmentId { get; set; }
 
+        /// <summary>
+        /// Наименование счета
+        /// </summary>
         public virtual string AccountName
         {
             get { return $"Базовый на имя {OwnerName}"; }
         }
 
+        /// <summary>
+        /// Тип счет
+        /// </summary>
         public virtual AccountType Type
         {
             get { return AccountType.Basic; }
         }
 
+        /// <summary>
+        /// Доступно снятие со счета
+        /// </summary>
         public virtual bool CanWithdrawed
         {
             get { return false; }
         }
 
+        /// <summary>
+        /// Доступно пополнение счета
+        /// </summary>
         public virtual bool CanAdded
         {
             get { return false; }
         }
        
+        /// <summary>
+        /// Доступно закрытие счета
+        /// </summary>
         public virtual bool CanClose
         {
             get { return false; }
         }
 
+        /// <summary>
+        /// Доступен перевод со счета
+        /// </summary>
         public virtual bool CanTransact
         {
             get { return false; }
         }
 
         private decimal amount;
+
+        /// <summary>
+        /// Начальная сумма счета
+        /// </summary>
         public decimal Amount
         {
             get
@@ -66,6 +106,10 @@ namespace Модуль_13_ДЗ.MVVM.Model
         }
 
         private DateTime currentDate;
+
+        /// <summary>
+        /// Текущая дата
+        /// </summary>
         public DateTime CurrentDate
         {
             get { return currentDate; }
@@ -82,9 +126,15 @@ namespace Модуль_13_ДЗ.MVVM.Model
                 NotifyPropertyChanged(nameof(Income));
             }
         }
-                
+             
+        /// <summary>
+        /// процент по вкладу
+        /// </summary>
         public decimal InterestRate { get; set; }
 
+        /// <summary>
+        /// Прошло месяцев
+        /// </summary>
         public int MonthPassed
         {
             get
@@ -93,6 +143,9 @@ namespace Модуль_13_ДЗ.MVVM.Model
             }           
         }
         
+        /// <summary>
+        /// Доход по вкладу
+        /// </summary>
         public decimal Income
         {
             get
@@ -101,14 +154,15 @@ namespace Модуль_13_ДЗ.MVVM.Model
             }
         }
 
+        /// <summary>
+        /// Подсчет дохода
+        /// </summary>
+        /// <returns></returns>
         protected virtual decimal CountIncome()
         {
-            if(MonthPassed > 0)    
-                return Amount + MonthPassed * (Amount * InterestRate) / 100;
-
-            if (MonthPassed == 0)
-                return Amount + 1 * (Amount * InterestRate) / 100;
-
+            if(MonthPassed == MinTerm || MonthPassed % MinTerm == 0)    
+                return Amount + (MonthPassed / MinTerm) * (Amount * InterestRate) / 100;
+            
             return 0;
         }        
 

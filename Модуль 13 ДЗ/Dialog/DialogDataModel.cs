@@ -17,7 +17,19 @@ namespace Модуль_13_ДЗ
         }
 
         public string Label { get; set; }
-        public decimal Amount { get; set; }
+        private decimal amount;
+        public decimal Amount
+        {
+            get { return amount; }
+            set
+            {
+                if (value < 0)
+                    value *= -1;
+
+                amount = value;
+            }
+        }
+
         public decimal TotalAmount { get; set; }
         public bool IsWithdraw { get; private set; }
 
@@ -27,7 +39,7 @@ namespace Модуль_13_ДЗ
             {
                 if(IsWithdraw)
                     return Amount > 0 && Amount < TotalAmount;
-
+                
                 return Amount > 0 && Amount < decimal.MaxValue;
             }
         }
@@ -45,13 +57,13 @@ namespace Модуль_13_ДЗ
                         
                         if(IsWithdraw)
                         {
-                            if ((Amount < 0) || (Amount > TotalAmount))
+                            if (Amount > TotalAmount)
                                 error = "Нельзя снять больше суммы вклада!";                            
                         }
                         else
                         {
-                            if ((Amount < 0) || (Amount > decimal.MaxValue))
-                                error = "Нельзя внести отрицательную сумму!";
+                            if (Amount < 0 || Amount > decimal.MaxValue)
+                                error = "Недопустимая сумма!";
                         }
                         
                         break;                    

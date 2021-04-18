@@ -10,10 +10,10 @@ namespace Модуль_13_ДЗ
 {
     public class TransactionViewModel : ObservableObject
     {
-        public TransactionViewModel(List<BankAccount> accounts)
+        public TransactionViewModel(List<BankAccount> accounts, decimal CurrentAmount)
         {
             this.accounts = new ReadOnlyCollection<BankAccount>(accounts);
-            Data = new DialogDataModel("Перевод", 0, false);
+            Data = new DialogDataModel("Перевод", CurrentAmount, true);
         }
 
         public decimal Amount { get { return Data.Amount; } }
@@ -95,7 +95,8 @@ namespace Модуль_13_ДЗ
 
         private bool CanClose(object o)
         {
-            return SelectedAccount != null;
+            return SelectedAccount != null &&
+                   Data.IsValid;
         }
     }
 }

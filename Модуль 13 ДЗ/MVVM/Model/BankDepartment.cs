@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Linq;
 
 namespace Модуль_13_ДЗ.MVVM.Model
@@ -9,12 +10,19 @@ namespace Модуль_13_ДЗ.MVVM.Model
     {
         public string Name { get; set; }
 
+        /// <summary>
+        /// Тип департамента
+        /// </summary>
         public virtual AccountType AccountType
         {
             get { return AccountType.Basic; }
         }
 
         protected ObservableCollection<T> accounts;
+
+        /// <summary>
+        /// Счета департамента
+        /// </summary>
         public ObservableCollection<T> Accounts
         {
             get
@@ -31,12 +39,22 @@ namespace Модуль_13_ДЗ.MVVM.Model
             }
         }
 
+        /// <summary>
+        /// Ставка по вкладам
+        /// </summary>
         public decimal InterestRate { get; set; }
         
+        /// <summary>
+        /// Минимальный срок вклада в месяцах
+        /// </summary>
         public uint MinTerm { get; set; }
         public uint Delay { get; set; }
 
         public decimal minAmount;
+
+        /// <summary>
+        /// Минимальная сумма вклада
+        /// </summary>
         public decimal MinAmount
         {
             get
@@ -54,6 +72,10 @@ namespace Модуль_13_ДЗ.MVVM.Model
         }
 
         protected int departmentId;
+
+        /// <summary>
+        /// Идентификатор департамента
+        /// </summary>
         public int DepartmentId
         {
             get { return departmentId; }
@@ -68,6 +90,10 @@ namespace Модуль_13_ДЗ.MVVM.Model
 
         protected static int id;
 
+        /// <summary>
+        /// Получить следующий идентификатор
+        /// </summary>
+        /// <returns></returns>
         protected static int NextId()
         {
             id++;
@@ -92,8 +118,14 @@ namespace Модуль_13_ДЗ.MVVM.Model
 
             Accounts = new ObservableCollection<T>();
         }
-                
-        public void GetAccounts(List<T> accounts, int clientId = 0)
+         
+        /// <summary>
+        /// Получить счета
+        /// </summary>
+        /// <param name="accounts"></param>
+        /// <param name="handler"></param>
+        /// <param name="clientId"></param>
+        public void GetAccounts(List<T> accounts, NotifyCollectionChangedEventHandler handler, int clientId = 0)
         {
             if (clientId == 0 && DepartmentId == 0)
                 Accounts = new ObservableCollection<T>(accounts);
@@ -106,25 +138,24 @@ namespace Модуль_13_ДЗ.MVVM.Model
 
             if (clientId > 0 && DepartmentId > 0)
                 Accounts = new ObservableCollection<T>(accounts.Where(x => x.OwnerId == clientId && x.DepartmentId == DepartmentId));
+
+            Accounts.CollectionChanged += handler;
         }   
         
+        /// <summary>
+        /// Добавить клиента
+        /// </summary>
+        /// <param name="clients"></param>
         public void AddClient(IList<Client> clients)
         {
             clients.Add(new Client("Новый клиент", "", "", 0));
         }        
-        
 
-        public virtual void CloseAccount(IList<T> accounts, Client client)
-        {
-            throw new NotImplementedException();
-        }
-
-        public virtual void Transact(IList<T> accounts, Client client)
-        {
-            throw new NotImplementedException();
-        }
-
-        public virtual void OpenAccount(IList<T> accounts, Client client)
+        /// <summary>
+        /// Открыть счет
+        /// </summary>
+        /// <param name="client"></param>
+        public virtual void OpenAccount(Client client)
         {
             T newAccount = null;
 
@@ -148,17 +179,7 @@ namespace Модуль_13_ДЗ.MVVM.Model
 
             }
 
-            accounts.Add(newAccount);
+            Accounts.Add(newAccount);
         }
-
-        public void Put(IList<T> accounts, Client client)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Withdraw(IList<T> accounts, Client client)
-        {
-            throw new NotImplementedException();
-        }        
     }
 }

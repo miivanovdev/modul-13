@@ -66,5 +66,7 @@ namespace Модуль_13_ДЗ.MVVM.Model
         {
             get { return CanWithdrawed; }
         }
+
+        public override bool CanClose => CanWithdrawed;
     }
 }

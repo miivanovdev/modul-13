@@ -7,7 +7,7 @@
         xmlns:local="clr-namespace:Модуль_13_ДЗ"
         local:DialogCloser.DialogResult="{Binding DialogResult}"
         mc:Ignorable="d"
-        Title="" Height="250" Width="400">
+        Title="" MinHeight="150" MinWidth="200" Height="250" Width="400">
 
     <Window.Resources>
 

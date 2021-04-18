@@ -14,13 +14,13 @@ namespace Модуль_13_ДЗ
     class ViewModel : ObservableObject
     {
         public ObservableCollection<Client> Clients { get; set; }
+        public List<BankDepartment<BankAccount>> BankDepartments { get; set; }       
         public List<BankAccount> Accounts { get; set; }
-        public List<BankDepartment<BankAccount>> BankDepartments { get; set; }
 
         public ViewModel()
         {
             #region.Начальная инициализация
-            
+            /*
             Clients = new ObservableCollection<Client>()
             {
                 new Client("Кулибяка", "Вадим", "Натанович", 27450, true),
@@ -54,9 +54,9 @@ namespace Модуль_13_ДЗ
                 new PrivilegedAccount(3012250, 20, Clients[5].ClientId, Clients[5].FIO, 3, 18, new DateTime(2018, 10, 12)),
                 new PrivilegedAccount(2012250, 15, Clients[6].ClientId, Clients[6].FIO, 3, 18, new DateTime(2019, 11, 21)),
             };
-            
+            */
             #endregion
-            //InitData();
+            InitData();
             PropertyChanged += new PropertyChangedEventHandler(SelectionChangeHandler);
 
             SelectedDepartment = BankDepartments.First();
@@ -67,6 +67,9 @@ namespace Модуль_13_ДЗ
 
         private BankDepartment<BankAccount> selectedDepartment;
 
+        /// <summary>
+        /// Выбранный департамент
+        /// </summary>
         public BankDepartment<BankAccount> SelectedDepartment
         {
             get
@@ -85,6 +88,9 @@ namespace Модуль_13_ДЗ
 
         private Client selectedClient;
 
+        /// <summary>
+        /// Выбранный клиент
+        /// </summary>
         public Client SelectedClient
         {
             get
@@ -103,6 +109,9 @@ namespace Модуль_13_ДЗ
 
         private BankAccount selectedAccount;
 
+        /// <summary>
+        /// Выбранный счет
+        /// </summary>
         public BankAccount SelectedAccount
         {
             get
@@ -165,8 +174,8 @@ namespace Модуль_13_ДЗ
         {
             if (File.Exists("Clients.json"))
             {
-                string jsonDepartments = File.ReadAllText("Clients.json");
-                Clients = JsonConvert.DeserializeObject<ObservableCollection<Client>>(jsonDepartments);
+                string jsonClients = File.ReadAllText("Clients.json");
+                Clients = JsonConvert.DeserializeObject<ObservableCollection<Client>>(jsonClients);
             }
 
             JsonSerializerSettings settings = new JsonSerializerSettings()
@@ -182,8 +191,8 @@ namespace Модуль_13_ДЗ
 
             if (File.Exists("Accounts.json"))
             {
-                string jsonDepartments = File.ReadAllText("Accounts.json");
-                Accounts = JsonConvert.DeserializeObject<List<BankAccount>>(jsonDepartments, settings);
+                string jsonAccounts = File.ReadAllText("Accounts.json");
+                Accounts = JsonConvert.DeserializeObject<List<BankAccount>>(jsonAccounts, settings);
             }      
         }
 
@@ -226,6 +235,46 @@ namespace Модуль_13_ДЗ
         }
 
         /// <summary>
+        /// Команда удаления клиента
+        /// </summary>
+        private RelayCommand removeClientCommand;
+
+        public RelayCommand RemoveClientCommand
+        {
+            get
+            {
+                return removeClientCommand ??
+                (removeClientCommand = new RelayCommand(new Action<object>(RemoveClient),
+                                                     new Func<object, bool>(CanClientBeRemove)
+                ));
+            }
+        }
+
+        /// <summary>
+        /// Проверка возможности удаления клиента
+        /// </summary>
+        /// <param name="o"></param>
+        /// <returns></returns>
+        private bool CanClientBeRemove(object o)
+        {
+            return SelectedClient != null &&
+                   !Accounts.Exists(x => x.OwnerId == SelectedClient.ClientId);
+        }
+
+        /// <summary>
+        /// Удалить клиента
+        /// </summary>
+        /// <param name="o"></param>
+        private void RemoveClient(object o)
+        {
+            if (!Clients.Remove(SelectedClient))
+                MessageBox.Show("Не удалось удалить клиента!");
+
+            if(Clients.Count > 0)
+                SelectedClient = Clients.First();
+        }
+
+        /// <summary>
         /// Команда открытия счета
         /// </summary>
         private RelayCommand openAccountCommand;
@@ -248,9 +297,11 @@ namespace Модуль_13_ДЗ
         /// <returns></returns>
         private bool AccountCanBeOpened(object o)
         {
-            return SelectedDepartment != null && 
+            return SelectedDepartment != null &&
+                   SelectedDepartment.DepartmentId > 0 &&
                    SelectedClient != null &&
-                   SelectedDepartment.DepartmentId > 0;
+                   !SelectedClient.BadHistory;
+                   
         }
 
         /// <summary>
@@ -259,10 +310,10 @@ namespace Модуль_13_ДЗ
         /// <param name="o"></param>
         private void OpenAccount(object o)
         {
-            SelectedDepartment.OpenAccount(Accounts, SelectedClient);
-            SelectedDepartment.GetAccounts(Accounts, SelectedClient == null ? 0 : SelectedClient.ClientId);
+            SelectedDepartment.OpenAccount(SelectedClient);
+            SelectedDepartment.GetAccounts(Accounts, new NotifyCollectionChangedEventHandler(AccountsChanged), SelectedClient == null ? 0 : SelectedClient.ClientId);
         }
-        #endregion
+        
 
         /// <summary>
         /// Команда для списания средств со счета
@@ -277,7 +328,7 @@ namespace Модуль_13_ДЗ
                 (withdrawCommand = new RelayCommand(new Action<object>(Withdraw), new Func<object, bool>(AccountCanBeWithdrawed)));
             }
         }
-
+                
         /// <summary>
         /// Метод проверки возможности снятия средств
         /// </summary>
@@ -285,10 +336,8 @@ namespace Модуль_13_ДЗ
         /// <returns></returns>
         private bool AccountCanBeWithdrawed(object o)
         {
-            return SelectedDepartment != null &&
-                   SelectedClient != null &&
+            return SelectedClient != null &&
                    SelectedAccount != null &&
-                   SelectedDepartment.DepartmentId > 0 &&
                    SelectedAccount.CanWithdrawed;
         }
 
@@ -384,6 +433,11 @@ namespace Модуль_13_ДЗ
             }
         }
 
+
+        /// <summary>
+        /// Вызов диалога транзакции
+        /// </summary>
+        /// <param name="o"></param>
         private void TransactionDialog(object o)
         {
             try
@@ -409,7 +463,7 @@ namespace Модуль_13_ДЗ
         /// <returns></returns>
         private decimal TransactionDialog()
         {
-            TransactionViewModel transactionViewModel = new TransactionViewModel(Accounts.Where( x => x != SelectedAccount).ToList());
+            TransactionViewModel transactionViewModel = new TransactionViewModel(Accounts.Where( x => x != SelectedAccount).ToList(), SelectedAccount.Amount);
             DialogTransaction dialogTransaction = new DialogTransaction(transactionViewModel);
 
             if (dialogTransaction.ShowDialog() == true)
@@ -422,6 +476,44 @@ namespace Модуль_13_ДЗ
         }
 
         /// <summary>
+        /// Команда для списания средств со счета
+        /// </summary>
+        private RelayCommand closeAccountCommand;
+
+        public RelayCommand CloseAccountCommand
+        {
+            get
+            {
+                return closeAccountCommand ??
+                (closeAccountCommand = new RelayCommand(new Action<object>(CloseAccount), new Func<object, bool>(AccountCanBeClosed)));
+            }
+        }
+
+        /// <summary>
+        /// Метод закрытия счета
+        /// </summary>
+        /// <param name="o"></param>
+        private void CloseAccount(object o)
+        {
+            if (!SelectedDepartment.Accounts.Remove(SelectedAccount))
+                MessageBox.Show("Не удалось закрыть счет!");
+        }
+
+        /// <summary>
+        /// Проверка на возможность закрытия счета
+        /// </summary>
+        /// <param name="o"></param>
+        /// <returns></returns>
+        private bool AccountCanBeClosed(object o)
+        {
+            return SelectedAccount != null &&
+                   SelectedDepartment != null &&
+                   SelectedAccount.CanClose;
+        }
+
+        #endregion
+
+        /// <summary>
         /// Действия при смене департамента
         /// </summary>
         /// <param name="sender"></param>
@@ -430,17 +522,16 @@ namespace Модуль_13_ДЗ
         {
             if(e.PropertyName == nameof(SelectedDepartment))
             {
-                SelectedDepartment.GetAccounts(Accounts, SelectedClient == null ? 0 : SelectedClient.ClientId);
+                SelectedDepartment.GetAccounts(Accounts, new NotifyCollectionChangedEventHandler(AccountsChanged), SelectedClient == null ? 0 : SelectedClient.ClientId);                
             }
 
             if (e.PropertyName == nameof(SelectedClient)
             && SelectedClient != null)
             {
-                SelectedDepartment.GetAccounts(Accounts, SelectedClient.ClientId);
-                SelectedDepartment.Accounts.CollectionChanged += new NotifyCollectionChangedEventHandler(AccountsChanged);
+                SelectedDepartment.GetAccounts(Accounts, new NotifyCollectionChangedEventHandler(AccountsChanged), SelectedClient.ClientId);
             }
         }
-                
+               
         /// <summary>
         /// Действия при изменении в коллекции счетов 
         /// </summary>
@@ -457,6 +548,12 @@ namespace Модуль_13_ДЗ
                     if (!Accounts.Contains(account))
                         Accounts.Add(account);
                 }
+            }
+
+            if (e.Action == NotifyCollectionChangedAction.Remove)
+            {
+                if (Accounts.Remove(SelectedAccount))
+                    SelectedAccount = null;       
             }
         }
     }

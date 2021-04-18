@@ -30,24 +30,15 @@ namespace Модуль_13_ДЗ.MVVM.Model
         {
             get
             {
-                if (CurrentDate == DateTime.Now)
+                if (CreatedDate.AddMonths(MinTerm) <= CurrentDate)
                     return true;
 
                 return false;
             }
         }
 
-        public override bool CanClose
-        {
-            get
-            {
-                if (CreatedDate.AddMonths(MinTerm) == CurrentDate)
-                    return true;
-
-                return false;
-            }
-        }
-
+        public override bool CanClose => CanWithdrawed;
+        
         public override bool CanTransact
         {
             get { return CanWithdrawed;  }

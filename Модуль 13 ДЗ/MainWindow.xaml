@@ -134,7 +134,7 @@
                 </Setter.Value>
             </Setter>
         </Style>
-        
+
         <Style TargetType="{x:Type ComboBox}">
             <Setter Property="Template">
                 <Setter.Value>
@@ -199,9 +199,9 @@
 
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition MinWidth="450" Width="4*"/>
-            <ColumnDefinition MinWidth="5"  Width="Auto"/>
             <ColumnDefinition MinWidth="450" Width="3*"/>
+            <ColumnDefinition MinWidth="3"  Width="Auto"/>
+            <ColumnDefinition MinWidth="600" Width="4*"/>
         </Grid.ColumnDefinitions>
         <GridSplitter Grid.Column="1" 
                       ShowsPreview="False" 
@@ -209,7 +209,7 @@
                       BorderThickness="0.5"
                       Background="AntiqueWhite"
                       HorizontalAlignment="Center"
-                      VerticalAlignment="Stretch" />
+                      VerticalAlignment="Stretch" Width="3" />
 
         <DockPanel Grid.Column="0">
             <Grid DockPanel.Dock="Top">
@@ -261,14 +261,15 @@
                     <TextBox Padding="2"  ToolTip="Минимальный срок вклада" Text="{Binding ElementName = department, Path = SelectedItem.Delay}" Style="{StaticResource bxStyle}"/>
                 </StackPanel>
             </Grid>
-            
+
 
             <DataGrid x:Name="clients" 
                       DockPanel.Dock="Top" 
                       ItemsSource="{Binding Clients}"
                       SelectedItem="{Binding SelectedClient, Mode=TwoWay}"
                       IsSynchronizedWithCurrentItem="True"
-                      AutoGenerateColumns="False">
+                      AutoGenerateColumns="False"
+                      CanUserAddRows="False">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Имя" Binding="{Binding Path=FirstName}" Width="100"/>
                     <DataGridTextColumn Header="Фамилия" Binding="{Binding Path=Surname}" Width="100"/>
@@ -279,11 +280,12 @@
                 <DataGrid.ContextMenu>
                     <ContextMenu>
                         <MenuItem Header="Добавить клиента" Command="{Binding AddClientCommand}"/>
-                    </ContextMenu> 
+                        <MenuItem Header="Удаление клиента" Command="{Binding RemoveClientCommand}"/>
+                    </ContextMenu>
                 </DataGrid.ContextMenu>
             </DataGrid>
-            
-            
+
+
         </DockPanel>
         <DockPanel Grid.Column="2">
             <Grid DockPanel.Dock="Top">
@@ -295,7 +297,7 @@
                 </Grid.ColumnDefinitions>
                 <StackPanel Grid.Column="0">
                     <TextBlock Text="Фамилия"/>
-                    <TextBox Text="{Binding ElementName=clients, Path = SelectedItem.FirstName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource bxStyle}" />    
+                    <TextBox Text="{Binding ElementName=clients, Path = SelectedItem.FirstName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource bxStyle}" />
                 </StackPanel>
 
                 <StackPanel Grid.Column="1">
@@ -312,7 +314,7 @@
                     <TextBlock Text="Итого по вкладам"/>
                     <TextBox Text="{Binding ElementName=clients, Path = SelectedItem.Income, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource bxStyle}" />
                 </StackPanel>
-                               
+
             </Grid>
 
             <DataGrid x:Name="accounts" 
@@ -321,40 +323,42 @@
                       SelectedItem="{Binding SelectedAccount, Mode=TwoWay}"
                       IsSynchronizedWithCurrentItem="True"
                       AutoGenerateColumns="False" 
+                      CanUserAddRows="False"
                       HorizontalGridLinesBrush="DarkGray"
                       RowBackground="LightGray" 
                       AlternatingRowBackground="White">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Дата создания" Binding="{Binding CreatedDate}" IsReadOnly="True" Width="100"/>
-                    <DataGridTextColumn Header="Сумма" Binding="{Binding Amount}" IsReadOnly="True" Width="100"/>
+                    <DataGridTextColumn Header="Начальная сумма" Binding="{Binding Amount}" IsReadOnly="True" Width="105"/>
                     <DataGridTextColumn Header="Ставка" Binding="{Binding InterestRate}" IsReadOnly="True" Width="100"/>
                     <DataGridTextColumn Header="Месяцев" Binding="{Binding MonthPassed}" IsReadOnly="True" Width="100"/>
-                    <DataGridTemplateColumn Header="Текущая дата" Width="100">                        
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding CurrentDate}" />
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                            <DataGridTemplateColumn.CellEditingTemplate>
-                                <DataTemplate>
-                                    <DatePicker SelectedDate="{Binding CurrentDate}" />
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellEditingTemplate>
-                    </DataGridTemplateColumn>    
+                    <DataGridTemplateColumn Header="Текущая дата" Width="100">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding CurrentDate}" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                        <DataGridTemplateColumn.CellEditingTemplate>
+                            <DataTemplate>
+                                <DatePicker SelectedDate="{Binding CurrentDate}" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellEditingTemplate>
+                    </DataGridTemplateColumn>
                     <DataGridTextColumn Header="Итого" Binding="{Binding Income}" IsReadOnly="True" Width="100"/>
                 </DataGrid.Columns>
                 <DataGrid.ContextMenu>
                     <ContextMenu>
                         <MenuItem Header="Открыть счет" Command="{Binding OpenAccountCommand}" />
+                        <MenuItem Header="Закрыть счет" Command="{Binding CloseAccountCommand}" />
                         <MenuItem Header="Снять со счета" Command="{Binding WithdrawCommand}" />
                         <MenuItem Header="Внести на счет" Command="{Binding AddCommand}" />
                         <MenuItem Header="Перевод на счет" Command="{Binding TransactCommand}" />
-                    </ContextMenu>                    
+                    </ContextMenu>
                 </DataGrid.ContextMenu>
             </DataGrid>
         </DockPanel>
     </Grid>
 
-    
-    
+
+
 </Window>
