@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
+using System.Windows;
 
 namespace Модуль_13_ДЗ.MVVM.Model
 {
     internal class BankDepartment<T> : ObservableObject where T : BankAccount
     {
         public string Name { get; set; }
+        public List<LogMessage> Log { get; set; }
 
         /// <summary>
         /// Тип департамента
@@ -105,8 +107,9 @@ namespace Модуль_13_ДЗ.MVVM.Model
             id = 0;
         }
 
-        public BankDepartment(string name, decimal minAmount, uint minTerm, decimal rate, bool isEmpty = false, uint delay = 0)
+        public BankDepartment(List<LogMessage> log, string name, decimal minAmount, uint minTerm, decimal rate, bool isEmpty = false, uint delay = 0)
         {
+            Log = log;
             Name = name;
             MinTerm = minTerm;
             Delay = delay;
@@ -140,6 +143,8 @@ namespace Модуль_13_ДЗ.MVVM.Model
                 Accounts = new ObservableCollection<T>(accounts.Where(x => x.OwnerId == clientId && x.DepartmentId == DepartmentId));
 
             Accounts.CollectionChanged += handler;
+            Subscribe();
+            
         }   
         
         /// <summary>
@@ -180,6 +185,48 @@ namespace Модуль_13_ДЗ.MVVM.Model
             }
 
             Accounts.Add(newAccount);
+            Log.Add(new LogMessage($"Открыт счет {newAccount.OwnerName} {newAccount.OwnerId} Type:{newAccount.Type}"));
         }
+
+        protected void Subscribe()
+        {
+            foreach(var a in Accounts)
+            {
+                a.AmountAdded += LogAdding;
+                a.AmountWithdrawed += LogWithdrawing;
+                a.AmountTransact += LogTransact;
+            }
+        }
+
+        /// <summary>
+        /// Закрыть счет
+        /// </summary>
+        /// <param name="account"></param>
+        public virtual void CloseAccount(T account)
+        {
+            if (!Accounts.Remove(account))
+                MessageBox.Show("Не удалось закрыть счет!");
+
+            Log.Add(new LogMessage($"Закрыт счет {account.OwnerName} {account.OwnerId} Type:{account.Type}"));
+        }
+
+        protected virtual void LogAdding(object sender, decimal amount)
+        {
+            var account = sender as BankAccount;
+            Log.Add(new LogMessage($"{account.OwnerName} Id:{account.OwnerId} Type: {account.Type} пополнен на сумму: {amount}"));
+        }
+
+        protected virtual void LogWithdrawing(object sender, decimal amount)
+        {
+            var account = sender as BankAccount;
+            Log.Add(new LogMessage($"{account.OwnerName} Id:{account.OwnerId} Type: {account.Type} снята сумма: {amount}"));
+        }
+
+        protected virtual void LogTransact(object sender, BankAccount accountReciever, decimal amount)
+        {
+            var account = sender as BankAccount;
+            Log.Add(new LogMessage($"{account.OwnerName} Id:{account.OwnerId} Type: {account.Type} перевод на счет {accountReciever.OwnerName} Id:{accountReciever.OwnerId} Type: {accountReciever.Type} на сумму: {amount}"));
+        }
+
     }
 }

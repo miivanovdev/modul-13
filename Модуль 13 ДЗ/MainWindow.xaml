@@ -197,13 +197,20 @@
 
     </Window.Resources>
 
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition MinWidth="450" Width="3*"/>
-            <ColumnDefinition MinWidth="3"  Width="Auto"/>
-            <ColumnDefinition MinWidth="600" Width="4*"/>
-        </Grid.ColumnDefinitions>
-        <GridSplitter Grid.Column="1" 
+    <TabControl>
+        <TabItem>
+            <TabItem.Header>
+                Операции
+            </TabItem.Header>
+            <TabItem.Content>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition MinWidth="450" Width="3*"/>
+                        <ColumnDefinition MinWidth="3"  Width="Auto"/>
+                        <ColumnDefinition MinWidth="600" Width="4*"/>
+                    </Grid.ColumnDefinitions>
+                    
+                    <GridSplitter Grid.Column="1" 
                       ShowsPreview="False" 
                       MinWidth="3"
                       BorderThickness="0.5"
@@ -211,21 +218,21 @@
                       HorizontalAlignment="Center"
                       VerticalAlignment="Stretch" Width="3" />
 
-        <DockPanel Grid.Column="0">
-            <Grid DockPanel.Dock="Top">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                </Grid.RowDefinitions>
+                <DockPanel Grid.Column="0">
+                    <Grid DockPanel.Dock="Top">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
 
-                <StackPanel Grid.Column="0" Margin="2 0 0 0">
-                    <TextBlock Text="Департамент"/>
-                    <ComboBox  x:Name="department"  
+                        <StackPanel Grid.Column="0" Margin="2 0 0 0">
+                            <TextBlock Text="Департамент"/>
+                            <ComboBox  x:Name="department"  
                       ItemsSource="{Binding BankDepartments}"
                       DisplayMemberPath="Name" 
                       SelectedValuePath="Name"
@@ -234,90 +241,90 @@
                       HorizontalContentAlignment="Stretch"
                       Height="22"
                       />
-                </StackPanel>
+                        </StackPanel>
 
-                <StackPanel Grid.Column="1" Margin="2 0 0 0">
-                    <TextBlock  Text="Наименование"/>
-                    <TextBox Padding="2" ToolTip="Ставка по вкладам" Text="{Binding ElementName = department, Path = SelectedItem.Name}" Style="{StaticResource bxStyle}"/>
-                </StackPanel>
+                        <StackPanel Grid.Column="1" Margin="2 0 0 0">
+                            <TextBlock  Text="Наименование"/>
+                            <TextBox Padding="2" ToolTip="Ставка по вкладам" Text="{Binding ElementName = department, Path = SelectedItem.Name}" Style="{StaticResource bxStyle}"/>
+                        </StackPanel>
 
-                <StackPanel Grid.Column ="2">
-                    <TextBlock  Text="Ставка по вкладам"/>
-                    <TextBox Padding="2" ToolTip="Ставка по вкладам" Text="{Binding ElementName = department, Path = SelectedItem.InterestRate}" Style="{StaticResource bxStyle}"/>
-                </StackPanel>
+                        <StackPanel Grid.Column ="2">
+                            <TextBlock  Text="Ставка по вкладам"/>
+                            <TextBox Padding="2" ToolTip="Ставка по вкладам" Text="{Binding ElementName = department, Path = SelectedItem.InterestRate}" Style="{StaticResource bxStyle}"/>
+                        </StackPanel>
 
-                <StackPanel Grid.Row="1" Grid.Column="0" Margin="2 0 0 0">
-                    <TextBlock Text="Минимальная сумма вклада"/>
-                    <TextBox Padding="2" ToolTip="Минимальная сумма вклада" Text="{Binding ElementName = department, Path = SelectedItem.MinAmount}" Style="{StaticResource bxStyle}"/>
-                </StackPanel>
+                        <StackPanel Grid.Row="1" Grid.Column="0" Margin="2 0 0 0">
+                            <TextBlock Text="Минимальная сумма вклада"/>
+                            <TextBox Padding="2" ToolTip="Минимальная сумма вклада" Text="{Binding ElementName = department, Path = SelectedItem.MinAmount}" Style="{StaticResource bxStyle}"/>
+                        </StackPanel>
 
-                <StackPanel Grid.Row="1"  Grid.Column ="1">
-                    <TextBlock Text="Минимальный срок вклада"/>
-                    <TextBox Padding="2"  ToolTip="Минимальный срок вклада" Text="{Binding ElementName = department, Path = SelectedItem.MinTerm}" Style="{StaticResource bxStyle}"/>
-                </StackPanel>
+                        <StackPanel Grid.Row="1"  Grid.Column ="1">
+                            <TextBlock Text="Минимальный срок вклада"/>
+                            <TextBox Padding="2"  ToolTip="Минимальный срок вклада" Text="{Binding ElementName = department, Path = SelectedItem.MinTerm}" Style="{StaticResource bxStyle}"/>
+                        </StackPanel>
 
-                <StackPanel Grid.Row="1"  Grid.Column ="2">
-                    <TextBlock Text="Отсрочка"/>
-                    <TextBox Padding="2"  ToolTip="Минимальный срок вклада" Text="{Binding ElementName = department, Path = SelectedItem.Delay}" Style="{StaticResource bxStyle}"/>
-                </StackPanel>
-            </Grid>
+                        <StackPanel Grid.Row="1"  Grid.Column ="2">
+                            <TextBlock Text="Отсрочка"/>
+                            <TextBox Padding="2"  ToolTip="Минимальный срок вклада" Text="{Binding ElementName = department, Path = SelectedItem.Delay}" Style="{StaticResource bxStyle}"/>
+                        </StackPanel>
+                    </Grid>
 
 
-            <DataGrid x:Name="clients" 
+                    <DataGrid x:Name="clients" 
                       DockPanel.Dock="Top" 
                       ItemsSource="{Binding Clients}"
                       SelectedItem="{Binding SelectedClient, Mode=TwoWay}"
                       IsSynchronizedWithCurrentItem="True"
                       AutoGenerateColumns="False"
                       CanUserAddRows="False">
-                <DataGrid.Columns>
-                    <DataGridTextColumn Header="Имя" Binding="{Binding Path=FirstName}" Width="100"/>
-                    <DataGridTextColumn Header="Фамилия" Binding="{Binding Path=Surname}" Width="100"/>
-                    <DataGridTextColumn Header="Отчество" Binding="{Binding Path=SecondName}" Width="100"/>
-                    <DataGridTextColumn Header="Сумма" Binding="{Binding Path=Amount}" Width="100"/>
-                    <DataGridCheckBoxColumn Header="Плохая история"  Binding="{Binding Path=BadHistory}" Width="100"/>
-                </DataGrid.Columns>
-                <DataGrid.ContextMenu>
-                    <ContextMenu>
-                        <MenuItem Header="Добавить клиента" Command="{Binding AddClientCommand}"/>
-                        <MenuItem Header="Удаление клиента" Command="{Binding RemoveClientCommand}"/>
-                    </ContextMenu>
-                </DataGrid.ContextMenu>
-            </DataGrid>
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Имя" Binding="{Binding Path=FirstName}" Width="100"/>
+                            <DataGridTextColumn Header="Фамилия" Binding="{Binding Path=Surname}" Width="100"/>
+                            <DataGridTextColumn Header="Отчество" Binding="{Binding Path=SecondName}" Width="100"/>
+                            <DataGridTextColumn Header="Сумма" Binding="{Binding Path=Amount}" Width="100"/>
+                            <DataGridCheckBoxColumn Header="Плохая история"  Binding="{Binding Path=BadHistory}" Width="100"/>
+                        </DataGrid.Columns>
+                        <DataGrid.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="Добавить клиента" Command="{Binding AddClientCommand}"/>
+                                <MenuItem Header="Удаление клиента" Command="{Binding RemoveClientCommand}"/>
+                            </ContextMenu>
+                        </DataGrid.ContextMenu>
+                    </DataGrid>
 
 
-        </DockPanel>
-        <DockPanel Grid.Column="2">
-            <Grid DockPanel.Dock="Top">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <StackPanel Grid.Column="0">
-                    <TextBlock Text="Фамилия"/>
-                    <TextBox Text="{Binding ElementName=clients, Path = SelectedItem.FirstName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource bxStyle}" />
-                </StackPanel>
+                </DockPanel>
+                <DockPanel Grid.Column="2">
+                    <Grid DockPanel.Dock="Top">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0">
+                            <TextBlock Text="Фамилия"/>
+                            <TextBox Text="{Binding ElementName=clients, Path = SelectedItem.FirstName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource bxStyle}" />
+                        </StackPanel>
 
-                <StackPanel Grid.Column="1">
-                    <TextBlock Text="Имя"/>
-                    <TextBox Text="{Binding ElementName=clients, Path = SelectedItem.Surname, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource bxStyle}" />
-                </StackPanel>
+                        <StackPanel Grid.Column="1">
+                            <TextBlock Text="Имя"/>
+                            <TextBox Text="{Binding ElementName=clients, Path = SelectedItem.Surname, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource bxStyle}" />
+                        </StackPanel>
 
-                <StackPanel Grid.Column="2">
-                    <TextBlock Text="Отчество"/>
-                    <TextBox Grid.Column="2" Text="{Binding ElementName=clients, Path = SelectedItem.SecondName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource bxStyle}" />
-                </StackPanel>
+                        <StackPanel Grid.Column="2">
+                            <TextBlock Text="Отчество"/>
+                            <TextBox Grid.Column="2" Text="{Binding ElementName=clients, Path = SelectedItem.SecondName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource bxStyle}" />
+                        </StackPanel>
 
-                <StackPanel Grid.Column="3">
-                    <TextBlock Text="Итого по вкладам"/>
-                    <TextBox Text="{Binding ElementName=clients, Path = SelectedItem.Income, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource bxStyle}" />
-                </StackPanel>
+                        <StackPanel Grid.Column="3">
+                            <TextBlock Text="Итого по вкладам"/>
+                            <TextBox Text="{Binding ElementName=clients, Path = SelectedItem.Income, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource bxStyle}" />
+                        </StackPanel>
 
-            </Grid>
+                    </Grid>
 
-            <DataGrid x:Name="accounts" 
+                    <DataGrid x:Name="accounts" 
                       DockPanel.Dock="Top" 
                       ItemsSource="{Binding ElementName=department, Path=SelectedItem.Accounts}"
                       SelectedItem="{Binding SelectedAccount, Mode=TwoWay}"
@@ -327,37 +334,57 @@
                       HorizontalGridLinesBrush="DarkGray"
                       RowBackground="LightGray" 
                       AlternatingRowBackground="White">
-                <DataGrid.Columns>
-                    <DataGridTextColumn Header="Дата создания" Binding="{Binding CreatedDate}" IsReadOnly="True" Width="100"/>
-                    <DataGridTextColumn Header="Начальная сумма" Binding="{Binding Amount}" IsReadOnly="True" Width="105"/>
-                    <DataGridTextColumn Header="Ставка" Binding="{Binding InterestRate}" IsReadOnly="True" Width="100"/>
-                    <DataGridTextColumn Header="Месяцев" Binding="{Binding MonthPassed}" IsReadOnly="True" Width="100"/>
-                    <DataGridTemplateColumn Header="Текущая дата" Width="100">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding CurrentDate}" />
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                        <DataGridTemplateColumn.CellEditingTemplate>
-                            <DataTemplate>
-                                <DatePicker SelectedDate="{Binding CurrentDate}" />
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellEditingTemplate>
-                    </DataGridTemplateColumn>
-                    <DataGridTextColumn Header="Итого" Binding="{Binding Income}" IsReadOnly="True" Width="100"/>
-                </DataGrid.Columns>
-                <DataGrid.ContextMenu>
-                    <ContextMenu>
-                        <MenuItem Header="Открыть счет" Command="{Binding OpenAccountCommand}" />
-                        <MenuItem Header="Закрыть счет" Command="{Binding CloseAccountCommand}" />
-                        <MenuItem Header="Снять со счета" Command="{Binding WithdrawCommand}" />
-                        <MenuItem Header="Внести на счет" Command="{Binding AddCommand}" />
-                        <MenuItem Header="Перевод на счет" Command="{Binding TransactCommand}" />
-                    </ContextMenu>
-                </DataGrid.ContextMenu>
-            </DataGrid>
-        </DockPanel>
-    </Grid>
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Дата создания" Binding="{Binding CreatedDate}" IsReadOnly="True" Width="100"/>
+                            <DataGridTextColumn Header="Начальная сумма" Binding="{Binding Amount}" IsReadOnly="True" Width="105"/>
+                            <DataGridTextColumn Header="Ставка" Binding="{Binding InterestRate}" IsReadOnly="True" Width="100"/>
+                            <DataGridTextColumn Header="Месяцев" Binding="{Binding MonthPassed}" IsReadOnly="True" Width="100"/>
+                            <DataGridTemplateColumn Header="Текущая дата" Width="100">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding CurrentDate}" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                                <DataGridTemplateColumn.CellEditingTemplate>
+                                    <DataTemplate>
+                                        <DatePicker SelectedDate="{Binding CurrentDate}" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellEditingTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTextColumn Header="Итого" Binding="{Binding Income}" IsReadOnly="True" Width="100"/>
+                        </DataGrid.Columns>
+                        <DataGrid.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="Открыть счет" Command="{Binding OpenAccountCommand}" />
+                                <MenuItem Header="Закрыть счет" Command="{Binding CloseAccountCommand}" />
+                                <MenuItem Header="Снять со счета" Command="{Binding WithdrawCommand}" />
+                                <MenuItem Header="Внести на счет" Command="{Binding AddCommand}" />
+                                <MenuItem Header="Перевод на счет" Command="{Binding TransactCommand}" />
+                            </ContextMenu>
+                        </DataGrid.ContextMenu>
+                    </DataGrid>
+                </DockPanel>
+                </Grid>
+            </TabItem.Content>
+        </TabItem>
+        <TabItem>
+            <TabItem.Header>
+                История
+            </TabItem.Header>
+            <TabItem.Content>
+                <ListView ItemsSource="{Binding History}">
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="Событие" DisplayMemberBinding="{Binding Message}" Width="650"/>
+                            <GridViewColumn Header="Время" DisplayMemberBinding="{Binding Time}"/>
+                        </GridView>
+                    </ListView.View>    
+                </ListView>
+                    
+            </TabItem.Content>
+        </TabItem>
+    </TabControl>
+    
 
 
 

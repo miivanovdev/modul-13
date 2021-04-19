@@ -16,11 +16,14 @@ namespace Модуль_13_ДЗ
         public ObservableCollection<Client> Clients { get; set; }
         public List<BankDepartment<BankAccount>> BankDepartments { get; set; }       
         public List<BankAccount> Accounts { get; set; }
+        public List<LogMessage> Log { get; set; }
 
         public ViewModel()
         {
             #region.Начальная инициализация
             /*
+            Log = new List<LogMessage>();
+
             Clients = new ObservableCollection<Client>()
             {
                 new Client("Кулибяка", "Вадим", "Натанович", 27450, true),
@@ -34,10 +37,10 @@ namespace Модуль_13_ДЗ
                         
             BankDepartments = new List<BankDepartment<BankAccount>>()
             {
-                new BankDepartment<BankAccount>("Не выбрано!", 0, 0, 0, true),
-                new PhysicalDepartment("Отдел по работе с физическими лицами", 50000, 6, 15),
-                new IndividualDepartment("Отдел по работе с юридическими лицами", 30000, 12, 15),
-                new PrivilegedDepartment("Отдел по работе с привелигированными клиентами", 100000, 18, 20)
+                new BankDepartment<BankAccount>(Log, "Не выбрано!", 0, 0, 0, true),
+                new PhysicalDepartment(Log, "Отдел по работе с физическими лицами", 50000, 6, 15),
+                new IndividualDepartment(Log, "Отдел по работе с юридическими лицами", 30000, 12, 15),
+                new PrivilegedDepartment(Log, "Отдел по работе с привелигированными клиентами", 100000, 18, 20)
             };
             
             Accounts = new List<BankAccount>()
@@ -63,6 +66,11 @@ namespace Модуль_13_ДЗ
             SelectedClient = Clients.First();
                      
             SelectedAccount = SelectedDepartment.Accounts.First();
+        }
+
+        public ObservableCollection<LogMessage> History
+        {
+            get { return new ObservableCollection<LogMessage>(Log);  }
         }
 
         private BankDepartment<BankAccount> selectedDepartment;
@@ -163,6 +171,9 @@ namespace Модуль_13_ДЗ
 
             string jsonAccounts = JsonConvert.SerializeObject(Accounts, settings);
             File.WriteAllText("Accounts.json", jsonAccounts);
+
+            string jsonLog = JsonConvert.SerializeObject(Log, settings);
+            File.WriteAllText("Log.json", jsonLog);
         }
         #endregion
 
@@ -193,7 +204,13 @@ namespace Модуль_13_ДЗ
             {
                 string jsonAccounts = File.ReadAllText("Accounts.json");
                 Accounts = JsonConvert.DeserializeObject<List<BankAccount>>(jsonAccounts, settings);
-            }      
+            }
+
+            if (File.Exists("Log.json"))
+            {
+                string jsonLog = File.ReadAllText("Log.json");
+                Log = JsonConvert.DeserializeObject<List<LogMessage>>(jsonLog, settings);
+            }
         }
 
 
@@ -342,21 +359,14 @@ namespace Модуль_13_ДЗ
         }
 
         /// <summary>
-        /// Метод снятия со счета
+        /// Вызов снятия со счета
         /// </summary>
-        /// <param name="o"></param>
-        private void Withdraw(object o)
+        /// <param name="sender"></param>
+        private void Withdraw(object sender)
         {
-            try
-            {
-                SelectedAccount.Amount -= ShowDialog("Снятие средств со счета", true);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }            
+            SelectedAccount.Withdraw(this);
         }
-
+                
         /// <summary>
         /// Команда внесения средств на счет
         /// </summary>
@@ -378,47 +388,20 @@ namespace Модуль_13_ДЗ
         /// <returns></returns>
         private bool AccountCanBeAdd(object o)
         {
-            return SelectedDepartment != null &&
-                   SelectedClient != null &&
-                   SelectedAccount != null &&
-                   SelectedDepartment.DepartmentId > 0 &&
+            return SelectedClient != null &&
+                   SelectedAccount != null &&                   
                    SelectedAccount.CanAdded;
         }
 
-
         /// <summary>
-        /// Метод внесения средств на счет
+        /// Вызов поплнения счета
         /// </summary>
-        /// <param name="o"></param>
-        private void Add(object o)
+        /// <param name="sender"></param>
+        private void Add(object sender)
         {
-            try
-            {
-                SelectedAccount.Amount += ShowDialog("Внесение средств на счет");
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
+            SelectedAccount.Add(this);
         }
-
-        /// <summary>
-        /// Вывод диалогового окна для внесения/снятия
-        /// </summary>
-        /// <param name="operationName"></param>
-        /// <param name="isWithdraw"></param>
-        /// <returns></returns>
-        private decimal ShowDialog(string operationName, bool isWithdraw = false)
-        {
-            DialogViewModel dialogVM = new DialogViewModel(operationName, SelectedAccount.Amount, isWithdraw);
-            DialogWindow dialogWindow = new DialogWindow(dialogVM, operationName);
-
-            if (dialogWindow.ShowDialog() == true)
-                return dialogVM.Amount;
-            
-            return 0;
-        }
-
+                
         /// <summary>
         /// Команда вызова транзакции
         /// </summary>
@@ -429,52 +412,24 @@ namespace Модуль_13_ДЗ
             get
             {
                 return transactCommand ??
-                (transactCommand = new RelayCommand(new Action<object>(TransactionDialog), new Func<object, bool>(CanTransact)));
+                (transactCommand = new RelayCommand(new Action<object>(Transact), new Func<object, bool>(CanTransact)));
             }
         }
-
-
-        /// <summary>
-        /// Вызов диалога транзакции
-        /// </summary>
-        /// <param name="o"></param>
-        private void TransactionDialog(object o)
-        {
-            try
-            {
-                TransactionDialog();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-        }
-
+                
         private bool CanTransact(object o)
         {
             return SelectedAccount != null && SelectedAccount.CanTransact;
         }
 
         /// <summary>
-        /// Вывод диалогового окна для внесения/снятия
+        /// Вызвать перевод
         /// </summary>
-        /// <param name="operationName"></param>
-        /// <param name="isWithdraw"></param>
-        /// <returns></returns>
-        private decimal TransactionDialog()
+        /// <param name="sender"></param>
+        private void Transact(object sender)
         {
-            TransactionViewModel transactionViewModel = new TransactionViewModel(Accounts.Where( x => x != SelectedAccount).ToList(), SelectedAccount.Amount);
-            DialogTransaction dialogTransaction = new DialogTransaction(transactionViewModel);
-
-            if (dialogTransaction.ShowDialog() == true)
-            {
-                SelectedAccount.Amount -= transactionViewModel.Amount;
-                transactionViewModel.SelectedAccount.Amount += transactionViewModel.Amount;
-            }
-
-            return 0;
+            SelectedAccount.Transact(Accounts);
         }
-
+                
         /// <summary>
         /// Команда для списания средств со счета
         /// </summary>
@@ -495,8 +450,7 @@ namespace Модуль_13_ДЗ
         /// <param name="o"></param>
         private void CloseAccount(object o)
         {
-            if (!SelectedDepartment.Accounts.Remove(SelectedAccount))
-                MessageBox.Show("Не удалось закрыть счет!");
+            SelectedDepartment.CloseAccount(SelectedAccount);
         }
 
         /// <summary>

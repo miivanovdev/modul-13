@@ -9,8 +9,8 @@ namespace Модуль_13_ДЗ.MVVM.Model
 {
     class PrivilegedDepartment : BankDepartment<BankAccount>
     {
-        public PrivilegedDepartment(string name, decimal minAmount, uint minTerm, decimal rate, bool isEmpty = false, uint delay = 0)
-            : base(name, minAmount, minTerm, rate, isEmpty, delay)
+        public PrivilegedDepartment(List<LogMessage> log, string name, decimal minAmount, uint minTerm, decimal rate, bool isEmpty = false, uint delay = 0)
+           : base(log, name, minAmount, minTerm, rate, isEmpty, delay)
         {
 
         }

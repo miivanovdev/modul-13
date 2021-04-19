@@ -75,6 +75,7 @@
     <Compile Include="EnumToCollectionConverter .cs" />
     <Compile Include="MVVM\Model\IndividualAccount.cs" />
     <Compile Include="MVVM\Model\IndividualDepartment.cs" />
+    <Compile Include="MVVM\Model\LogMessage.cs" />
     <Compile Include="MVVM\Model\PhysicalAccount.cs" />
     <Compile Include="MVVM\Model\PhysicalDepartment.cs" />
     <Compile Include="MVVM\Model\PrivilegedAccount.cs" />

@@ -9,8 +9,8 @@ namespace Модуль_13_ДЗ.MVVM.Model
 {
     class PhysicalDepartment : BankDepartment<BankAccount>
     {
-        public PhysicalDepartment(string name, decimal minAmount, uint minTerm, decimal rate, bool isEmpty = false, uint delay = 0)
-            : base(name, minAmount, minTerm, rate, isEmpty, delay)
+        public PhysicalDepartment(List<LogMessage> log, string name, decimal minAmount, uint minTerm, decimal rate, bool isEmpty = false, uint delay = 0)
+            : base(log, name, minAmount, minTerm, rate, isEmpty, delay)
         {
 
         }
