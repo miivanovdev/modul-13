@@ -10,7 +10,7 @@ namespace Модуль_13_ДЗ.MVVM.Model
     internal class BankDepartment<T> : ObservableObject where T : BankAccount
     {
         public string Name { get; set; }
-        public List<LogMessage> Log { get; set; }
+        public ObservableCollection<LogMessage> Log { get; set; }
 
         /// <summary>
         /// Тип департамента
@@ -107,7 +107,7 @@ namespace Модуль_13_ДЗ.MVVM.Model
             id = 0;
         }
 
-        public BankDepartment(List<LogMessage> log, string name, decimal minAmount, uint minTerm, decimal rate, bool isEmpty = false, uint delay = 0)
+        public BankDepartment(ObservableCollection<LogMessage> log, string name, decimal minAmount, uint minTerm, decimal rate, bool isEmpty = false, uint delay = 0)
         {
             Log = log;
             Name = name;
@@ -128,7 +128,7 @@ namespace Модуль_13_ДЗ.MVVM.Model
         /// <param name="accounts"></param>
         /// <param name="handler"></param>
         /// <param name="clientId"></param>
-        public void GetAccounts(List<T> accounts, NotifyCollectionChangedEventHandler handler, int clientId = 0)
+        public void GetAccounts(List<T> accounts, NotifyCollectionChangedEventHandler accountsHandler, NotifyCollectionChangedEventHandler logHandler, int clientId = 0)
         {
             if (clientId == 0 && DepartmentId == 0)
                 Accounts = new ObservableCollection<T>(accounts);
@@ -142,7 +142,8 @@ namespace Модуль_13_ДЗ.MVVM.Model
             if (clientId > 0 && DepartmentId > 0)
                 Accounts = new ObservableCollection<T>(accounts.Where(x => x.OwnerId == clientId && x.DepartmentId == DepartmentId));
 
-            Accounts.CollectionChanged += handler;
+            Accounts.CollectionChanged += accountsHandler;
+            Log.CollectionChanged += logHandler;
             Subscribe();
             
         }   

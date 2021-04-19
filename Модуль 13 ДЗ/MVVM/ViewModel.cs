@@ -16,13 +16,13 @@ namespace Модуль_13_ДЗ
         public ObservableCollection<Client> Clients { get; set; }
         public List<BankDepartment<BankAccount>> BankDepartments { get; set; }       
         public List<BankAccount> Accounts { get; set; }
-        public List<LogMessage> Log { get; set; }
+        public ObservableCollection<LogMessage> Log { get; set; }
 
         public ViewModel()
         {
             #region.Начальная инициализация
-            /*
-            Log = new List<LogMessage>();
+            
+            Log = new ObservableCollection<LogMessage>();
 
             Clients = new ObservableCollection<Client>()
             {
@@ -57,9 +57,9 @@ namespace Модуль_13_ДЗ
                 new PrivilegedAccount(3012250, 20, Clients[5].ClientId, Clients[5].FIO, 3, 18, new DateTime(2018, 10, 12)),
                 new PrivilegedAccount(2012250, 15, Clients[6].ClientId, Clients[6].FIO, 3, 18, new DateTime(2019, 11, 21)),
             };
-            */
+            
             #endregion
-            InitData();
+            //InitData();
             PropertyChanged += new PropertyChangedEventHandler(SelectionChangeHandler);
 
             SelectedDepartment = BankDepartments.First();
@@ -67,12 +67,7 @@ namespace Модуль_13_ДЗ
                      
             SelectedAccount = SelectedDepartment.Accounts.First();
         }
-
-        public ObservableCollection<LogMessage> History
-        {
-            get { return new ObservableCollection<LogMessage>(Log);  }
-        }
-
+               
         private BankDepartment<BankAccount> selectedDepartment;
 
         /// <summary>
@@ -209,7 +204,7 @@ namespace Модуль_13_ДЗ
             if (File.Exists("Log.json"))
             {
                 string jsonLog = File.ReadAllText("Log.json");
-                Log = JsonConvert.DeserializeObject<List<LogMessage>>(jsonLog, settings);
+                Log = JsonConvert.DeserializeObject<ObservableCollection<LogMessage>>(jsonLog, settings);
             }
         }
 
@@ -328,7 +323,7 @@ namespace Модуль_13_ДЗ
         private void OpenAccount(object o)
         {
             SelectedDepartment.OpenAccount(SelectedClient);
-            SelectedDepartment.GetAccounts(Accounts, new NotifyCollectionChangedEventHandler(AccountsChanged), SelectedClient == null ? 0 : SelectedClient.ClientId);
+            SelectedDepartment.GetAccounts(Accounts, new NotifyCollectionChangedEventHandler(AccountsChanged), new NotifyCollectionChangedEventHandler(LogChanged), SelectedClient == null ? 0 : SelectedClient.ClientId);
         }
         
 
@@ -476,13 +471,13 @@ namespace Модуль_13_ДЗ
         {
             if(e.PropertyName == nameof(SelectedDepartment))
             {
-                SelectedDepartment.GetAccounts(Accounts, new NotifyCollectionChangedEventHandler(AccountsChanged), SelectedClient == null ? 0 : SelectedClient.ClientId);                
+                SelectedDepartment.GetAccounts(Accounts, new NotifyCollectionChangedEventHandler(AccountsChanged), new NotifyCollectionChangedEventHandler(LogChanged), SelectedClient == null ? 0 : SelectedClient.ClientId);                
             }
 
             if (e.PropertyName == nameof(SelectedClient)
             && SelectedClient != null)
             {
-                SelectedDepartment.GetAccounts(Accounts, new NotifyCollectionChangedEventHandler(AccountsChanged), SelectedClient.ClientId);
+                SelectedDepartment.GetAccounts(Accounts, new NotifyCollectionChangedEventHandler(AccountsChanged), new NotifyCollectionChangedEventHandler(LogChanged), SelectedClient.ClientId);
             }
         }
                
@@ -508,6 +503,26 @@ namespace Модуль_13_ДЗ
             {
                 if (Accounts.Remove(SelectedAccount))
                     SelectedAccount = null;       
+            }
+        }
+
+        /// <summary>
+        /// Действия при изменении в коллекции логов
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        void LogChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            if(e.Action == NotifyCollectionChangedAction.Add)
+            {
+                foreach(var l in e.NewItems)
+                {
+                    LogMessage lm = l as LogMessage;
+
+                    if (!Log.Contains(lm))
+                        Log.Add(lm);
+
+                }
             }
         }
     }

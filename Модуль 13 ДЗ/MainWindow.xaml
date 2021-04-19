@@ -372,7 +372,8 @@
                 История
             </TabItem.Header>
             <TabItem.Content>
-                <ListView ItemsSource="{Binding History}">
+                <ListView ItemsSource="{Binding Log}"
+                          IsSynchronizedWithCurrentItem="True">
                     <ListView.View>
                         <GridView>
                             <GridViewColumn Header="Событие" DisplayMemberBinding="{Binding Message}" Width="650"/>
