@@ -5,7 +5,7 @@ using System.Windows;
 
 namespace Модуль_13_ДЗ.MVVM.Model
 {
-    public class BankAccount : ObservableObject
+    public class BankAccount : ObservableObject, ITransactable
     {
         /// <summary>
         /// Идентификатор владельца
@@ -101,6 +101,11 @@ namespace Модуль_13_ДЗ.MVVM.Model
                 NotifyPropertyChanged(nameof(Income));
             }
         }
+
+        /// <summary>
+        /// Доступно средств
+        /// </summary>
+        public decimal AmountAvailable { get { return Amount; } }
 
         private DateTime currentDate;
 
@@ -198,100 +203,7 @@ namespace Модуль_13_ДЗ.MVVM.Model
             }
             remove { amountTransact -= value; }
         }
-        
-        /// <summary>
-        /// Метод снятия со счета
-        /// </summary>
-        /// <param name="o"></param>
-        public virtual void Withdraw(object sender)
-        {
-            try
-            {
-                Amount -= ShowDialog("Снятие средств со счета", true);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-        }
-
-        /// <summary>
-        /// Метод внесения средств на счет
-        /// </summary>
-        /// <param name="o"></param>
-        public virtual void Add(object o)
-        {
-            try
-            {
-                Amount += ShowDialog("Внесение средств на счет");
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-        }
-
-        /// <summary>
-        /// Вывод диалогового окна для внесения/снятия
-        /// </summary>
-        /// <param name="operationName"></param>
-        /// <param name="isWithdraw"></param>
-        /// <returns></returns>
-        protected decimal ShowDialog(string operationName, bool isWithdraw = false)
-        {
-            DialogViewModel dialogVM = new DialogViewModel(operationName, Amount, isWithdraw);
-            DialogWindow dialogWindow = new DialogWindow(dialogVM, operationName);
-
-            if (dialogWindow.ShowDialog() == true)
-            {
-                if (isWithdraw)
-                    amountWithdrawed?.Invoke(this, dialogVM.Amount);
-                else
-                    amountAdded?.Invoke(this, dialogVM.Amount);
-
-                return dialogVM.Amount;
-            }                
-
-            return 0;
-        }
-
-        /// <summary>
-        /// Вызов диалога транзакции
-        /// </summary>
-        /// <param name="o"></param>
-        public void Transact(List<BankAccount> accounts)
-        {
-            try
-            {                
-                TransactionDialog(accounts);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-        }
-
-        /// <summary>
-        /// Вывод диалогового окна для внесения/снятия
-        /// </summary>
-        /// <param name="operationName"></param>
-        /// <param name="isWithdraw"></param>
-        /// <returns></returns>
-        public virtual decimal TransactionDialog(List<BankAccount> accounts)
-        {
-            TransactionViewModel transactionViewModel = new TransactionViewModel(accounts.Where(x => x != this).ToList(), Amount);
-            DialogTransaction dialogTransaction = new DialogTransaction(transactionViewModel);
-
-            if (dialogTransaction.ShowDialog() == true)
-            {
-                Amount -= transactionViewModel.Amount;
-                transactionViewModel.SelectedAccount.Amount += transactionViewModel.Amount;
-                amountTransact?.Invoke(this, transactionViewModel.SelectedAccount, transactionViewModel.Amount);
-            }
-
-            return 0;
-        }
-
+                                             
         /// <summary>
         /// Подсчет дохода
         /// </summary>
@@ -302,7 +214,31 @@ namespace Модуль_13_ДЗ.MVVM.Model
                 return Amount + (MonthPassed / MinTerm) * (Amount * InterestRate) / 100;
             
             return 0;
-        }        
+        }
+
+        /// <summary>
+        /// Положить на счет
+        /// </summary>
+        /// <param name="amount"></param>
+        public void Put(decimal amount)
+        {
+            Amount += amount;
+            amountAdded?.Invoke(this, amount);
+            NotifyPropertyChanged(nameof(Amount));
+            NotifyPropertyChanged(nameof(Income));
+        }
+
+        /// <summary>
+        /// Списать со счета
+        /// </summary>
+        /// <param name="amount"></param>
+        public void Withdraw(decimal amount)
+        {
+            Amount -= amount;
+            amountWithdrawed?.Invoke(this, amount);
+            NotifyPropertyChanged(nameof(Amount));
+            NotifyPropertyChanged(nameof(Income));
+        }
 
         public BankAccount(decimal amount, decimal interestRate, int ownerId, string ownerName , int departmentId, int minTerm, DateTime dateTime)
         {

@@ -24,7 +24,7 @@ namespace Модуль_13_ДЗ
             set
             {
                 if (value < 0)
-                    value *= -1;
+                    value = Math.Abs(value);
 
                 amount = value;
             }

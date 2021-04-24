@@ -10,7 +10,7 @@ using System.Runtime.CompilerServices;
 
 namespace Модуль_13_ДЗ.MVVM.Model
 {
-    class Client : ObservableObject
+    class Client : ObservableObject, ITransactable
     {
         public string FirstName { get; set; }
         public string Surname { get; set; }
@@ -31,6 +31,8 @@ namespace Модуль_13_ДЗ.MVVM.Model
 
         public decimal Amount { get; set; }
 
+        public decimal AmountAvailable { get { return Amount; } }
+
         public bool BadHistory { get; set; }
 
         private static int id;
@@ -39,6 +41,18 @@ namespace Модуль_13_ДЗ.MVVM.Model
         {
             id++;
             return id;
+        }
+
+        public void Put(decimal amount)
+        {
+            Amount += amount;
+            NotifyPropertyChanged(nameof(Amount));
+        }
+
+        public void Withdraw(decimal amount)
+        {
+            Amount -= amount;
+            NotifyPropertyChanged(nameof(Amount));
         }
 
         static Client()

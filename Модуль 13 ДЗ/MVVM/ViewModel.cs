@@ -359,7 +359,8 @@ namespace Модуль_13_ДЗ
         /// <param name="sender"></param>
         private void Withdraw(object sender)
         {
-            SelectedAccount.Withdraw(this);
+            var mediator = new AccountToClientMediator(SelectedClient, SelectedAccount, true);
+            mediator.Transaction();
         }
                 
         /// <summary>
@@ -394,7 +395,8 @@ namespace Модуль_13_ДЗ
         /// <param name="sender"></param>
         private void Add(object sender)
         {
-            SelectedAccount.Add(this);
+            var mediator = new AccountToClientMediator(SelectedClient, SelectedAccount);
+            mediator.Transaction();
         }
                 
         /// <summary>
@@ -422,7 +424,8 @@ namespace Модуль_13_ДЗ
         /// <param name="sender"></param>
         private void Transact(object sender)
         {
-            SelectedAccount.Transact(Accounts);
+            var mediator = new AccountToAccountMediator(Accounts.Where(x => x != SelectedAccount).ToList(), SelectedAccount);
+            mediator.Transaction();
         }
                 
         /// <summary>
