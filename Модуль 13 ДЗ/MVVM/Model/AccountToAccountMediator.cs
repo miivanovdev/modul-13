@@ -25,8 +25,8 @@ namespace Модуль_13_ДЗ.MVVM.Model
             {
                 Reciever = transactionViewModel.SelectedAccount;
 
-                Sender.Withdraw(transactionViewModel.Amount);
-                Reciever.Put(transactionViewModel.Amount);
+                Sender.Withdraw(transactionViewModel.Amount, true);
+                Reciever.Put(transactionViewModel.Amount, Sender);
             }
         }
     }

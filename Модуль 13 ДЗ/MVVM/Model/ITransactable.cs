@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 
 namespace Модуль_13_ДЗ.MVVM.Model
 {
-    interface ITransactable
+    public interface ITransactable
     {
         decimal AmountAvailable { get; }
-        void Put(decimal amount);
-        void Withdraw(decimal amount);
+        string Name { get; }
+        void Put(decimal amount, ITransactable sender = null);
+        void Withdraw(decimal amount, bool isTransact = false);
     }
 }

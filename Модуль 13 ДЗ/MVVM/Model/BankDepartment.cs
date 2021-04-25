@@ -128,8 +128,10 @@ namespace Модуль_13_ДЗ.MVVM.Model
         /// <param name="accounts"></param>
         /// <param name="handler"></param>
         /// <param name="clientId"></param>
-        public void GetAccounts(List<T> accounts, NotifyCollectionChangedEventHandler accountsHandler, NotifyCollectionChangedEventHandler logHandler, int clientId = 0)
+        public void GetAccounts(List<T> accounts, NotifyCollectionChangedEventHandler accountsHandler, int clientId = 0)
         {
+            Unsubscribe();
+
             if (clientId == 0 && DepartmentId == 0)
                 Accounts = new ObservableCollection<T>(accounts);
 
@@ -143,7 +145,6 @@ namespace Модуль_13_ДЗ.MVVM.Model
                 Accounts = new ObservableCollection<T>(accounts.Where(x => x.OwnerId == clientId && x.DepartmentId == DepartmentId));
 
             Accounts.CollectionChanged += accountsHandler;
-            Log.CollectionChanged += logHandler;
             Subscribe();
             
         }   
@@ -168,19 +169,19 @@ namespace Модуль_13_ДЗ.MVVM.Model
             switch(AccountType)
             {
                 case AccountType.Basic:
-                    newAccount = new BankAccount(MinAmount, InterestRate, client.ClientId, client.FIO, DepartmentId, (int)MinTerm, DateTime.Now) as T;
+                    newAccount = new BankAccount(MinAmount, InterestRate, client.ClientId, client.Name, DepartmentId, (int)MinTerm, DateTime.Now) as T;
                     break;
 
                 case AccountType.PhysicalAccount:
-                    newAccount = new PhysicalAccount(MinAmount, InterestRate, client.ClientId, client.FIO,  DepartmentId, (int)MinTerm, DateTime.Now) as T;
+                    newAccount = new PhysicalAccount(MinAmount, InterestRate, client.ClientId, client.Name,  DepartmentId, (int)MinTerm, DateTime.Now) as T;
                     break;
 
                 case AccountType.IndividualAccount:
-                    newAccount = new IndividualAccount(MinAmount, InterestRate, client.ClientId, client.FIO,  DepartmentId, (int)MinTerm, DateTime.Now, (int)Delay) as T;
+                    newAccount = new IndividualAccount(MinAmount, InterestRate, client.ClientId, client.Name,  DepartmentId, (int)MinTerm, DateTime.Now, (int)Delay) as T;
                     break;
 
                 case AccountType.PrivilegedAccount:
-                    newAccount = new PrivilegedAccount(MinAmount, InterestRate, client.ClientId, client.FIO,  DepartmentId, (int)MinTerm, DateTime.Now) as T;
+                    newAccount = new PrivilegedAccount(MinAmount, InterestRate, client.ClientId, client.Name,  DepartmentId, (int)MinTerm, DateTime.Now) as T;
                     break;
 
             }
@@ -199,6 +200,16 @@ namespace Модуль_13_ДЗ.MVVM.Model
             }
         }
 
+        protected void Unsubscribe()
+        {
+            foreach (var a in Accounts)
+            {
+                a.AmountAdded -= LogAdding;
+                a.AmountWithdrawed -= LogWithdrawing;
+                a.AmountTransact -= LogTransact;
+            }
+        }
+
         /// <summary>
         /// Закрыть счет
         /// </summary>
@@ -213,20 +224,20 @@ namespace Модуль_13_ДЗ.MVVM.Model
 
         protected virtual void LogAdding(object sender, decimal amount)
         {
-            var account = sender as BankAccount;
-            Log.Add(new LogMessage($"{account.OwnerName} Id:{account.OwnerId} Type: {account.Type} пополнен на сумму: {amount}"));
+            var account = sender as ITransactable;
+            Log.Add(new LogMessage($"{account.Name} пополнен на сумму: {amount}"));
         }
 
         protected virtual void LogWithdrawing(object sender, decimal amount)
         {
-            var account = sender as BankAccount;
-            Log.Add(new LogMessage($"{account.OwnerName} Id:{account.OwnerId} Type: {account.Type} снята сумма: {amount}"));
+            var account = sender as ITransactable;
+            Log.Add(new LogMessage($"{account.Name} снята сумма: {amount}"));
         }
 
-        protected virtual void LogTransact(object sender, BankAccount accountReciever, decimal amount)
+        protected virtual void LogTransact(object sender, ITransactable accountSender, decimal amount)
         {
-            var account = sender as BankAccount;
-            Log.Add(new LogMessage($"{account.OwnerName} Id:{account.OwnerId} Type: {account.Type} перевод на счет {accountReciever.OwnerName} Id:{accountReciever.OwnerId} Type: {accountReciever.Type} на сумму: {amount}"));
+            var accountReciever = sender as ITransactable;
+            Log.Add(new LogMessage($"{accountSender.Name} перевод на счет {accountReciever.Name} на сумму: {amount}"));
         }
 
     }

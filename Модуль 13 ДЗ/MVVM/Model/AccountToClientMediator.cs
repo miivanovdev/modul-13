@@ -11,10 +11,11 @@ namespace Модуль_13_ДЗ.MVVM.Model
         public bool IsWithdraw { get; private set; }
 
         public AccountToClientMediator(ITransactable client, ITransactable account, bool isWithdraw = false)
-        {
+        {            
+            IsWithdraw = isWithdraw;            
             Sender = client;
             Reciever = account;
-            IsWithdraw = isWithdraw;
+            
         }
 
         public override void Transaction()

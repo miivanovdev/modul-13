@@ -34,28 +34,28 @@ namespace Модуль_13_ДЗ
                 new Client("Коняев", "Станислав", "Валерьевич", 301200),
                 new Client("Чизмар", "Валентина", "Витальевна", 178500)
             };
-                        
+                                    
+            Accounts = new List<BankAccount>()
+            {
+                new PhysicalAccount(40000, 10, Clients[0].ClientId, Clients[0].Name, 1 , 6, new DateTime(2020, 11, 05)),
+                new PhysicalAccount(78540, 12, Clients[0].ClientId, Clients[0].Name, 1, 6, new DateTime(2019, 10, 23)),
+                new PhysicalAccount(63400, 10, Clients[1].ClientId, Clients[1].Name, 1, 6, new DateTime(2020, 09, 04)),
+                new PhysicalAccount(-48900, 10, Clients[1].ClientId, Clients[1].Name, 1, 6, new DateTime(2020, 06, 12)),
+                new IndividualAccount(34000, 10, Clients[2].ClientId, Clients[2].Name, 2, 12, new DateTime(2019, 01, 24), 2),
+                new IndividualAccount(-500000, 10, Clients[2].ClientId, Clients[2].Name, 2, 12, new DateTime(2021, 01, 13), 2),
+                new IndividualAccount(1240000, 10, Clients[3].ClientId, Clients[3].Name, 2, 12, new DateTime(2020, 08, 07), 2),
+                new IndividualAccount(12700, 10, Clients[3].ClientId, Clients[3].Name, 2, 12, new DateTime(2020, 02, 14), 2),
+                new IndividualAccount(481500, 15, Clients[4].ClientId, Clients[4].Name, 2, 12, new DateTime(2020, 07, 15), 2),
+                new PrivilegedAccount(3012250, 20, Clients[5].ClientId, Clients[5].Name, 3, 18, new DateTime(2018, 10, 12)),
+                new PrivilegedAccount(2012250, 15, Clients[6].ClientId, Clients[6].Name, 3, 18, new DateTime(2019, 11, 21)),
+            };
+
             BankDepartments = new List<BankDepartment<BankAccount>>()
             {
                 new BankDepartment<BankAccount>(Log, "Не выбрано!", 0, 0, 0, true),
                 new PhysicalDepartment(Log, "Отдел по работе с физическими лицами", 50000, 6, 15),
                 new IndividualDepartment(Log, "Отдел по работе с юридическими лицами", 30000, 12, 15),
                 new PrivilegedDepartment(Log, "Отдел по работе с привелигированными клиентами", 100000, 18, 20)
-            };
-            
-            Accounts = new List<BankAccount>()
-            {
-                new PhysicalAccount(40000, 10, Clients[0].ClientId, Clients[0].FIO, 1 , 6, new DateTime(2020, 11, 05)),
-                new PhysicalAccount(78540, 12, Clients[0].ClientId, Clients[0].FIO, 1, 6, new DateTime(2019, 10, 23)),
-                new PhysicalAccount(63400, 10, Clients[1].ClientId, Clients[1].FIO, 1, 6, new DateTime(2020, 09, 04)),
-                new PhysicalAccount(-48900, 10, Clients[1].ClientId, Clients[1].FIO, 1, 6, new DateTime(2020, 06, 12)),
-                new IndividualAccount(34000, 10, Clients[2].ClientId, Clients[2].FIO, 2, 12, new DateTime(2019, 01, 24), 2),
-                new IndividualAccount(-500000, 10, Clients[2].ClientId, Clients[2].FIO, 2, 12, new DateTime(2021, 01, 13), 2),
-                new IndividualAccount(1240000, 10, Clients[3].ClientId, Clients[3].FIO, 2, 12, new DateTime(2020, 08, 07), 2),
-                new IndividualAccount(12700, 10, Clients[3].ClientId, Clients[3].FIO, 2, 12, new DateTime(2020, 02, 14), 2),
-                new IndividualAccount(481500, 15, Clients[4].ClientId, Clients[4].FIO, 2, 12, new DateTime(2020, 07, 15), 2),
-                new PrivilegedAccount(3012250, 20, Clients[5].ClientId, Clients[5].FIO, 3, 18, new DateTime(2018, 10, 12)),
-                new PrivilegedAccount(2012250, 15, Clients[6].ClientId, Clients[6].FIO, 3, 18, new DateTime(2019, 11, 21)),
             };
             
             #endregion
@@ -323,7 +323,7 @@ namespace Модуль_13_ДЗ
         private void OpenAccount(object o)
         {
             SelectedDepartment.OpenAccount(SelectedClient);
-            SelectedDepartment.GetAccounts(Accounts, new NotifyCollectionChangedEventHandler(AccountsChanged), new NotifyCollectionChangedEventHandler(LogChanged), SelectedClient == null ? 0 : SelectedClient.ClientId);
+            SelectedDepartment.GetAccounts(Accounts, new NotifyCollectionChangedEventHandler(AccountsChanged), SelectedClient == null ? 0 : SelectedClient.ClientId);
         }
         
 
@@ -474,13 +474,13 @@ namespace Модуль_13_ДЗ
         {
             if(e.PropertyName == nameof(SelectedDepartment))
             {
-                SelectedDepartment.GetAccounts(Accounts, new NotifyCollectionChangedEventHandler(AccountsChanged), new NotifyCollectionChangedEventHandler(LogChanged), SelectedClient == null ? 0 : SelectedClient.ClientId);                
+                SelectedDepartment.GetAccounts(Accounts, new NotifyCollectionChangedEventHandler(AccountsChanged), SelectedClient == null ? 0 : SelectedClient.ClientId);                
             }
 
             if (e.PropertyName == nameof(SelectedClient)
             && SelectedClient != null)
             {
-                SelectedDepartment.GetAccounts(Accounts, new NotifyCollectionChangedEventHandler(AccountsChanged), new NotifyCollectionChangedEventHandler(LogChanged), SelectedClient.ClientId);
+                SelectedDepartment.GetAccounts(Accounts, new NotifyCollectionChangedEventHandler(AccountsChanged), SelectedClient.ClientId);
             }
         }
                
@@ -508,25 +508,6 @@ namespace Модуль_13_ДЗ
                     SelectedAccount = null;       
             }
         }
-
-        /// <summary>
-        /// Действия при изменении в коллекции логов
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        void LogChanged(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            if(e.Action == NotifyCollectionChangedAction.Add)
-            {
-                foreach(var l in e.NewItems)
-                {
-                    LogMessage lm = l as LogMessage;
-
-                    if (!Log.Contains(lm))
-                        Log.Add(lm);
-
-                }
-            }
-        }
+        
     }
 }

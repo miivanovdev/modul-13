@@ -35,9 +35,9 @@ namespace Модуль_13_ДЗ.MVVM.Model
         /// <summary>
         /// Наименование счета
         /// </summary>
-        public virtual string AccountName
+        public virtual string Name
         {
-            get { return $"Базовый на имя {OwnerName}"; }
+            get { return $"Базовый на имя {OwnerName} - Id {OwnerId}"; }
         }
 
         /// <summary>
@@ -191,8 +191,8 @@ namespace Модуль_13_ДЗ.MVVM.Model
         /// <summary>
         /// Событие перевода суммы со счета
         /// </summary>
-        private event Action<object, BankAccount, decimal> amountTransact;
-        public event Action<object, BankAccount, decimal> AmountTransact
+        private event Action<object, ITransactable, decimal> amountTransact;
+        public event Action<object, ITransactable, decimal> AmountTransact
         {
             add
             {
@@ -220,10 +220,19 @@ namespace Модуль_13_ДЗ.MVVM.Model
         /// Положить на счет
         /// </summary>
         /// <param name="amount"></param>
-        public void Put(decimal amount)
+        public void Put(decimal amount, ITransactable sender = null)
         {
             Amount += amount;
-            amountAdded?.Invoke(this, amount);
+
+            if(sender != null)
+            {
+                amountTransact?.Invoke(this, sender, amount);
+            }
+            else
+            {
+                amountAdded?.Invoke(this, amount);
+            }
+            
             NotifyPropertyChanged(nameof(Amount));
             NotifyPropertyChanged(nameof(Income));
         }
@@ -232,10 +241,13 @@ namespace Модуль_13_ДЗ.MVVM.Model
         /// Списать со счета
         /// </summary>
         /// <param name="amount"></param>
-        public void Withdraw(decimal amount)
+        public void Withdraw(decimal amount, bool isTransact = false)
         {
             Amount -= amount;
-            amountWithdrawed?.Invoke(this, amount);
+
+            if(!isTransact)
+                amountWithdrawed?.Invoke(this, amount);
+
             NotifyPropertyChanged(nameof(Amount));
             NotifyPropertyChanged(nameof(Income));
         }

@@ -43,13 +43,13 @@ namespace Модуль_13_ДЗ.MVVM.Model
             return id;
         }
 
-        public void Put(decimal amount)
+        public void Put(decimal amount, ITransactable sender = null)
         {
             Amount += amount;
             NotifyPropertyChanged(nameof(Amount));
         }
 
-        public void Withdraw(decimal amount)
+        public void Withdraw(decimal amount, bool isTransact = false)
         {
             Amount -= amount;
             NotifyPropertyChanged(nameof(Amount));
@@ -72,7 +72,7 @@ namespace Модуль_13_ДЗ.MVVM.Model
             ClientId = NextId();
         }     
         
-        public string FIO
+        public string Name
         {
             get { return $"{Surname} {FirstName} {SecondName}"; }
         }

@@ -11,7 +11,7 @@ namespace Модуль_13_ДЗ.MVVM.Model
         public PhysicalAccount(decimal amount, decimal interestRate, int ownerId, string ownerName, int departmentId, int minTerm, DateTime dateTime)
             : base(amount, interestRate, ownerId, ownerName, departmentId, minTerm, dateTime)
         {
-
+            
         }
 
         public override AccountType Type
@@ -19,9 +19,9 @@ namespace Модуль_13_ДЗ.MVVM.Model
             get { return AccountType.PhysicalAccount; }
         }
 
-        public override string AccountName
+        public override string Name
         {
-            get { return $"Физический счет {OwnerName}"; }
+            get { return $"Физический счет {OwnerName} Id {OwnerId}"; }
         }
 
         public override bool CanAdded => true;

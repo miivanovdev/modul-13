@@ -43,8 +43,8 @@
                 <ComboBox x:Name="accountCb"
                   ItemsSource="{Binding Accounts}"
                   SelectedItem="{Binding SelectedAccount}"
-                  DisplayMemberPath="AccountName" 
-                  SelectedValuePath="AccountName"/>
+                  DisplayMemberPath="Name" 
+                  SelectedValuePath="Name"/>
 
                 <TextBlock Text="Остаток:"/>
                 <TextBlock Text="{Binding ElementName = accountCb, Path = SelectedItem.Amount}"/>

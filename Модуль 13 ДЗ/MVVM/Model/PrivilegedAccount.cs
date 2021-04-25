@@ -19,9 +19,9 @@ namespace Модуль_13_ДЗ.MVVM.Model
             get { return AccountType.PrivilegedAccount; }
         }
 
-        public override string AccountName
+        public override string Name
         {
-            get { return $"Привелигированный счет {OwnerName}"; }
+            get { return $"Привелигированный счет {OwnerName} Id {OwnerId}"; }
         }
 
         protected override decimal CountIncome()

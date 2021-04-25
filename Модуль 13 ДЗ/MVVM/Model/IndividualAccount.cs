@@ -19,9 +19,9 @@ namespace Модуль_13_ДЗ.MVVM.Model
             get { return AccountType.IndividualAccount; }
         }
 
-        public override string AccountName
+        public override string Name
         {
-            get { return $"Индивидуальный счет {OwnerName}"; }
+            get { return $"Индивидуальный счет {OwnerName} Id {OwnerId}"; }
         }
 
         private int delay;
