@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 
-namespace Модуль_13_ДЗ.MVVM.Model
+namespace ModelLib
 {
     public enum AccountType
     {

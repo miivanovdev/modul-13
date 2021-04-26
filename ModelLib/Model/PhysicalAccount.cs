@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Модуль_13_ДЗ.MVVM.Model
+namespace ModelLib
 {
-    class PhysicalAccount : BankAccount
+    public class PhysicalAccount : BankAccount
     {
         public PhysicalAccount(decimal amount, decimal interestRate, int ownerId, string ownerName, int departmentId, int minTerm, DateTime dateTime)
             : base(amount, interestRate, ownerId, ownerName, departmentId, minTerm, dateTime)

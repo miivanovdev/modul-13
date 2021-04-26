@@ -8,9 +8,9 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace Модуль_13_ДЗ.MVVM.Model
+namespace ModelLib
 {
-    class Client : ObservableObject, ITransactable
+    public class Client : ObservableObject, ITransactable
     {
         public string FirstName { get; set; }
         public string Surname { get; set; }

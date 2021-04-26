@@ -5,12 +5,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Модуль_13_ДЗ.MVVM.Model
+namespace ModelLib
 {
     /// <summary>
     /// Исключение возникающее при срыве транзакции
     /// </summary>
-    class TransactionFailureException : ApplicationException
+    public class TransactionFailureException : ApplicationException
     {
         public TransactionFailureException(string info)
         {

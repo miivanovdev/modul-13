@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Модуль_13_ДЗ.MVVM.Model;
 
-namespace Модуль_13_ДЗ
+namespace ModelLib
 {
     /// <summary>
     /// Класс расширения методов List<BankAccount>

@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace Модуль_13_ДЗ
+namespace ModelLib
 {
     public class ObservableObject : INotifyPropertyChanged
     {

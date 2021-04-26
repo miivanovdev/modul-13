@@ -2,13 +2,10 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Модуль_13_ДЗ.MVVM.Model;
 
-namespace Модуль_13_ДЗ.MVVM.Model
+namespace ModelLib
 {
-    class PhysicalDepartment : BankDepartment<BankAccount>
+    public class PhysicalDepartment : BankDepartment<BankAccount>
     {
         public PhysicalDepartment(ObservableCollection<LogMessage> log, string name, decimal minAmount, uint minTerm, decimal rate, bool isEmpty = false, uint delay = 0)
             : base(log, name, minAmount, minTerm, rate, isEmpty, delay)

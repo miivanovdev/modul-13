@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 
-namespace Модуль_13_ДЗ.MVVM.Model
+namespace ModelLib
 {
     public class BankAccount : ObservableObject, ITransactable
     {

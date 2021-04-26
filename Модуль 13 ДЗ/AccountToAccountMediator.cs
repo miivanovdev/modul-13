@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using Модуль_13_ДЗ.MVVM.Model;
+using ModelLib;
 
 namespace Модуль_13_ДЗ
 {

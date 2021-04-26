@@ -7,7 +7,7 @@ using System.ComponentModel;
 using System.Collections.Specialized;
 using System.Collections.ObjectModel;
 using System.Windows;
-using Модуль_13_ДЗ.MVVM.Model;
+using ModelLib;
 
 namespace Модуль_13_ДЗ
 {
@@ -448,7 +448,10 @@ namespace Модуль_13_ДЗ
         /// <param name="o"></param>
         private void CloseAccount(object o)
         {
-            SelectedDepartment.CloseAccount(SelectedAccount);
+            string message = string.Empty;
+
+            if (!SelectedDepartment.CloseAccount(SelectedAccount, out message))
+                MessageBox.Show(message);
         }
 
         /// <summary>

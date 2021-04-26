@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
-using System.Windows;
 
-namespace Модуль_13_ДЗ.MVVM.Model
+namespace ModelLib
 {
-    internal class BankDepartment<T> : ObservableObject where T : BankAccount
+    public class BankDepartment<T> : ObservableObject where T : BankAccount
     {
         public string Name { get; set; }
         public ObservableCollection<LogMessage> Log { get; set; }
@@ -215,12 +214,17 @@ namespace Модуль_13_ДЗ.MVVM.Model
         /// Закрыть счет
         /// </summary>
         /// <param name="account"></param>
-        public virtual void CloseAccount(T account)
+        public virtual bool CloseAccount(T account, out string message)
         {
             if (!Accounts.Remove(account))
-                MessageBox.Show("Не удалось закрыть счет!");
+            {
+                message = "Не удалось закрыть счет!";
+                return false;
+            }
 
             Log.Add(new LogMessage($"Закрыт счет {account.OwnerName} {account.OwnerId} Type:{account.Type}"));
+            message = "";
+            return true;
         }
 
         protected virtual void LogAdding(object sender, decimal amount)

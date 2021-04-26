@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Модуль_13_ДЗ.MVVM.Model;
+using ModelLib;
 
 namespace Модуль_13_ДЗ
 {
