@@ -38,8 +38,8 @@ namespace Модуль_13_ДЗ
                 {
                     Reciever = transactionViewModel.SelectedAccount;
 
-                    Sender.Withdraw(transactionViewModel.Amount, true);
-                    Reciever.Put(transactionViewModel.Amount, Sender);
+                    Sender.Withdraw(transactionViewModel.Amount, Reciever);
+                    Reciever.Put(transactionViewModel.Amount);
                 }
             }
             catch (TransactionFailureException ex)

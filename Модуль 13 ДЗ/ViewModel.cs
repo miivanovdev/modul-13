@@ -21,7 +21,7 @@ namespace Модуль_13_ДЗ
         public ViewModel()
         {
             #region.Начальная инициализация
-            
+
             //Log = new ObservableCollection<LogMessage>();
 
             //Clients = new ObservableCollection<Client>()
@@ -34,7 +34,7 @@ namespace Модуль_13_ДЗ
             //    new Client("Коняев", "Станислав", "Валерьевич", 301200),
             //    new Client("Чизмар", "Валентина", "Витальевна", 178500)
             //};
-                                    
+
             //Accounts = new List<BankAccount>()
             //{
             //    new PhysicalAccount(40000, 10, Clients[0].ClientId, Clients[0].Name, 1 , 6, new DateTime(2020, 11, 05)),
@@ -57,7 +57,7 @@ namespace Модуль_13_ДЗ
             //    new IndividualDepartment(Log, "Отдел по работе с юридическими лицами", 30000, 12, 15),
             //    new PrivilegedDepartment(Log, "Отдел по работе с привелигированными клиентами", 100000, 18, 20)
             //};
-            
+
             #endregion
             InitData();
             PropertyChanged += new PropertyChangedEventHandler(SelectionChangeHandler);
@@ -83,6 +83,8 @@ namespace Модуль_13_ДЗ
             {
                 if (selectedDepartment == value)
                     return;
+
+                selectedDepartment?.Unsubscribe();
 
                 selectedDepartment = value;
                 NotifyPropertyChanged(nameof(SelectedDepartment));
@@ -205,6 +207,9 @@ namespace Модуль_13_ДЗ
             {
                 string jsonLog = File.ReadAllText("Log.json");
                 Log = JsonConvert.DeserializeObject<ObservableCollection<LogMessage>>(jsonLog, settings);
+
+                foreach (var b in BankDepartments)
+                    b.Log = Log;
             }
         }
 

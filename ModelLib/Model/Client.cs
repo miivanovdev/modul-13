@@ -43,13 +43,13 @@ namespace ModelLib
             return id;
         }
 
-        public void Put(decimal amount, ITransactable sender = null)
+        public void Put(decimal amount)
         {
             Amount += amount;
             NotifyPropertyChanged(nameof(Amount));
         }
 
-        public void Withdraw(decimal amount, bool isTransact = false)
+        public void Withdraw(decimal amount, ITransactable reciever)
         {
             Amount -= amount;
             NotifyPropertyChanged(nameof(Amount));

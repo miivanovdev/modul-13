@@ -220,19 +220,12 @@ namespace ModelLib
         /// Положить на счет
         /// </summary>
         /// <param name="amount"></param>
-        public void Put(decimal amount, ITransactable sender = null)
+        public void Put(decimal amount)
         {
             Amount += amount;
 
-            if(sender != null)
-            {
-                amountTransact?.Invoke(this, sender, amount);
-            }
-            else
-            {
-                amountAdded?.Invoke(this, amount);
-            }
-            
+            amountAdded?.Invoke(this, amount);
+                        
             NotifyPropertyChanged(nameof(Amount));
             NotifyPropertyChanged(nameof(Income));
         }
@@ -241,12 +234,18 @@ namespace ModelLib
         /// Списать со счета
         /// </summary>
         /// <param name="amount"></param>
-        public void Withdraw(decimal amount, bool isTransact = false)
+        public void Withdraw(decimal amount, ITransactable reciever = null)
         {
             Amount -= amount;
 
-            if(!isTransact)
+            if(reciever != null)
+            {
+                amountTransact?.Invoke(this, reciever, amount);
+            }
+            else
+            {
                 amountWithdrawed?.Invoke(this, amount);
+            }                
 
             NotifyPropertyChanged(nameof(Amount));
             NotifyPropertyChanged(nameof(Income));

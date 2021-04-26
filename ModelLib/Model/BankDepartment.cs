@@ -141,7 +141,7 @@ namespace ModelLib
         public void GetAccounts(List<BankAccount> accounts, NotifyCollectionChangedEventHandler accountsHandler, int clientId = 0)
         {
             Unsubscribe();
-           
+
             Accounts = new ObservableCollection<BankAccount>(accounts.GetAccountsSubset(DepartmentId, clientId));
             
             Accounts.CollectionChanged += accountsHandler;
@@ -200,7 +200,7 @@ namespace ModelLib
             }
         }
 
-        protected void Unsubscribe()
+        public void Unsubscribe()
         {
             foreach (var a in Accounts)
             {
@@ -239,9 +239,9 @@ namespace ModelLib
             Log.Add(new LogMessage($"{account.Name} снята сумма: {amount}"));
         }
 
-        protected virtual void LogTransact(object sender, ITransactable accountSender, decimal amount)
+        protected virtual void LogTransact(object sender, ITransactable accountReciever, decimal amount)
         {
-            var accountReciever = sender as ITransactable;
+            var accountSender = sender as ITransactable;
             Log.Add(new LogMessage($"{accountSender.Name} перевод на счет {accountReciever.Name} на сумму: {amount}"));
         }
 
