@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace Модуль_13_ДЗ.MVVM.Model
 {
+    /// <summary>
+    /// Посредник транзакции между клиентом и счетом
+    /// </summary>
     class AccountToClientMediator : Mediator
     {
         public bool IsWithdraw { get; private set; }

@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace Модуль_13_ДЗ.MVVM.Model
 {
+    /// <summary>
+    /// Поведение сущности участника транзакции
+    /// </summary>
     public interface ITransactable
     {
         decimal AmountAvailable { get; }

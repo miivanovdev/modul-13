@@ -20,12 +20,12 @@ namespace Модуль_13_ДЗ.MVVM.Model
             get { return AccountType.Basic; }
         }
 
-        protected ObservableCollection<T> accounts;
+        protected ObservableCollection<BankAccount> accounts;
 
         /// <summary>
         /// Счета департамента
         /// </summary>
-        public ObservableCollection<T> Accounts
+        public ObservableCollection<BankAccount> Accounts
         {
             get
             {
@@ -45,11 +45,22 @@ namespace Модуль_13_ДЗ.MVVM.Model
         /// Ставка по вкладам
         /// </summary>
         public decimal InterestRate { get; set; }
-        
+
         /// <summary>
         /// Минимальный срок вклада в месяцах
         /// </summary>
-        public uint MinTerm { get; set; }
+        private uint minTerm;
+        public uint MinTerm
+        {
+            get { return minTerm; }
+            set
+            {
+                if (value == 0)
+                    value = 1;
+
+                minTerm = value;
+            }
+        }
         public uint Delay { get; set; }
 
         public decimal minAmount;
@@ -119,7 +130,7 @@ namespace Модуль_13_ДЗ.MVVM.Model
             if (!isEmpty)
                 DepartmentId = NextId();
 
-            Accounts = new ObservableCollection<T>();
+            Accounts = new ObservableCollection<BankAccount>();
         }
          
         /// <summary>
@@ -128,22 +139,12 @@ namespace Модуль_13_ДЗ.MVVM.Model
         /// <param name="accounts"></param>
         /// <param name="handler"></param>
         /// <param name="clientId"></param>
-        public void GetAccounts(List<T> accounts, NotifyCollectionChangedEventHandler accountsHandler, int clientId = 0)
+        public void GetAccounts(List<BankAccount> accounts, NotifyCollectionChangedEventHandler accountsHandler, int clientId = 0)
         {
             Unsubscribe();
-
-            if (clientId == 0 && DepartmentId == 0)
-                Accounts = new ObservableCollection<T>(accounts);
-
-            if (clientId == 0 && DepartmentId > 0)
-                Accounts = new ObservableCollection<T>(accounts.Where(x => x.DepartmentId == DepartmentId));
-
-            if(clientId > 0 && DepartmentId == 0)
-                Accounts = new ObservableCollection<T>(accounts.Where(x => x.OwnerId == clientId));
-
-            if (clientId > 0 && DepartmentId > 0)
-                Accounts = new ObservableCollection<T>(accounts.Where(x => x.OwnerId == clientId && x.DepartmentId == DepartmentId));
-
+           
+            Accounts = new ObservableCollection<BankAccount>(accounts.GetAccountsSubset(DepartmentId, clientId));
+            
             Accounts.CollectionChanged += accountsHandler;
             Subscribe();
             

@@ -12,21 +12,31 @@ namespace Модуль_13_ДЗ
     {
         public TransactionViewModel(List<BankAccount> accounts, decimal CurrentAmount)
         {
-            this.accounts = new ReadOnlyCollection<BankAccount>(accounts);
+            this.accounts = new List<BankAccount>(accounts);
             Data = new DialogDataModel("Перевод", CurrentAmount, true);
         }
 
         public decimal Amount { get { return Data.Amount; } }
+
         public DialogDataModel Data { get; set; }
 
-        private ReadOnlyCollection<BankAccount> accounts;
+        /// <summary>
+        /// Все счета
+        /// </summary>
+        private List<BankAccount> accounts;
+
+        /// <summary>
+        /// Отфильтрованные счета
+        /// </summary>
         public ReadOnlyCollection<BankAccount> Accounts
         {
-            get { return new ReadOnlyCollection<BankAccount>(accounts.Where(x => x.Type == this.AccountType).ToList()); ; }
+            get { return new ReadOnlyCollection<BankAccount>(accounts.GetAccountsSubset(AccountType)); }
         }
 
+        /// <summary>
+        /// Фильтр по типу счета
+        /// </summary>
         private AccountType accountType;
-
         public AccountType AccountType
         {
             get { return accountType; }
@@ -41,8 +51,10 @@ namespace Модуль_13_ДЗ
             }
         }
 
+        /// <summary>
+        /// Результат диалога
+        /// </summary>
         private bool? dialogResult;
-
         public bool? DialogResult
         {
             get { return dialogResult; }
@@ -56,8 +68,10 @@ namespace Модуль_13_ДЗ
             }
         }
 
+        /// <summary>
+        /// Выбранный счет получатель
+        /// </summary>
         private BankAccount selectedAccount;
-
         public BankAccount SelectedAccount
         {
             get
@@ -75,8 +89,10 @@ namespace Модуль_13_ДЗ
             }
         }
 
+        /// <summary>
+        /// Команда закрытия при положительном результате диалога
+        /// </summary>
         private RelayCommand okCommand;
-
         public RelayCommand OkCommand
         {
             get
@@ -88,11 +104,20 @@ namespace Модуль_13_ДЗ
             }
         }
 
+        /// <summary>
+        /// Положительное закрытие диалога
+        /// </summary>
+        /// <param name="o"></param>
         private void OkClose(object o)
         {
             DialogResult = true;
         }
 
+        /// <summary>
+        /// Проверка допустимости положительного исхода диалога
+        /// </summary>
+        /// <param name="o"></param>
+        /// <returns></returns>
         private bool CanClose(object o)
         {
             return SelectedAccount != null &&

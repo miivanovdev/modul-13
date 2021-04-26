@@ -22,44 +22,44 @@ namespace Модуль_13_ДЗ
         {
             #region.Начальная инициализация
             
-            Log = new ObservableCollection<LogMessage>();
+            //Log = new ObservableCollection<LogMessage>();
 
-            Clients = new ObservableCollection<Client>()
-            {
-                new Client("Кулибяка", "Вадим", "Натанович", 27450, true),
-                new Client("Пыпырин", "Владимир", "Юльевич", 38850),
-                new Client("Прокопов", "Алексей", "Александрович", 40450),
-                new Client("Никишин", "Олег", "Викторович", 120250),
-                new Client("Крупская", "Анна", "Сергеевна", 117300),
-                new Client("Коняев", "Станислав", "Валерьевич", 301200),
-                new Client("Чизмар", "Валентина", "Витальевна", 178500)
-            };
+            //Clients = new ObservableCollection<Client>()
+            //{
+            //    new Client("Кулибяка", "Вадим", "Натанович", 27450, true),
+            //    new Client("Пыпырин", "Владимир", "Юльевич", 38850),
+            //    new Client("Прокопов", "Алексей", "Александрович", 40450),
+            //    new Client("Никишин", "Олег", "Викторович", 120250),
+            //    new Client("Крупская", "Анна", "Сергеевна", 117300),
+            //    new Client("Коняев", "Станислав", "Валерьевич", 301200),
+            //    new Client("Чизмар", "Валентина", "Витальевна", 178500)
+            //};
                                     
-            Accounts = new List<BankAccount>()
-            {
-                new PhysicalAccount(40000, 10, Clients[0].ClientId, Clients[0].Name, 1 , 6, new DateTime(2020, 11, 05)),
-                new PhysicalAccount(78540, 12, Clients[0].ClientId, Clients[0].Name, 1, 6, new DateTime(2019, 10, 23)),
-                new PhysicalAccount(63400, 10, Clients[1].ClientId, Clients[1].Name, 1, 6, new DateTime(2020, 09, 04)),
-                new PhysicalAccount(-48900, 10, Clients[1].ClientId, Clients[1].Name, 1, 6, new DateTime(2020, 06, 12)),
-                new IndividualAccount(34000, 10, Clients[2].ClientId, Clients[2].Name, 2, 12, new DateTime(2019, 01, 24), 2),
-                new IndividualAccount(-500000, 10, Clients[2].ClientId, Clients[2].Name, 2, 12, new DateTime(2021, 01, 13), 2),
-                new IndividualAccount(1240000, 10, Clients[3].ClientId, Clients[3].Name, 2, 12, new DateTime(2020, 08, 07), 2),
-                new IndividualAccount(12700, 10, Clients[3].ClientId, Clients[3].Name, 2, 12, new DateTime(2020, 02, 14), 2),
-                new IndividualAccount(481500, 15, Clients[4].ClientId, Clients[4].Name, 2, 12, new DateTime(2020, 07, 15), 2),
-                new PrivilegedAccount(3012250, 20, Clients[5].ClientId, Clients[5].Name, 3, 18, new DateTime(2018, 10, 12)),
-                new PrivilegedAccount(2012250, 15, Clients[6].ClientId, Clients[6].Name, 3, 18, new DateTime(2019, 11, 21)),
-            };
+            //Accounts = new List<BankAccount>()
+            //{
+            //    new PhysicalAccount(40000, 10, Clients[0].ClientId, Clients[0].Name, 1 , 6, new DateTime(2020, 11, 05)),
+            //    new PhysicalAccount(78540, 12, Clients[0].ClientId, Clients[0].Name, 1, 6, new DateTime(2019, 10, 23)),
+            //    new PhysicalAccount(63400, 10, Clients[1].ClientId, Clients[1].Name, 1, 6, new DateTime(2020, 09, 04)),
+            //    new PhysicalAccount(-48900, 10, Clients[1].ClientId, Clients[1].Name, 1, 6, new DateTime(2020, 06, 12)),
+            //    new IndividualAccount(34000, 10, Clients[2].ClientId, Clients[2].Name, 2, 12, new DateTime(2019, 01, 24), 2),
+            //    new IndividualAccount(-500000, 10, Clients[2].ClientId, Clients[2].Name, 2, 12, new DateTime(2021, 01, 13), 2),
+            //    new IndividualAccount(1240000, 10, Clients[3].ClientId, Clients[3].Name, 2, 12, new DateTime(2020, 08, 07), 2),
+            //    new IndividualAccount(12700, 10, Clients[3].ClientId, Clients[3].Name, 2, 12, new DateTime(2020, 02, 14), 2),
+            //    new IndividualAccount(481500, 15, Clients[4].ClientId, Clients[4].Name, 2, 12, new DateTime(2020, 07, 15), 2),
+            //    new PrivilegedAccount(3012250, 20, Clients[5].ClientId, Clients[5].Name, 3, 18, new DateTime(2018, 10, 12)),
+            //    new PrivilegedAccount(2012250, 15, Clients[6].ClientId, Clients[6].Name, 3, 18, new DateTime(2019, 11, 21)),
+            //};
 
-            BankDepartments = new List<BankDepartment<BankAccount>>()
-            {
-                new BankDepartment<BankAccount>(Log, "Не выбрано!", 0, 0, 0, true),
-                new PhysicalDepartment(Log, "Отдел по работе с физическими лицами", 50000, 6, 15),
-                new IndividualDepartment(Log, "Отдел по работе с юридическими лицами", 30000, 12, 15),
-                new PrivilegedDepartment(Log, "Отдел по работе с привелигированными клиентами", 100000, 18, 20)
-            };
+            //BankDepartments = new List<BankDepartment<BankAccount>>()
+            //{
+            //    new BankDepartment<BankAccount>(Log, "Не выбрано!", 0, 0, 0, true),
+            //    new PhysicalDepartment(Log, "Отдел по работе с физическими лицами", 50000, 6, 15),
+            //    new IndividualDepartment(Log, "Отдел по работе с юридическими лицами", 30000, 12, 15),
+            //    new PrivilegedDepartment(Log, "Отдел по работе с привелигированными клиентами", 100000, 18, 20)
+            //};
             
             #endregion
-            //InitData();
+            InitData();
             PropertyChanged += new PropertyChangedEventHandler(SelectionChangeHandler);
 
             SelectedDepartment = BankDepartments.First();

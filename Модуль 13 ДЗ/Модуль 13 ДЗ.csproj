@@ -61,12 +61,13 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="BankAccountListExt.cs" />
     <Compile Include="Dialog\DialogTransaction.xaml.cs">
       <DependentUpon>DialogTransaction.xaml</DependentUpon>
     </Compile>
     <Compile Include="Dialog\TransactionViewModel.cs" />
-    <Compile Include="MVVM\Model\AccountToAccountMediator.cs" />
-    <Compile Include="MVVM\Model\AccountToClientMediator.cs" />
+    <Compile Include="AccountToAccountMediator.cs" />
+    <Compile Include="AccountToClientMediator.cs" />
     <Compile Include="MVVM\Model\AccountType.cs" />
     <Compile Include="MVVM\Model\BankAccount.cs" />
     <Compile Include="MVVM\Model\BankDepartment.cs" />
