@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Модуль_13_ДЗ.MVVM.Model;
 
-namespace Модуль_13_ДЗ.MVVM.Model
+namespace Модуль_13_ДЗ
 {
     /// <summary>
     /// Класс посредник операции транзакции над банковскими счетами

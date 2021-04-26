@@ -4,8 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using Модуль_13_ДЗ.MVVM.Model;
 
-namespace Модуль_13_ДЗ.MVVM.Model
+namespace Модуль_13_ДЗ
 {
     /// <summary>
     /// Посдердник операции транзакции со счета на счет 

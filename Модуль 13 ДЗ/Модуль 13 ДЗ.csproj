@@ -84,12 +84,12 @@
     <Compile Include="MVVM\Model\PhysicalDepartment.cs" />
     <Compile Include="MVVM\Model\PrivilegedAccount.cs" />
     <Compile Include="MVVM\Model\PrivilegedDepartment.cs" />
-    <Compile Include="MVVM\Model\Mediator.cs" />
+    <Compile Include="Mediator.cs" />
     <Compile Include="MVVM\Model\TransactionFailureException.cs" />
     <Compile Include="ValueDescription.cs" />
     <Compile Include="ObservableObject.cs" />
     <Compile Include="RelayCommand.cs" />
-    <Compile Include="MVVM\ViewModel.cs" />
+    <Compile Include="ViewModel.cs" />
     <Compile Include="Dialog\DialogWindow.xaml.cs">
       <DependentUpon>DialogWindow.xaml</DependentUpon>
     </Compile>
