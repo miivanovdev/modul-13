@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using Newtonsoft.Json;
 using System.Linq;
 
 namespace ModelLib
@@ -9,6 +10,8 @@ namespace ModelLib
     public class BankDepartment<T> : ObservableObject where T : BankAccount
     {
         public string Name { get; set; }
+
+        [JsonIgnore]
         public ObservableCollection<LogMessage> Log { get; set; }
 
         /// <summary>
@@ -163,31 +166,35 @@ namespace ModelLib
         /// </summary>
         /// <param name="client"></param>
         public virtual void OpenAccount(Client client)
-        {
+        {            
+            if (client.AmountAvailable < MinAmount)
+                throw new TransactionFailureException($"У клиента {client.Name} недостаточно средств {client.Amount}, минимальная сумма вклада {MinAmount}");
+
             T newAccount = null;
 
-            switch(AccountType)
+            switch (AccountType)
             {
                 case AccountType.Basic:
                     newAccount = new BankAccount(MinAmount, InterestRate, client.ClientId, client.Name, DepartmentId, (int)MinTerm, DateTime.Now) as T;
                     break;
 
                 case AccountType.PhysicalAccount:
-                    newAccount = new PhysicalAccount(MinAmount, InterestRate, client.ClientId, client.Name,  DepartmentId, (int)MinTerm, DateTime.Now) as T;
+                    newAccount = new PhysicalAccount(MinAmount, InterestRate, client.ClientId, client.Name, DepartmentId, (int)MinTerm, DateTime.Now) as T;
                     break;
 
                 case AccountType.IndividualAccount:
-                    newAccount = new IndividualAccount(MinAmount, InterestRate, client.ClientId, client.Name,  DepartmentId, (int)MinTerm, DateTime.Now, (int)Delay) as T;
+                    newAccount = new IndividualAccount(MinAmount, InterestRate, client.ClientId, client.Name, DepartmentId, (int)MinTerm, DateTime.Now, (int)Delay) as T;
                     break;
 
                 case AccountType.PrivilegedAccount:
-                    newAccount = new PrivilegedAccount(MinAmount, InterestRate, client.ClientId, client.Name,  DepartmentId, (int)MinTerm, DateTime.Now) as T;
+                    newAccount = new PrivilegedAccount(MinAmount, InterestRate, client.ClientId, client.Name, DepartmentId, (int)MinTerm, DateTime.Now) as T;
                     break;
 
             }
 
+            client.Amount -= MinAmount;
             Accounts.Add(newAccount);
-            Log.Add(new LogMessage($"Открыт счет {newAccount.OwnerName} {newAccount.OwnerId} Type:{newAccount.Type}"));
+            Log.Add(new LogMessage($"Открыт счет {newAccount.OwnerName} {newAccount.OwnerId} Type:{newAccount.Type}"));            
         }
 
         protected void Subscribe()

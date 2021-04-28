@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using ModelLib;
 
 namespace Модуль_13_ДЗ
@@ -24,24 +25,42 @@ namespace Модуль_13_ДЗ
 
         public override void Transaction()
         {
-            string label = IsWithdraw ? "Снятие со счета" : "Пополнение счета";
-
-            DialogViewModel dialogVM = new DialogViewModel(label, Reciever.AmountAvailable, IsWithdraw);
-            DialogWindow dialogWindow = new DialogWindow(dialogVM, label);
-
-            if (dialogWindow.ShowDialog() == true)
+            try
             {
-                if(IsWithdraw)
+                if (Sender.BadHistory)
+                    throw new TransactionFailureException($"Клиент {Sender.Name} заблокирован!");
+
+                if (Reciever.BadHistory)
+                    throw new TransactionFailureException($"Счет {Reciever.Name} заблокирован!");
+
+                string label = IsWithdraw ? "Снятие со счета" : "Пополнение счета";
+
+                DialogViewModel dialogVM = new DialogViewModel(label, Reciever.AmountAvailable, IsWithdraw);
+                DialogWindow dialogWindow = new DialogWindow(dialogVM, label);
+
+                if (dialogWindow.ShowDialog() == true)
                 {
-                    Sender.Put(dialogVM.Amount);
-                    Reciever.Withdraw(dialogVM.Amount);
-                }
-                else
-                {
-                    Sender.Withdraw(dialogVM.Amount);
-                    Reciever.Put(dialogVM.Amount);
+                    if (IsWithdraw)
+                    {
+                        Sender.Put(dialogVM.Amount);
+                        Reciever.Withdraw(dialogVM.Amount);
+                    }
+                    else
+                    {
+                        Sender.Withdraw(dialogVM.Amount);
+                        Reciever.Put(dialogVM.Amount);
+                    }
                 }
             }
+            catch(TransactionFailureException ex)
+            {
+                MessageBox.Show(ex.Info);
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            
         }
     }
 }

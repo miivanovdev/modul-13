@@ -37,7 +37,10 @@ namespace ModelLib
             }
         }
 
-        public override bool CanClose => CanWithdrawed;
+        public override bool CanClose
+        {
+            get { return Amount == 0; }
+        }
         
         public override bool CanTransact
         {

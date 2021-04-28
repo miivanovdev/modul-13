@@ -94,7 +94,7 @@ namespace ModelLib
             set
             {
                 if (value < 0)
-                    value *= (-1);
+                    value = Math.Abs(value);
 
                 amount = value;
                 NotifyPropertyChanged(nameof(Amount));
@@ -155,6 +155,11 @@ namespace ModelLib
                 return Math.Round(CountIncome(), 2);
             }
         }
+
+        /// <summary>
+        /// Счет заблокирован
+        /// </summary>
+        public bool BadHistory { get; set; } = false;
 
         /// <summary>
         /// Событие внесенния суммы на счет

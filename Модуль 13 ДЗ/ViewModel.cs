@@ -160,6 +160,16 @@ namespace Модуль_13_ДЗ
                 };
             }
 
+            if (File.Exists("Log.json"))
+            {
+                string jsonLog = File.ReadAllText("Log.json");
+                Log = JsonConvert.DeserializeObject<ObservableCollection<LogMessage>>(jsonLog);                
+            }
+            else
+            {
+                Log = new ObservableCollection<LogMessage>();
+            }
+
             JsonSerializerSettings settings = new JsonSerializerSettings()
             {
                 TypeNameHandling = Newtonsoft.Json.TypeNameHandling.All
@@ -169,6 +179,9 @@ namespace Модуль_13_ДЗ
             {
                 string jsonDepartments = File.ReadAllText("Departments.json");
                 BankDepartments = JsonConvert.DeserializeObject<List<BankDepartment<BankAccount>>>(jsonDepartments, settings);
+
+                foreach (var b in BankDepartments)
+                    b.Log = Log;
             }            
             else
             {
@@ -202,20 +215,7 @@ namespace Модуль_13_ДЗ
                     new PrivilegedAccount(3012250, 20, Clients[5].ClientId, Clients[5].Name, 3, 18, new DateTime(2018, 10, 12)),
                     new PrivilegedAccount(2012250, 15, Clients[6].ClientId, Clients[6].Name, 3, 18, new DateTime(2019, 11, 21)),
                 };
-            }
-
-            if (File.Exists("Log.json"))
-            {
-                string jsonLog = File.ReadAllText("Log.json");
-                Log = JsonConvert.DeserializeObject<ObservableCollection<LogMessage>>(jsonLog, settings);
-
-                foreach (var b in BankDepartments)
-                    b.Log = Log;
-            }
-            else
-            {
-                Log = new ObservableCollection<LogMessage>();
-            }
+            }           
         }
 
 
@@ -332,7 +332,19 @@ namespace Модуль_13_ДЗ
         /// <param name="o"></param>
         private void OpenAccount(object o)
         {
-            SelectedDepartment.OpenAccount(SelectedClient);
+            try
+            {
+                SelectedDepartment.OpenAccount(SelectedClient);
+            }
+            catch(TransactionFailureException ex)
+            {
+                MessageBox.Show(ex.Info);
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            
             SelectedDepartment.GetAccounts(Accounts, new NotifyCollectionChangedEventHandler(AccountsChanged), SelectedClient == null ? 0 : SelectedClient.ClientId);
         }
         

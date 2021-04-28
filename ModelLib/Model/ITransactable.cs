@@ -15,5 +15,6 @@ namespace ModelLib
         string Name { get; }
         void Put(decimal amount);
         void Withdraw(decimal amount, ITransactable sender = null);
+        bool BadHistory { get; }
     }
 }

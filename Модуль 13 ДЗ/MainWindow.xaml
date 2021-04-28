@@ -278,11 +278,11 @@
                       AutoGenerateColumns="False"
                       CanUserAddRows="False">
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="Имя" Binding="{Binding Path=FirstName}" Width="100"/>
-                            <DataGridTextColumn Header="Фамилия" Binding="{Binding Path=Surname}" Width="100"/>
-                            <DataGridTextColumn Header="Отчество" Binding="{Binding Path=SecondName}" Width="100"/>
-                            <DataGridTextColumn Header="Сумма" Binding="{Binding Path=Amount}" Width="100"/>
-                            <DataGridCheckBoxColumn Header="Плохая история"  Binding="{Binding Path=BadHistory}" Width="100"/>
+                                <DataGridTextColumn Header="Имя" Binding="{Binding Path=FirstName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="100"/>
+                                <DataGridTextColumn Header="Фамилия" Binding="{Binding Path = Surname, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="100"/>
+                                <DataGridTextColumn Header="Отчество" Binding="{Binding Path = SecondName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="100"/>
+                                <DataGridTextColumn Header="Сумма" Binding="{Binding Path = Amount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="100"/>
+                                <DataGridCheckBoxColumn Header="Плохая история"  Binding="{Binding Path = BadHistory, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="100"/>
                         </DataGrid.Columns>
                         <DataGrid.ContextMenu>
                             <ContextMenu>
@@ -295,34 +295,6 @@
 
                 </DockPanel>
                 <DockPanel Grid.Column="2">
-                    <Grid DockPanel.Dock="Top">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <StackPanel Grid.Column="0">
-                            <TextBlock Text="Фамилия"/>
-                            <TextBox Text="{Binding ElementName=clients, Path = SelectedItem.FirstName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource bxStyle}" />
-                        </StackPanel>
-
-                        <StackPanel Grid.Column="1">
-                            <TextBlock Text="Имя"/>
-                            <TextBox Text="{Binding ElementName=clients, Path = SelectedItem.Surname, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource bxStyle}" />
-                        </StackPanel>
-
-                        <StackPanel Grid.Column="2">
-                            <TextBlock Text="Отчество"/>
-                            <TextBox Grid.Column="2" Text="{Binding ElementName=clients, Path = SelectedItem.SecondName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource bxStyle}" />
-                        </StackPanel>
-
-                        <StackPanel Grid.Column="3">
-                            <TextBlock Text="Итого по вкладам"/>
-                            <TextBox Text="{Binding ElementName=clients, Path = SelectedItem.Income, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource bxStyle}" />
-                        </StackPanel>
-
-                    </Grid>
 
                     <DataGrid x:Name="accounts" 
                       DockPanel.Dock="Top" 
@@ -373,15 +345,15 @@
             </TabItem.Header>
             <TabItem.Content>
                 <ListView ItemsSource="{Binding Log}"
-                          IsSynchronizedWithCurrentItem="True">
+                              IsSynchronizedWithCurrentItem="True"
+                              >
                     <ListView.View>
                         <GridView>
                             <GridViewColumn Header="Событие" DisplayMemberBinding="{Binding Message}" Width="650"/>
                             <GridViewColumn Header="Время" DisplayMemberBinding="{Binding Time}"/>
                         </GridView>
-                    </ListView.View>    
+                    </ListView.View>
                 </ListView>
-                    
             </TabItem.Content>
         </TabItem>
     </TabControl>
