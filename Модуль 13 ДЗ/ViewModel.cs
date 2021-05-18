@@ -7,6 +7,9 @@ using System.ComponentModel;
 using System.Collections.Specialized;
 using System.Collections.ObjectModel;
 using System.Windows;
+using System.Threading.Tasks;
+using System.Diagnostics;
+using System.Configuration;
 using ModelLib;
 
 namespace Модуль_13_ДЗ
@@ -18,8 +21,18 @@ namespace Модуль_13_ДЗ
         public List<BankAccount> Accounts { get; set; }
         public ObservableCollection<LogMessage> Log { get; set; }
 
+        private string DepartmentsFile { get; set; }
+        private string AccountsFile { get; set; }
+        private string ClientsFile { get; set; }
+        private string LogFile { get; set; }
+
         public ViewModel()
-        {                     
+        {
+            DepartmentsFile = ConfigurationManager.AppSettings["DepartmentsFile"];
+            AccountsFile = ConfigurationManager.AppSettings["AccountsFile"];
+            ClientsFile = ConfigurationManager.AppSettings["ClientsFile"];
+            LogFile = ConfigurationManager.AppSettings["LogFile"];
+
             InitData();
             PropertyChanged += new PropertyChangedEventHandler(SelectionChangeHandler);
 
@@ -117,7 +130,7 @@ namespace Модуль_13_ДЗ
         private void SaveData(object args)
         {
             string jsonClients = JsonConvert.SerializeObject(Clients);
-            File.WriteAllText("Clients.json", jsonClients);
+            File.WriteAllText(ClientsFile, jsonClients);
 
             JsonSerializerSettings settings = new JsonSerializerSettings()
             {
@@ -125,14 +138,25 @@ namespace Модуль_13_ДЗ
             };
 
             string jsonDepartments = JsonConvert.SerializeObject(BankDepartments, settings);
-            File.WriteAllText("Departments.json", jsonDepartments);            
+            File.WriteAllText(DepartmentsFile, jsonDepartments);
 
             string jsonAccounts = JsonConvert.SerializeObject(Accounts, settings);
-            File.WriteAllText("Accounts.json", jsonAccounts);
+            File.WriteAllText(AccountsFile, jsonAccounts);
 
-            string jsonLog = JsonConvert.SerializeObject(Log, settings);
-            File.WriteAllText("Log.json", jsonLog);
+            WriteLogAsync();
         }
+
+        public async void WriteLogAsync()
+        {           
+            using (StreamWriter sw = new StreamWriter(File.OpenWrite(LogFile)))
+            {
+                foreach (var l in Log)
+                {
+                    await sw.WriteLineAsync(JsonConvert.SerializeObject(l));                    
+                }
+            }            
+        }
+
         #endregion
 
 
@@ -141,9 +165,9 @@ namespace Модуль_13_ДЗ
         /// </summary>
         private void InitData()
         {
-            if (File.Exists("Clients.json"))
+            if (File.Exists(ClientsFile))
             {
-                string jsonClients = File.ReadAllText("Clients.json");
+                string jsonClients = File.ReadAllText(ClientsFile);
                 Clients = JsonConvert.DeserializeObject<ObservableCollection<Client>>(jsonClients);
             }
             else
@@ -160,24 +184,37 @@ namespace Модуль_13_ДЗ
                 };
             }
 
-            if (File.Exists("Log.json"))
+            if (File.Exists(LogFile))
             {
-                string jsonLog = File.ReadAllText("Log.json");
-                Log = JsonConvert.DeserializeObject<ObservableCollection<LogMessage>>(jsonLog);                
+                string jsonLog = File.ReadAllText(LogFile);
+                Log = JsonConvert.DeserializeObject<ObservableCollection<LogMessage>>(jsonLog);
             }
             else
             {
-                Log = new ObservableCollection<LogMessage>();
-            }
+                Log = new ObservableCollection<LogMessage>(); 
 
+                Task.Factory.StartNew(() =>
+                {
+                    for(int i = 0; i < 10_000_000; i++)
+                    {
+                        System.Windows.Application.Current.Dispatcher.InvokeAsync((Action)(() =>
+                        {
+                            Log.Add(new LogMessage($"{i}"));
+                        }));
+
+                        System.Threading.Thread.Sleep(100);
+                    }                   
+                });
+            }
+            
             JsonSerializerSettings settings = new JsonSerializerSettings()
             {
                 TypeNameHandling = Newtonsoft.Json.TypeNameHandling.All
             };
 
-            if (File.Exists("Departments.json"))
+            if (File.Exists(DepartmentsFile))
             {
-                string jsonDepartments = File.ReadAllText("Departments.json");
+                string jsonDepartments = File.ReadAllText(DepartmentsFile);
                 BankDepartments = JsonConvert.DeserializeObject<List<BankDepartment<BankAccount>>>(jsonDepartments, settings);
 
                 foreach (var b in BankDepartments)
@@ -194,9 +231,9 @@ namespace Модуль_13_ДЗ
                 };
             }
 
-            if (File.Exists("Accounts.json"))
+            if (File.Exists(AccountsFile))
             {
-                string jsonAccounts = File.ReadAllText("Accounts.json");
+                string jsonAccounts = File.ReadAllText(AccountsFile);
                 Accounts = JsonConvert.DeserializeObject<List<BankAccount>>(jsonAccounts, settings);
             }
             else
@@ -217,8 +254,7 @@ namespace Модуль_13_ДЗ
                 };
             }           
         }
-
-
+                                
         #region.Commands
         /// <summary>
         /// Команда добавления клиента

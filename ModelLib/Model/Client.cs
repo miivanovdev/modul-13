@@ -52,11 +52,9 @@ namespace ModelLib
             get { return amount; }
             set
             {
-                if (value < 0)
-                    value = Math.Abs(value);
-
-                amount = value;
+                amount = Math.Abs(value);
                 NotifyPropertyChanged(nameof(Amount));
+
             }
         }
 
