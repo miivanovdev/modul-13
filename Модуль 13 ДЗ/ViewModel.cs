@@ -8,8 +8,8 @@ using System.Collections.Specialized;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Threading.Tasks;
-using System.Diagnostics;
 using System.Configuration;
+using System.Data.SqlClient;
 using ModelLib;
 
 namespace Модуль_13_ДЗ
@@ -25,6 +25,8 @@ namespace Модуль_13_ДЗ
         private string AccountsFile { get; set; }
         private string ClientsFile { get; set; }
         private string LogFile { get; set; }
+
+        private SqlConnection SqlConnection { get; set; }
 
         public ViewModel()
         {
@@ -164,95 +166,163 @@ namespace Модуль_13_ДЗ
         /// Инициализировать коллекции данных десериализовав json
         /// </summary>
         private void InitData()
-        {
-            if (File.Exists(ClientsFile))
-            {
-                string jsonClients = File.ReadAllText(ClientsFile);
-                Clients = JsonConvert.DeserializeObject<ObservableCollection<Client>>(jsonClients);
-            }
-            else
-            {
-                Clients = new ObservableCollection<Client>()
-                {
-                    new Client("Кулибяка", "Вадим", "Натанович", 27450, true),
-                    new Client("Пыпырин", "Владимир", "Юльевич", 38850),
-                    new Client("Прокопов", "Алексей", "Александрович", 40450),
-                    new Client("Никишин", "Олег", "Викторович", 120250),
-                    new Client("Крупская", "Анна", "Сергеевна", 117300),
-                    new Client("Коняев", "Станислав", "Валерьевич", 301200),
-                    new Client("Чизмар", "Валентина", "Витальевна", 178500)
-                };
-            }
+        {            
+            Log = new ObservableCollection<LogMessage>();            
 
-            if (File.Exists(LogFile))
+            SqlConnectionStringBuilder connectionString = new SqlConnectionStringBuilder()
             {
-                string jsonLog = File.ReadAllText(LogFile);
-                Log = JsonConvert.DeserializeObject<ObservableCollection<LogMessage>>(jsonLog);
-            }
-            else
-            {
-                Log = new ObservableCollection<LogMessage>(); 
-
-                Task.Factory.StartNew(() =>
-                {
-                    for(int i = 0; i < 10_000_000; i++)
-                    {
-                        System.Windows.Application.Current.Dispatcher.InvokeAsync((Action)(() =>
-                        {
-                            Log.Add(new LogMessage($"{i}"));
-                        }));
-
-                        System.Threading.Thread.Sleep(100);
-                    }                   
-                });
-            }
-            
-            JsonSerializerSettings settings = new JsonSerializerSettings()
-            {
-                TypeNameHandling = Newtonsoft.Json.TypeNameHandling.All
+                DataSource = ConfigurationManager.AppSettings["DataSource"],
+                InitialCatalog = ConfigurationManager.AppSettings["InitialCatalog"],
+                IntegratedSecurity = Convert.ToBoolean(ConfigurationManager.AppSettings["IntegratedSecurity"]),
+                Pooling = Convert.ToBoolean(ConfigurationManager.AppSettings["Pooling"])
             };
 
-            if (File.Exists(DepartmentsFile))
-            {
-                string jsonDepartments = File.ReadAllText(DepartmentsFile);
-                BankDepartments = JsonConvert.DeserializeObject<List<BankDepartment<BankAccount>>>(jsonDepartments, settings);
+            SqlConnection = new SqlConnection(connectionString.ConnectionString);
 
-                foreach (var b in BankDepartments)
-                    b.Log = Log;
-            }            
-            else
-            {
-                BankDepartments = new List<BankDepartment<BankAccount>>()
-                {
-                    new BankDepartment<BankAccount>(Log, "Не выбрано!", 0, 0, 0, true),
-                    new PhysicalDepartment(Log, "Отдел по работе с физическими лицами", 50000, 6, 15),
-                    new IndividualDepartment(Log, "Отдел по работе с юридическими лицами", 30000, 12, 15),
-                    new PrivilegedDepartment(Log, "Отдел по работе с привелигированными клиентами", 100000, 18, 20)
-                };
-            }
+            string selectClientQuery = "SELECT * FROM Clients ORDER BY ClientId";
+            string selectDepartmentQuery = "SELECT * FROM Departments ORDER BY DepartmentId";
+            string selectAccountQuery = "SELECT * FROM Accounts ORDER BY AccountId";
 
-            if (File.Exists(AccountsFile))
+            Clients = new ObservableCollection<Client>();
+
+            try
             {
-                string jsonAccounts = File.ReadAllText(AccountsFile);
-                Accounts = JsonConvert.DeserializeObject<List<BankAccount>>(jsonAccounts, settings);
-            }
-            else
-            {
-                Accounts = new List<BankAccount>()
+                SqlConnection.Open();
+
+                SqlCommand sqlCommandSelectClient = new SqlCommand(selectClientQuery, SqlConnection);
+                SqlDataReader reader = sqlCommandSelectClient.ExecuteReader();
+
+                while(reader.Read())
                 {
-                    new PhysicalAccount(40000, 10, Clients[0].ClientId, Clients[0].Name, 1 , 6, new DateTime(2020, 11, 05)),
-                    new PhysicalAccount(78540, 12, Clients[0].ClientId, Clients[0].Name, 1, 6, new DateTime(2019, 10, 23)),
-                    new PhysicalAccount(63400, 10, Clients[1].ClientId, Clients[1].Name, 1, 6, new DateTime(2020, 09, 04)),
-                    new PhysicalAccount(-48900, 10, Clients[1].ClientId, Clients[1].Name, 1, 6, new DateTime(2020, 06, 12)),
-                    new IndividualAccount(34000, 10, Clients[2].ClientId, Clients[2].Name, 2, 12, new DateTime(2019, 01, 24), 2),
-                    new IndividualAccount(-500000, 10, Clients[2].ClientId, Clients[2].Name, 2, 12, new DateTime(2021, 01, 13), 2),
-                    new IndividualAccount(1240000, 10, Clients[3].ClientId, Clients[3].Name, 2, 12, new DateTime(2020, 08, 07), 2),
-                    new IndividualAccount(12700, 10, Clients[3].ClientId, Clients[3].Name, 2, 12, new DateTime(2020, 02, 14), 2),
-                    new IndividualAccount(481500, 15, Clients[4].ClientId, Clients[4].Name, 2, 12, new DateTime(2020, 07, 15), 2),
-                    new PrivilegedAccount(3012250, 20, Clients[5].ClientId, Clients[5].Name, 3, 18, new DateTime(2018, 10, 12)),
-                    new PrivilegedAccount(2012250, 15, Clients[6].ClientId, Clients[6].Name, 3, 18, new DateTime(2019, 11, 21)),
-                };
-            }           
+                    Clients.Add(new Client(reader[1].ToString(), 
+                                           reader[2].ToString(),
+                                           reader[3].ToString(),
+                                           (decimal)reader[4],
+                                           (int)reader[0],
+                                           (bool)reader[5]));
+                }
+
+                reader.Close();
+                reader = null;
+
+                SqlCommand sqlCommandSelectDepartments = new SqlCommand(selectDepartmentQuery, SqlConnection);
+                reader = sqlCommandSelectDepartments.ExecuteReader();
+
+                BankDepartments = new List<BankDepartment<BankAccount>>();
+
+                if (reader == null)
+                    throw new ArgumentException("Не удалось получить Reader!");
+
+                while (reader.Read())
+                {
+                    switch (Enum.Parse(typeof(AccountType), reader[6].ToString()))
+                    {
+                        case AccountType.Basic:
+
+                        BankDepartments.Add(new BankDepartment<BankAccount>(Log,
+                                                                            reader[1].ToString(),
+                                                                            (decimal)reader[2],
+                                                                            (uint)((int)reader[4]),
+                                                                            (decimal)reader[5],
+                                                                            (bool)reader[7],
+                                                                            (uint)((int)reader[3])));
+                        break;
+
+                        case AccountType.PhysicalAccount:
+                        BankDepartments.Add(new PhysicalDepartment(Log,
+                                                                    reader[1].ToString(),
+                                                                    (decimal)reader[2],
+                                                                    (uint)((int)reader[4]),
+                                                                    (decimal)reader[5],
+                                                                    (bool)reader[7],
+                                                                    (uint)((int)reader[3])));
+                        break;
+
+                        case AccountType.IndividualAccount:
+                        BankDepartments.Add(new IndividualDepartment(Log,
+                                                                    reader[1].ToString(),
+                                                                    (decimal)reader[2],
+                                                                    (uint)((int)reader[4]),
+                                                                    (decimal)reader[5],
+                                                                    (bool)reader[7],
+                                                                    (uint)((int)reader[3])));
+                            break;
+
+                        case AccountType.PrivilegedAccount:
+                        BankDepartments.Add(new PrivilegedDepartment(Log,
+                                                                    reader[1].ToString(),
+                                                                    (decimal)reader[2],
+                                                                    (uint)((int)reader[4]),
+                                                                    (decimal)reader[5],
+                                                                    (bool)reader[7],
+                                                                    (uint)((int)reader[3])));
+                            break;
+
+                    }
+                }
+
+                reader.Close();
+                reader = null;
+
+                SqlCommand sqlCommandSelectAccounts = new SqlCommand(selectAccountQuery, SqlConnection);
+                reader = sqlCommandSelectAccounts.ExecuteReader();
+
+                if (reader == null)
+                    throw new ArgumentException("Не удалось получить Reader!");
+
+                Accounts = new List<BankAccount>();
+
+                while (reader.Read())
+                {
+                    switch (Enum.Parse(typeof(AccountType), reader[9].ToString()))
+                    {
+                        case AccountType.Basic:
+                            
+                            break;
+
+                        case AccountType.PhysicalAccount:
+                            Accounts.Add(new PhysicalAccount((decimal)reader[4],
+                                                            (decimal)reader[8],
+                                                            (int)reader[2],
+                                                            reader[3].ToString(),
+                                                            (int)reader[1],
+                                                            (int)reader[7],
+                                                            (DateTime)reader[5]));
+
+                            break;
+
+                        case AccountType.IndividualAccount:
+                            Accounts.Add(new IndividualAccount((decimal)reader[4],
+                                                            (decimal)reader[8],
+                                                            (int)reader[2],
+                                                            reader[3].ToString(),
+                                                            (int)reader[1],
+                                                            (int)reader[7],
+                                                            (DateTime)reader[5],
+                                                            0));
+                            break;
+
+                        case AccountType.PrivilegedAccount:
+                            Accounts.Add(new PrivilegedAccount((decimal)reader[4],
+                                                            (decimal)reader[8],
+                                                            (int)reader[2],
+                                                            reader[3].ToString(),
+                                                            (int)reader[1],
+                                                            (int)reader[7],
+                                                            (DateTime)reader[5]));
+                            break;
+
+                    }
+                }
+
+                SqlConnection.Close();
+                SqlConnection.Dispose();
+            }
+            catch(Exception ex)
+            {
+                SqlConnection.Dispose();
+                MessageBox.Show(ex.Message);
+            }
         }
                                 
         #region.Commands

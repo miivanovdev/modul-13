@@ -63,6 +63,10 @@ namespace ModelLib
                 minTerm = value;
             }
         }
+
+        /// <summary>
+        /// Отсрочка
+        /// </summary>
         public uint Delay { get; set; }
 
         public decimal minAmount;

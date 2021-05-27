@@ -119,8 +119,18 @@ namespace ModelLib
             Amount = amount;
             BadHistory = badHistory;
             ClientId = NextId();
-        }     
-        
+        }
+
+        public Client(string firsName, string surname, string secondName, decimal amount, int clientId, bool badHistory)
+        {
+            FirstName = firsName;
+            Surname = surname;
+            SecondName = secondName;
+            Amount = amount;
+            ClientId = clientId;
+            BadHistory = badHistory;
+        }
+
         public string Name
         {
             get { return $"{Surname} {FirstName} {SecondName}"; }
