@@ -8,16 +8,15 @@ namespace ModelLib
 {
     public class PhysicalAccount : BankAccount
     {
+        public PhysicalAccount() { }
+
         public PhysicalAccount(decimal amount, decimal interestRate, int ownerId, string ownerName, int departmentId, int minTerm, DateTime dateTime)
             : base(amount, interestRate, ownerId, ownerName, departmentId, minTerm, dateTime)
         {
             
         }
-
-        public override AccountType Type
-        {
-            get { return AccountType.PhysicalAccount; }
-        }
+        
+        public override AccountType Type { get; set; }
 
         public override string Name
         {

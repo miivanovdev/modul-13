@@ -7,12 +7,14 @@ namespace ModelLib
 {
     public class PrivilegedDepartment : BankDepartment<BankAccount>
     {
-        public PrivilegedDepartment(ObservableCollection<LogMessage> log, string name, decimal minAmount, uint minTerm, decimal rate, bool isEmpty = false, uint delay = 0)
-           : base(log, name, minAmount, minTerm, rate, isEmpty, delay)
+        public PrivilegedDepartment() { } 
+
+        public PrivilegedDepartment(ObservableCollection<LogMessage> log, string name, decimal minAmount, int minTerm, decimal rate, bool isEmpty = false, int delay = 0)
+           : base(log, name, minAmount, minTerm, rate, delay)
         {
 
         }
 
-        public override AccountType AccountType => AccountType.PrivilegedAccount;   
+        public override AccountType Type { get; set; } = AccountType.PrivilegedAccount;
     }
 }

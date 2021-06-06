@@ -1,36 +1,52 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows;
+using System.Data.Linq.Mapping;
 
 namespace ModelLib
 {
+    [Table(Name = "Accounts")]
+    [InheritanceMapping(Code = AccountType.Basic, Type = typeof(BankAccount),
+    IsDefault = true)]
+    [InheritanceMapping(Code = AccountType.IndividualAccount, Type = typeof(IndividualAccount))]
+    [InheritanceMapping(Code = AccountType.PhysicalAccount, Type = typeof(PhysicalAccount))]
+    [InheritanceMapping(Code = AccountType.PrivilegedAccount, Type = typeof(PrivilegedAccount))]
     public class BankAccount : ObservableObject, ITransactable
     {
+        [Column(Name = "AccountId", IsDbGenerated = true, IsPrimaryKey = true)]
+        public int AccountId { get; set; }
         /// <summary>
         /// Идентификатор владельца
         /// </summary>
+        [Column(Name = "OwnerId")]
         public int OwnerId { get; set; }
 
         /// <summary>
         /// Имя владельца
         /// </summary>
+        [Column(Name = "OwnerName")]
         public string OwnerName { get; set; }
 
         /// <summary>
         /// Дата создания
         /// </summary>
+        [Column(Name = "CreationDate")]
         public DateTime CreatedDate { get; set; }
 
         /// <summary>
         /// Минимальный срок вклада в месяцах
         /// </summary>
+        [Column(Name = "MinTerm")]
         public int MinTerm { get; set; }
 
         /// <summary>
         /// Идентификатор департамента
         /// </summary>
+        [Column(Name = "DepartmentId")]
         public int DepartmentId { get; set; }
+
+        [Column(Name = "Delay")]
+        public int Delay { get; set; }
 
         /// <summary>
         /// Наименование счета
@@ -43,10 +59,8 @@ namespace ModelLib
         /// <summary>
         /// Тип счет
         /// </summary>
-        public virtual AccountType Type
-        {
-            get { return AccountType.Basic; }
-        }
+        [Column(Name = "AccountType", IsDiscriminator = true)]
+        public virtual AccountType Type { get; set; } 
 
         /// <summary>
         /// Доступно снятие со счета
@@ -85,6 +99,7 @@ namespace ModelLib
         /// <summary>
         /// Начальная сумма счета
         /// </summary>
+        [Column(Name = "Amount")]
         public decimal Amount
         {
             get
@@ -112,6 +127,7 @@ namespace ModelLib
         /// <summary>
         /// Текущая дата
         /// </summary>
+        [Column(Name = "CurrentDate")]
         public DateTime CurrentDate
         {
             get { return currentDate; }
@@ -132,6 +148,7 @@ namespace ModelLib
         /// <summary>
         /// процент по вкладу
         /// </summary>
+        [Column(Name = "InterestRate")]
         public decimal InterestRate { get; set; }
 
         /// <summary>
@@ -159,7 +176,8 @@ namespace ModelLib
         /// <summary>
         /// Счет заблокирован
         /// </summary>
-        public bool BadHistory { get; set; } = false;
+        [Column(Name = "BadHistory")]
+        public bool BadHistory { get; set; }
 
         /// <summary>
         /// Событие внесенния суммы на счет
@@ -266,6 +284,8 @@ namespace ModelLib
             CreatedDate = dateTime;
             MinTerm = minTerm;
             CurrentDate = DateTime.Now;
-        }        
+        }
+
+        public BankAccount() { }
     }
 }

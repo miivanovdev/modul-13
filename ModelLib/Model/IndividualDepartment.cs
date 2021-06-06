@@ -7,12 +7,14 @@ namespace ModelLib
 {
     public class IndividualDepartment : BankDepartment<BankAccount>
     {
-        public IndividualDepartment(ObservableCollection<LogMessage> log, string name, decimal minAmount, uint minTerm, decimal rate, bool isEmpty = false, uint delay = 0)
-           : base(log, name, minAmount, minTerm, rate, isEmpty, delay)
+        public IndividualDepartment() { }
+
+        public IndividualDepartment(ObservableCollection<LogMessage> log, string name, decimal minAmount, int minTerm, decimal rate, bool isEmpty = false, int delay = 0)
+           : base(log, name, minAmount, minTerm, rate, delay)
         {
 
         }
 
-        public override AccountType AccountType => AccountType.IndividualAccount;
+        public override AccountType Type { get; set; } = AccountType.IndividualAccount;
     }
 }

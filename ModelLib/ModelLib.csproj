@@ -35,6 +35,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data.Linq" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -48,6 +49,7 @@
     <Compile Include="Model\BankAccountListExt.cs" />
     <Compile Include="Model\BankDepartment.cs" />
     <Compile Include="Model\Client.cs" />
+    <Compile Include="Model\DataService.cs" />
     <Compile Include="Model\IndividualAccount.cs" />
     <Compile Include="Model\IndividualDepartment.cs" />
     <Compile Include="Model\ITransactable.cs" />

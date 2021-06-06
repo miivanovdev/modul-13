@@ -6,16 +6,15 @@ namespace ModelLib
 {
     public class PrivilegedAccount : BankAccount
     {
+        public PrivilegedAccount() { }
+
         public PrivilegedAccount(decimal amount, decimal interestRate, int ownerId, string ownerName, int departmentId, int minTerm, DateTime dateTime)
             : base(amount, interestRate, ownerId, ownerName, departmentId, minTerm, dateTime)
         {
 
         }
 
-        public override AccountType Type
-        {
-            get { return AccountType.PrivilegedAccount; }
-        }
+        public override AccountType Type { get; set; }
 
         public override string Name
         {

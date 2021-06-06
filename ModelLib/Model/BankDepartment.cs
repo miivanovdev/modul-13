@@ -3,12 +3,19 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using Newtonsoft.Json;
-using System.Linq;
+using System.Data.Linq.Mapping;
 
 namespace ModelLib
 {
+    [Table(Name = "Departments")]
+    [InheritanceMapping(Code = AccountType.Basic, Type = typeof(BankDepartment<BankAccount>),
+    IsDefault = true)]
+    [InheritanceMapping(Code = AccountType.IndividualAccount, Type = typeof(IndividualDepartment))]
+    [InheritanceMapping(Code = AccountType.PhysicalAccount, Type = typeof(PhysicalDepartment))]
+    [InheritanceMapping(Code = AccountType.PrivilegedAccount, Type = typeof(PrivilegedDepartment))]
     public class BankDepartment<T> : ObservableObject where T : BankAccount
     {
+        [Column(Name = "Name")]
         public string Name { get; set; }
 
         [JsonIgnore]
@@ -17,10 +24,8 @@ namespace ModelLib
         /// <summary>
         /// Тип департамента
         /// </summary>
-        public virtual AccountType AccountType
-        {
-            get { return AccountType.Basic; }
-        }
+        [Column(Name = "AccountType", IsDiscriminator = true)]
+        public virtual AccountType Type { get; set; } = AccountType.Basic;
 
         protected ObservableCollection<BankAccount> accounts;
 
@@ -46,13 +51,16 @@ namespace ModelLib
         /// <summary>
         /// Ставка по вкладам
         /// </summary>
+        [Column(Name = "InterestRate")]
         public decimal InterestRate { get; set; }
 
         /// <summary>
         /// Минимальный срок вклада в месяцах
         /// </summary>
-        private uint minTerm;
-        public uint MinTerm
+        private int minTerm;
+
+        [Column(Name = "MinTerm")]
+        public int MinTerm
         {
             get { return minTerm; }
             set
@@ -67,13 +75,15 @@ namespace ModelLib
         /// <summary>
         /// Отсрочка
         /// </summary>
-        public uint Delay { get; set; }
+        [Column(Name = "Delay")]
+        public int Delay { get; set; }
 
         public decimal minAmount;
 
         /// <summary>
         /// Минимальная сумма вклада
         /// </summary>
+        [Column(Name = "MinAmount")]
         public decimal MinAmount
         {
             get
@@ -95,36 +105,12 @@ namespace ModelLib
         /// <summary>
         /// Идентификатор департамента
         /// </summary>
-        public int DepartmentId
-        {
-            get { return departmentId; }
-            set
-            {
-                if (id < value)
-                    id = value;
+        [Column(Name = "DepartmentId", IsPrimaryKey = true, IsDbGenerated = true)]
+        public int DepartmentId { get; set; }
 
-                departmentId = value;
-            }
-        }
+        public BankDepartment() { }
 
-        protected static int id;
-
-        /// <summary>
-        /// Получить следующий идентификатор
-        /// </summary>
-        /// <returns></returns>
-        protected static int NextId()
-        {
-            id++;
-            return id;
-        }
-
-        static BankDepartment()
-        {
-            id = 0;
-        }
-
-        public BankDepartment(ObservableCollection<LogMessage> log, string name, decimal minAmount, uint minTerm, decimal rate, bool isEmpty = false, uint delay = 0)
+        public BankDepartment(ObservableCollection<LogMessage> log, string name, decimal minAmount, int minTerm, decimal rate, int delay = 0)
         {
             Log = log;
             Name = name;
@@ -132,9 +118,6 @@ namespace ModelLib
             Delay = delay;
             InterestRate = rate;
             MinAmount = minAmount;
-
-            if (!isEmpty)
-                DepartmentId = NextId();
 
             Accounts = new ObservableCollection<BankAccount>();
         }
@@ -176,7 +159,7 @@ namespace ModelLib
 
             T newAccount = null;
 
-            switch (AccountType)
+            switch (Type)
             {
                 case AccountType.Basic:
                     newAccount = new BankAccount(MinAmount, InterestRate, client.ClientId, client.Name, DepartmentId, (int)MinTerm, DateTime.Now) as T;
@@ -213,6 +196,9 @@ namespace ModelLib
 
         public void Unsubscribe()
         {
+            if (Accounts == null)
+                return;
+
             foreach (var a in Accounts)
             {
                 a.AmountAdded -= LogAdding;

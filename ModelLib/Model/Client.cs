@@ -7,46 +7,45 @@ using System.Collections.Specialized;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Data.Linq.Mapping;
 
 namespace ModelLib
 {
+    [Table(Name = "Clients")]
     public class Client : ObservableObject, ITransactable
     {
         /// <summary>
         /// Имя
         /// </summary>
+        [Column(Name = "FirstName")]
         public string FirstName { get; set; }
 
         /// <summary>
         /// Фамилия
         /// </summary>
+        [Column(Name = "Surname")]
         public string Surname { get; set; }
 
         /// <summary>
         /// Отчество
         /// </summary>
+        [Column(Name = "SecondName")]
         public string SecondName { get; set; }
 
         /// <summary>
         /// Идентификатор клиента
         /// </summary>
-        private int clientId;
-        public int ClientId
-        {
-            get { return clientId; }
-            set
-            {
-                if (id < value)
-                    id = value;
 
-                clientId = value;
-            }
-        }
+        [Column(Name = "ClientId", IsPrimaryKey = true, IsDbGenerated = true)]
+        public int ClientId { get; set; }       
+        
 
         /// <summary>
         /// Сумма в кармане у клиента
         /// </summary>
         private decimal amount;
+
+        [Column(Name = "Amount")]
         public decimal Amount
         {
             get { return amount; }
@@ -66,23 +65,9 @@ namespace ModelLib
         /// <summary>
         /// Клиент заблокирован
         /// </summary>
+        [Column(Name = "BadHistory")]
         public bool BadHistory { get; set; }
-
-        /// <summary>
-        /// Последний использованный идентификатор
-        /// </summary>
-        private static int id;
-
-        /// <summary>
-        /// Выдать новый идентификатор
-        /// </summary>
-        /// <returns></returns>
-        private static int NextId()
-        {
-            id++;
-            return id;
-        }
-
+        
         /// <summary>
         /// Положить сумму в карман
         /// </summary>
@@ -103,12 +88,7 @@ namespace ModelLib
             Amount -= amount;
             NotifyPropertyChanged(nameof(Amount));
         }
-
-        static Client()
-        {
-            id = 0;
-        }
-
+        
         public Client() { }
 
         public Client(string firsName, string surname, string secondName, decimal amount, bool badHistory = false)
@@ -118,7 +98,6 @@ namespace ModelLib
             SecondName = secondName;
             Amount = amount;
             BadHistory = badHistory;
-            ClientId = NextId();
         }
 
         public Client(string firsName, string surname, string secondName, decimal amount, int clientId, bool badHistory)

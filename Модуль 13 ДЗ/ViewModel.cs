@@ -9,6 +9,8 @@ using System.Collections.ObjectModel;
 using System.Windows;
 using System.Threading.Tasks;
 using System.Configuration;
+using System.Data;
+using System.Data.Linq;
 using System.Data.SqlClient;
 using ModelLib;
 
@@ -21,26 +23,21 @@ namespace Модуль_13_ДЗ
         public List<BankAccount> Accounts { get; set; }
         public ObservableCollection<LogMessage> Log { get; set; }
 
-        private string DepartmentsFile { get; set; }
-        private string AccountsFile { get; set; }
-        private string ClientsFile { get; set; }
-        private string LogFile { get; set; }
+        public Table<Client> ClientsTable { get; set; }
+        public Table<BankAccount> AccountsTable { get; set; }
+        public Table<BankDepartment<BankAccount>> DepartmentsTable { get; set; }
+        public DataContext DataContext { get; set; }
 
         private SqlConnection SqlConnection { get; set; }
 
         public ViewModel()
         {
-            DepartmentsFile = ConfigurationManager.AppSettings["DepartmentsFile"];
-            AccountsFile = ConfigurationManager.AppSettings["AccountsFile"];
-            ClientsFile = ConfigurationManager.AppSettings["ClientsFile"];
-            LogFile = ConfigurationManager.AppSettings["LogFile"];
-
             InitData();
             PropertyChanged += new PropertyChangedEventHandler(SelectionChangeHandler);
 
             SelectedDepartment = BankDepartments.First();
-            SelectedClient = Clients.First();
-                     
+            SelectedClient = Clients.First();            
+
             SelectedAccount = SelectedDepartment.Accounts.First();
         }
                
@@ -58,20 +55,21 @@ namespace Модуль_13_ДЗ
             set
             {
                 if (selectedDepartment == value)
-                    return;
-
-                selectedDepartment?.Unsubscribe();
+                    return;                
+                               
+                 selectedDepartment?.Unsubscribe();
 
                 selectedDepartment = value;
                 NotifyPropertyChanged(nameof(SelectedDepartment));
             }
         }
+        
 
-        private Client selectedClient;
 
         /// <summary>
         /// Выбранный клиент
-        /// </summary>
+        /// </summary> 
+        private Client selectedClient;
         public Client SelectedClient
         {
             get
@@ -82,7 +80,7 @@ namespace Модуль_13_ДЗ
             {
                 if (selectedClient == value)
                     return;
-
+                
                 selectedClient = value;
                 NotifyPropertyChanged(nameof(SelectedClient));
             }
@@ -131,34 +129,10 @@ namespace Модуль_13_ДЗ
         /// <param name="args"></param>
         private void SaveData(object args)
         {
-            string jsonClients = JsonConvert.SerializeObject(Clients);
-            File.WriteAllText(ClientsFile, jsonClients);
-
-            JsonSerializerSettings settings = new JsonSerializerSettings()
-            {
-                TypeNameHandling = Newtonsoft.Json.TypeNameHandling.All
-            };
-
-            string jsonDepartments = JsonConvert.SerializeObject(BankDepartments, settings);
-            File.WriteAllText(DepartmentsFile, jsonDepartments);
-
-            string jsonAccounts = JsonConvert.SerializeObject(Accounts, settings);
-            File.WriteAllText(AccountsFile, jsonAccounts);
-
-            WriteLogAsync();
-        }
-
-        public async void WriteLogAsync()
-        {           
-            using (StreamWriter sw = new StreamWriter(File.OpenWrite(LogFile)))
-            {
-                foreach (var l in Log)
-                {
-                    await sw.WriteLineAsync(JsonConvert.SerializeObject(l));                    
-                }
-            }            
-        }
-
+            DataContext.SubmitChanges();
+            SqlConnection.Close();
+            SqlConnection.Dispose();
+        }        
         #endregion
 
 
@@ -179,150 +153,31 @@ namespace Модуль_13_ДЗ
 
             SqlConnection = new SqlConnection(connectionString.ConnectionString);
 
-            string selectClientQuery = "SELECT * FROM Clients ORDER BY ClientId";
-            string selectDepartmentQuery = "SELECT * FROM Departments ORDER BY DepartmentId";
-            string selectAccountQuery = "SELECT * FROM Accounts ORDER BY AccountId";
-
-            Clients = new ObservableCollection<Client>();
-
             try
-            {
+            {                
                 SqlConnection.Open();
 
-                SqlCommand sqlCommandSelectClient = new SqlCommand(selectClientQuery, SqlConnection);
-                SqlDataReader reader = sqlCommandSelectClient.ExecuteReader();
+                DataContext = new DataContext(SqlConnection);
 
-                while(reader.Read())
-                {
-                    Clients.Add(new Client(reader[1].ToString(), 
-                                           reader[2].ToString(),
-                                           reader[3].ToString(),
-                                           (decimal)reader[4],
-                                           (int)reader[0],
-                                           (bool)reader[5]));
-                }
+                ClientsTable = DataContext.GetTable<Client>();
+                Clients = new ObservableCollection<Client>(ClientsTable.ToList());
 
-                reader.Close();
-                reader = null;
+                AccountsTable = DataContext.GetTable<BankAccount>();
+                Accounts = AccountsTable.ToList();
 
-                SqlCommand sqlCommandSelectDepartments = new SqlCommand(selectDepartmentQuery, SqlConnection);
-                reader = sqlCommandSelectDepartments.ExecuteReader();
+                DepartmentsTable = DataContext.GetTable<BankDepartment<BankAccount>>();
+                BankDepartments = DepartmentsTable.ToList();
 
-                BankDepartments = new List<BankDepartment<BankAccount>>();
-
-                if (reader == null)
-                    throw new ArgumentException("Не удалось получить Reader!");
-
-                while (reader.Read())
-                {
-                    switch (Enum.Parse(typeof(AccountType), reader[6].ToString()))
-                    {
-                        case AccountType.Basic:
-
-                        BankDepartments.Add(new BankDepartment<BankAccount>(Log,
-                                                                            reader[1].ToString(),
-                                                                            (decimal)reader[2],
-                                                                            (uint)((int)reader[4]),
-                                                                            (decimal)reader[5],
-                                                                            (bool)reader[7],
-                                                                            (uint)((int)reader[3])));
-                        break;
-
-                        case AccountType.PhysicalAccount:
-                        BankDepartments.Add(new PhysicalDepartment(Log,
-                                                                    reader[1].ToString(),
-                                                                    (decimal)reader[2],
-                                                                    (uint)((int)reader[4]),
-                                                                    (decimal)reader[5],
-                                                                    (bool)reader[7],
-                                                                    (uint)((int)reader[3])));
-                        break;
-
-                        case AccountType.IndividualAccount:
-                        BankDepartments.Add(new IndividualDepartment(Log,
-                                                                    reader[1].ToString(),
-                                                                    (decimal)reader[2],
-                                                                    (uint)((int)reader[4]),
-                                                                    (decimal)reader[5],
-                                                                    (bool)reader[7],
-                                                                    (uint)((int)reader[3])));
-                            break;
-
-                        case AccountType.PrivilegedAccount:
-                        BankDepartments.Add(new PrivilegedDepartment(Log,
-                                                                    reader[1].ToString(),
-                                                                    (decimal)reader[2],
-                                                                    (uint)((int)reader[4]),
-                                                                    (decimal)reader[5],
-                                                                    (bool)reader[7],
-                                                                    (uint)((int)reader[3])));
-                            break;
-
-                    }
-                }
-
-                reader.Close();
-                reader = null;
-
-                SqlCommand sqlCommandSelectAccounts = new SqlCommand(selectAccountQuery, SqlConnection);
-                reader = sqlCommandSelectAccounts.ExecuteReader();
-
-                if (reader == null)
-                    throw new ArgumentException("Не удалось получить Reader!");
-
-                Accounts = new List<BankAccount>();
-
-                while (reader.Read())
-                {
-                    switch (Enum.Parse(typeof(AccountType), reader[9].ToString()))
-                    {
-                        case AccountType.Basic:
-                            
-                            break;
-
-                        case AccountType.PhysicalAccount:
-                            Accounts.Add(new PhysicalAccount((decimal)reader[4],
-                                                            (decimal)reader[8],
-                                                            (int)reader[2],
-                                                            reader[3].ToString(),
-                                                            (int)reader[1],
-                                                            (int)reader[7],
-                                                            (DateTime)reader[5]));
-
-                            break;
-
-                        case AccountType.IndividualAccount:
-                            Accounts.Add(new IndividualAccount((decimal)reader[4],
-                                                            (decimal)reader[8],
-                                                            (int)reader[2],
-                                                            reader[3].ToString(),
-                                                            (int)reader[1],
-                                                            (int)reader[7],
-                                                            (DateTime)reader[5],
-                                                            0));
-                            break;
-
-                        case AccountType.PrivilegedAccount:
-                            Accounts.Add(new PrivilegedAccount((decimal)reader[4],
-                                                            (decimal)reader[8],
-                                                            (int)reader[2],
-                                                            reader[3].ToString(),
-                                                            (int)reader[1],
-                                                            (int)reader[7],
-                                                            (DateTime)reader[5]));
-                            break;
-
-                    }
-                }
-
+                foreach (var d in BankDepartments)
+                    d.Log = Log;                
+            }
+            catch (Exception ex)
+            {
                 SqlConnection.Close();
                 SqlConnection.Dispose();
-            }
-            catch(Exception ex)
-            {
-                SqlConnection.Dispose();
                 MessageBox.Show(ex.Message);
-            }
+                System.Windows.Application.Current.Shutdown();
+            }            
         }
                                 
         #region.Commands
@@ -629,14 +484,38 @@ namespace Модуль_13_ДЗ
                     BankAccount account = (BankAccount)a;
 
                     if (!Accounts.Contains(account))
+                    {
                         Accounts.Add(account);
+
+                        try
+                        {
+                            DataContext.GetTable<BankAccount>().InsertOnSubmit(account);
+                            DataContext.SubmitChanges();
+                        }
+                        catch(Exception ex)
+                        {                            
+                            MessageBox.Show(ex.Message);
+                        }
+                    }                        
                 }
             }
 
             if (e.Action == NotifyCollectionChangedAction.Remove)
             {
                 if (Accounts.Remove(SelectedAccount))
-                    SelectedAccount = null;       
+                {
+                    try
+                    {
+                        DataContext.GetTable<BankAccount>().DeleteOnSubmit(SelectedAccount);
+                        DataContext.SubmitChanges();
+                    }
+                    catch (Exception ex)
+                    {                        
+                        MessageBox.Show(ex.Message);
+                    }
+                    
+                    SelectedAccount = null;
+                }
             }
         }
         
