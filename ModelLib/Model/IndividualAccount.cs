@@ -5,6 +5,8 @@ namespace ModelLib
 {
     public class IndividualAccount : BankAccount
     {
+        public IndividualAccount() { }
+
         public IndividualAccount(decimal amount, decimal interestRate, int ownerId, string ownerName, int departmentId, int minTerm, DateTime dateTime, int delay)
             : base(amount, interestRate, ownerId, ownerName, departmentId, minTerm, dateTime)
         {
@@ -20,23 +22,7 @@ namespace ModelLib
         {
             get { return $"Индивидуальный счет {OwnerName} Id {OwnerId}"; }
         }
-
-        private int delay;
-        public int Delay
-        {
-            get
-            {
-                return delay;
-            }
-            set
-            {
-                if (value > MinTerm)
-                    value = 1;
-
-                delay = value;
-            }
-        }
-
+               
         public override bool CanAdded
         {
             get

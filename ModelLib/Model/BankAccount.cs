@@ -8,6 +8,11 @@ namespace ModelLib
     public class BankAccount : ObservableObject, ITransactable
     {
         /// <summary>
+        /// Идентификатор счета
+        /// </summary>
+        public int AccountId { get; set; }
+
+        /// <summary>
         /// Идентификатор владельца
         /// </summary>
         public int OwnerId { get; set; }
@@ -38,6 +43,25 @@ namespace ModelLib
         public virtual string Name
         {
             get { return $"Базовый на имя {OwnerName} - Id {OwnerId}"; }
+        }
+
+        /// <summary>
+        /// Месяцев отстрочки
+        /// </summary>
+        private int delay;
+        public int Delay
+        {
+            get
+            {
+                return delay;
+            }
+            set
+            {
+                if (value > MinTerm)
+                    value = 1;
+
+                delay = value;
+            }
         }
 
         /// <summary>
@@ -255,6 +279,8 @@ namespace ModelLib
             NotifyPropertyChanged(nameof(Amount));
             NotifyPropertyChanged(nameof(Income));
         }
+
+        public BankAccount() { }
 
         public BankAccount(decimal amount, decimal interestRate, int ownerId, string ownerName , int departmentId, int minTerm, DateTime dateTime)
         {

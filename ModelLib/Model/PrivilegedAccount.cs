@@ -6,6 +6,8 @@ namespace ModelLib
 {
     public class PrivilegedAccount : BankAccount
     {
+        public PrivilegedAccount() { }
+
         public PrivilegedAccount(decimal amount, decimal interestRate, int ownerId, string ownerName, int departmentId, int minTerm, DateTime dateTime)
             : base(amount, interestRate, ownerId, ownerName, departmentId, minTerm, dateTime)
         {

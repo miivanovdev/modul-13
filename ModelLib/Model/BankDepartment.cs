@@ -51,8 +51,8 @@ namespace ModelLib
         /// <summary>
         /// Минимальный срок вклада в месяцах
         /// </summary>
-        private uint minTerm;
-        public uint MinTerm
+        private int minTerm;
+        public int MinTerm
         {
             get { return minTerm; }
             set
@@ -63,7 +63,7 @@ namespace ModelLib
                 minTerm = value;
             }
         }
-        public uint Delay { get; set; }
+        public int Delay { get; set; }
 
         public decimal minAmount;
 
@@ -120,7 +120,9 @@ namespace ModelLib
             id = 0;
         }
 
-        public BankDepartment(ObservableCollection<LogMessage> log, string name, decimal minAmount, uint minTerm, decimal rate, bool isEmpty = false, uint delay = 0)
+        public BankDepartment() { }
+
+        public BankDepartment(ObservableCollection<LogMessage> log, string name, decimal minAmount, int minTerm, decimal rate, bool isEmpty = false, int delay = 0)
         {
             Log = log;
             Name = name;
@@ -199,6 +201,9 @@ namespace ModelLib
 
         protected void Subscribe()
         {
+            if (Accounts == null)
+                return;
+
             foreach(var a in Accounts)
             {
                 a.AmountAdded += LogAdding;
@@ -209,6 +214,9 @@ namespace ModelLib
 
         public void Unsubscribe()
         {
+            if (Accounts == null)
+                return;
+
             foreach (var a in Accounts)
             {
                 a.AmountAdded -= LogAdding;
@@ -251,6 +259,5 @@ namespace ModelLib
             var accountSender = sender as ITransactable;
             Log.Add(new LogMessage($"{accountSender.Name} перевод на счет {accountReciever.Name} на сумму: {amount}"));
         }
-
     }
 }

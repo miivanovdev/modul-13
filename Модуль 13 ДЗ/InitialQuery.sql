@@ -163,4 +163,18 @@ as
 insert into Accounts ( [DepartmentId], [OwnerId], [OwnerName], [InterestRate], [Amount], [MinTerm], [CreationDate], [AccountType], [BadHistory], [CurrentDate]) 
 VALUES (@DepartmentId, @OwnerId, @OwnerName, @InterestRate, @Amount, @MinTerm, @CreationDate, @AccountType, 0, @CurrentDate)
 
+go
+create procedure getAllLog
+(
+	@Message NVARCHAR (200),
+    @Time DATETIME
+)
+as
+insert into [Log] ([Message], [Time]) values (@Message, @Time)
+
+go
+create procedure getAllLog
+as
+select * from Log
+
 exec getAllClients
