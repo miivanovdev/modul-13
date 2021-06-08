@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using ModelLib;
 
@@ -11,7 +7,7 @@ namespace Модуль_13_ДЗ
     /// <summary>
     /// Посредник транзакции между клиентом и счетом
     /// </summary>
-    class AccountToClientMediator : Mediator
+    class AccountToClientMediator : TransactionMediator
     {
         public bool IsWithdraw { get; private set; }
 
@@ -19,8 +15,7 @@ namespace Модуль_13_ДЗ
         {            
             IsWithdraw = isWithdraw;            
             Sender = client;
-            Reciever = account;
-            
+            Reciever = account;            
         }
 
         public override void Transaction()

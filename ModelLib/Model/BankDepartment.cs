@@ -150,18 +150,8 @@ namespace ModelLib
             Accounts = new ObservableCollection<BankAccount>(accounts.GetAccountsSubset(DepartmentId, clientId));
             
             Accounts.CollectionChanged += accountsHandler;
-            Subscribe();
-            
-        }   
-        
-        /// <summary>
-        /// Добавить клиента
-        /// </summary>
-        /// <param name="clients"></param>
-        public void AddClient(IList<Client> clients)
-        {
-            clients.Add(new Client("Новый клиент", "", "", 0));
-        }        
+            Subscribe();            
+        }       
 
         /// <summary>
         /// Открыть счет
@@ -191,7 +181,6 @@ namespace ModelLib
                 case AccountType.PrivilegedAccount:
                     newAccount = new PrivilegedAccount(MinAmount, InterestRate, client.ClientId, client.Name, DepartmentId, (int)MinTerm, DateTime.Now) as T;
                     break;
-
             }
 
             client.Amount -= MinAmount;

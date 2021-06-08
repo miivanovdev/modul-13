@@ -1,31 +1,25 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Collections.Specialized;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Runtime.CompilerServices;
+
 
 namespace ModelLib
 {
-    public class Client : ObservableObject, ITransactable
+    public class Client : ObservableObject, ITransactable, IDataErrorInfo
     {
         /// <summary>
         /// Имя
         /// </summary>
-        public string FirstName { get; set; }
+        public string FirstName { get; set; } = string.Empty;
 
         /// <summary>
         /// Фамилия
         /// </summary>
-        public string Surname { get; set; }
+        public string Surname { get; set; } = string.Empty;
 
         /// <summary>
         /// Отчество
         /// </summary>
-        public string SecondName { get; set; }
+        public string SecondName { get; set; } = string.Empty;
 
         /// <summary>
         /// Идентификатор клиента
@@ -124,6 +118,62 @@ namespace ModelLib
         public string Name
         {
             get { return $"{Surname} {FirstName} {SecondName}"; }
+        }
+
+        public string Error { get; private set; }
+
+        public string this[string columnName]
+        {
+            get
+            {
+                Error = String.Empty;
+                switch (columnName)
+                {
+                    case nameof(FirstName):
+
+                        if (FirstName == string.Empty)
+                        {
+                            Error = "Введите имя!";
+                        }
+                        else
+                        {
+                            if (FirstName.Length > 25)
+                                Error = "Слишком длинное имя!";
+                        }
+
+                        break;
+
+                    case nameof(SecondName):
+
+                        if (SecondName == string.Empty)
+                        {
+                            Error = "Введите отчество!";
+                        }
+                        else
+                        {
+                            if (SecondName.Length > 25)
+                                Error = "Слишком длинное отчество!";
+                        }                        
+
+                        break;
+
+                    case nameof(Surname):
+
+                        if (Surname == string.Empty)
+                        {
+                            Error = "Введите фамилию!";
+                        }                          
+                        else
+                        {
+                            if (Surname.Length > 25)
+                                Error = "Слишком длинная фамилия!";
+                        }                      
+
+                        break;
+                }
+
+                return Error;
+            }
         }
     }
 }

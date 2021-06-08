@@ -88,27 +88,7 @@ namespace Модуль_13_ДЗ
                 NotifyPropertyChanged(nameof(SelectedClient));
             }
         }
-
-        /// <summary>
-        /// Выбранный клиент
-        /// </summary>
-        private DataRow selectedClientRow;
-        public DataRow SelectedClientRow
-        {
-            get
-            {
-                return selectedClientRow;
-            }
-            set
-            {
-                if (selectedClientRow == value)
-                    return;
-
-                selectedClientRow = value;
-                NotifyPropertyChanged(nameof(SelectedClient));
-            }
-        }
-
+        
         private BankAccount selectedAccount;
 
         /// <summary>
@@ -152,6 +132,13 @@ namespace Модуль_13_ДЗ
         /// <param name="args"></param>
         private void SaveData(object args)
         {
+            if (SqlConnection.State == ConnectionState.Open)
+            {
+                SqlConnection.Close();
+                SqlConnection.Dispose();
+                return;
+            }                
+
             string jsonClients = JsonConvert.SerializeObject(Clients);
             File.WriteAllText(ClientsFile, jsonClients);
 
@@ -341,6 +328,7 @@ namespace Модуль_13_ДЗ
 
                 Clients.Add(client);
             }
+            dataReader.Close();
         }
 
         public void InitFromDb()
@@ -463,7 +451,9 @@ namespace Модуль_13_ДЗ
         /// <param name="o"></param>
         private void AddClient(object o)
         {
-            SelectedDepartment.AddClient(Clients);
+            ClientInputMediator clientInput = new ClientInputMediator(SqlConnection);
+            Clients.Add(clientInput.GetClient());
+
             NotifyPropertyChanged(nameof(Clients));
         }
 
@@ -500,6 +490,24 @@ namespace Модуль_13_ДЗ
         /// <param name="o"></param>
         private void RemoveClient(object o)
         {
+            if(SqlConnection.State == ConnectionState.Open)
+            {
+                SqlCommand sqlCommand = new SqlCommand("deleteClient", SqlConnection) { CommandType = CommandType.StoredProcedure };
+                sqlCommand.Parameters.AddWithValue("@Id", SelectedClient.ClientId);
+
+                try
+                {
+                    int rowAffected = sqlCommand.ExecuteNonQuery();
+
+                    if (rowAffected == 0)
+                        throw new Exception($"Не удалось удалить клиента {SelectedClient.Name}");
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+            }            
+
             if (!Clients.Remove(SelectedClient))
                 MessageBox.Show("Не удалось удалить клиента!");
 

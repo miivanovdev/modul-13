@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using ModelLib;
 
@@ -11,7 +8,7 @@ namespace Модуль_13_ДЗ
     /// <summary>
     /// Посдердник операции транзакции со счета на счет 
     /// </summary>
-    class AccountToAccountMediator : Mediator
+    class AccountToAccountMediator : TransactionMediator
     {
         public List<BankAccount> Accounts { get; private set; }
 

@@ -69,6 +69,10 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="DataService.cs" />
+    <Compile Include="Dialog\ClientInputDialog.xaml.cs">
+      <DependentUpon>ClientInputDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Dialog\ClientInputViewModel.cs" />
     <Compile Include="Dialog\DialogTransaction.xaml.cs">
       <DependentUpon>DialogTransaction.xaml</DependentUpon>
     </Compile>
@@ -80,13 +84,18 @@
     <Compile Include="Dialog\DialogViewModel.cs" />
     <Compile Include="EnumHelper.cs" />
     <Compile Include="EnumToCollectionConverter .cs" />
-    <Compile Include="Mediator.cs" />
+    <Compile Include="ClientInputMediator.cs" />
+    <Compile Include="TransactionMediator.cs" />
     <Compile Include="ValueDescription.cs" />
     <Compile Include="RelayCommand.cs" />
     <Compile Include="ViewModel.cs" />
     <Compile Include="Dialog\DialogWindow.xaml.cs">
       <DependentUpon>DialogWindow.xaml</DependentUpon>
     </Compile>
+    <Page Include="Dialog\ClientInputDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Dialog\DialogTransaction.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
