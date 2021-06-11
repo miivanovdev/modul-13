@@ -23,7 +23,7 @@ namespace Модуль_13_ДЗ
         public MainWindow()
         {
             InitializeComponent();
-            DataContext = new ViewModel();
+            DataContext = new MainViewModel();
             
         }
     }

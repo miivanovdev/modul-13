@@ -1,73 +1,94 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Windows;
+using ModelLib;
 
-namespace ModelLib
+namespace Модуль_13_ДЗ
 {
-    public class BankAccount : ObservableObject, ITransactable
+    public class BankAccountViewModel : ObservableObject, ITransactable
     {
+        public BankAccountViewModel(BankAccount bankAccount)
+        {
+            BankAccount = bankAccount;
+            CurrentDate = DateTime.Now;
+        }
+
+        public BankAccount BankAccount { get; private set; }
+
         /// <summary>
         /// Идентификатор счета
         /// </summary>
-        public int AccountId { get; set; }
+        public int AccountId { get { return BankAccount.AccountId; }  }
 
         /// <summary>
         /// Идентификатор владельца
         /// </summary>
-        public int OwnerId { get; set; }
+        public int OwnerId { get { return BankAccount.OwnerId; } }
 
         /// <summary>
         /// Имя владельца
         /// </summary>
-        public string OwnerName { get; set; }
+        public string OwnerName { get { return BankAccount.OwnerName; } }
 
         /// <summary>
         /// Дата создания
         /// </summary>
-        public DateTime CreatedDate { get; set; }
-
+        public DateTime CreatedDate { get { return BankAccount.CreatedDate; } }
+                
         /// <summary>
         /// Минимальный срок вклада в месяцах
         /// </summary>
-        public int MinTerm { get; set; }
+        public int MinTerm
+        {
+            get
+            {
+                return BankAccount.MinTerm;
+            }
+            set
+            {
+                if (BankAccount.MinTerm == value)
+                    return;
+
+                BankAccount.MinTerm = value;
+                NotifyPropertyChanged(nameof(MinTerm));
+                NotifyPropertyChanged(nameof(Income));
+            }
+        }
 
         /// <summary>
         /// Идентификатор департамента
         /// </summary>
-        public int DepartmentId { get; set; }
+        public int DepartmentId { get { return BankAccount.DepartmentId; } }
 
         /// <summary>
         /// Наименование счета
         /// </summary>
         public virtual string Name
         {
-            get { return $"Базовый на имя {OwnerName} - Id {OwnerId}"; }
+            get { return $"Базовый на имя {BankAccount.OwnerName} - Id {BankAccount.OwnerId}"; }
         }
 
         /// <summary>
         /// Месяцев отстрочки
         /// </summary>
-        private int delay;
         public int Delay
         {
             get
             {
-                return delay;
+                return BankAccount.Delay;
             }
             set
             {
-                if (value > MinTerm)
-                    value = 1;
+                if (BankAccount.Delay == value)
+                    return;
 
-                delay = value;
+                BankAccount.Delay = value;
             }
         }
 
         /// <summary>
         /// Тип счет
         /// </summary>
-        public virtual AccountType Type
+        public virtual AccountType AccountType
         {
             get { return AccountType.Basic; }
         }
@@ -103,9 +124,7 @@ namespace ModelLib
         {
             get { return false; }
         }
-
-        private decimal amount;
-
+        
         /// <summary>
         /// Начальная сумма счета
         /// </summary>
@@ -113,14 +132,14 @@ namespace ModelLib
         {
             get
             {
-                return amount;
+                return BankAccount.Amount;
             }
             set
             {
-                if (value < 0)
-                    value = Math.Abs(value);
+                if (BankAccount.Amount == value)
+                    return;
 
-                amount = value;
+                BankAccount.Amount = value;
                 NotifyPropertyChanged(nameof(Amount));
                 NotifyPropertyChanged(nameof(Income));
             }
@@ -129,10 +148,9 @@ namespace ModelLib
         /// <summary>
         /// Доступно средств
         /// </summary>
-        public decimal AmountAvailable { get { return Amount; } }
+        public decimal AmountAvailable { get { return BankAccount.Amount; } }
 
         private DateTime currentDate;
-
         /// <summary>
         /// Текущая дата
         /// </summary>
@@ -156,7 +174,20 @@ namespace ModelLib
         /// <summary>
         /// процент по вкладу
         /// </summary>
-        public decimal InterestRate { get; set; }
+        public decimal InterestRate
+        {
+            get { return BankAccount.InterestRate; }
+            set
+            {
+                if (BankAccount.InterestRate == value)
+                    return;
+
+                BankAccount.InterestRate = value;
+
+                NotifyPropertyChanged(nameof(InterestRate));
+                NotifyPropertyChanged(nameof(Income));
+            }
+        }
 
         /// <summary>
         /// Прошло месяцев
@@ -185,10 +216,10 @@ namespace ModelLib
         /// </summary>
         public bool BadHistory { get; set; } = false;
 
+        private event Action<object, decimal> amountAdded;
         /// <summary>
         /// Событие внесенния суммы на счет
         /// </summary>
-        private event Action<object, decimal> amountAdded;
         public event Action<object, decimal> AmountAdded
         {
             add
@@ -201,10 +232,10 @@ namespace ModelLib
             remove { amountAdded -= value; }
         }
 
+        private event Action<object, decimal> amountWithdrawed;
         /// <summary>
         /// Событие снятия суммы со счета
         /// </summary>
-        private event Action<object, decimal> amountWithdrawed;
         public event Action<object, decimal> AmountWithdrawed
         {
             add
@@ -217,10 +248,10 @@ namespace ModelLib
             remove { amountWithdrawed -= value; }
         }
 
+        private event Action<object, ITransactable, decimal> amountTransact;
         /// <summary>
         /// Событие перевода суммы со счета
         /// </summary>
-        private event Action<object, ITransactable, decimal> amountTransact;
         public event Action<object, ITransactable, decimal> AmountTransact
         {
             add
@@ -232,16 +263,16 @@ namespace ModelLib
             }
             remove { amountTransact -= value; }
         }
-                                             
+
         /// <summary>
         /// Подсчет дохода
         /// </summary>
         /// <returns></returns>
         protected virtual decimal CountIncome()
         {
-            if(MonthPassed == MinTerm || MonthPassed % MinTerm == 0)    
+            if (MonthPassed == MinTerm || MonthPassed % MinTerm == 0)
                 return Amount + (MonthPassed / MinTerm) * (Amount * InterestRate) / 100;
-            
+
             return 0;
         }
 
@@ -254,7 +285,7 @@ namespace ModelLib
             Amount += amount;
 
             amountAdded?.Invoke(this, amount);
-                        
+
             NotifyPropertyChanged(nameof(Amount));
             NotifyPropertyChanged(nameof(Income));
         }
@@ -267,31 +298,17 @@ namespace ModelLib
         {
             Amount -= amount;
 
-            if(reciever != null)
+            if (reciever != null)
             {
                 amountTransact?.Invoke(this, reciever, amount);
             }
             else
             {
                 amountWithdrawed?.Invoke(this, amount);
-            }                
+            }
 
             NotifyPropertyChanged(nameof(Amount));
             NotifyPropertyChanged(nameof(Income));
         }
-
-        public BankAccount() { }
-
-        public BankAccount(decimal amount, decimal interestRate, int ownerId, string ownerName , int departmentId, int minTerm, DateTime dateTime)
-        {
-            Amount = amount;
-            InterestRate = interestRate;
-            OwnerId = ownerId;
-            OwnerName = ownerName;
-            DepartmentId = departmentId;
-            CreatedDate = dateTime;
-            MinTerm = minTerm;
-            CurrentDate = DateTime.Now;
-        }        
     }
 }

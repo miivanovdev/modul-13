@@ -1,19 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using ModelLib;
 
-namespace ModelLib
+namespace Модуль_13_ДЗ
 {
-    public class IndividualAccount : BankAccount
+    public class IndividualAccountViewModel : BankAccountViewModel
     {
-        public IndividualAccount() { }
-
-        public IndividualAccount(decimal amount, decimal interestRate, int ownerId, string ownerName, int departmentId, int minTerm, DateTime dateTime, int delay)
-            : base(amount, interestRate, ownerId, ownerName, departmentId, minTerm, dateTime)
+        public IndividualAccountViewModel(BankAccount bankAccount)
+            : base(bankAccount)
         {
-            Delay = delay;
+            
         }
 
-        public override AccountType Type
+        public override AccountType AccountType
         {
             get { return AccountType.IndividualAccount; }
         }

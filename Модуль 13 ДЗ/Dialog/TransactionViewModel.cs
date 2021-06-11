@@ -10,9 +10,9 @@ namespace Модуль_13_ДЗ
 {
     public class TransactionViewModel : ObservableObject
     {
-        public TransactionViewModel(List<BankAccount> accounts, decimal CurrentAmount)
+        public TransactionViewModel(List<BankAccountViewModel> accounts, decimal CurrentAmount)
         {
-            this.accounts = new List<BankAccount>(accounts);
+            this.accounts = new List<BankAccountViewModel>(accounts);
             Data = new DialogDataModel("Перевод", CurrentAmount, true);
         }
 
@@ -23,14 +23,14 @@ namespace Модуль_13_ДЗ
         /// <summary>
         /// Все счета
         /// </summary>
-        private List<BankAccount> accounts;
+        private List<BankAccountViewModel> accounts;
 
         /// <summary>
         /// Отфильтрованные счета
         /// </summary>
-        public ReadOnlyCollection<BankAccount> Accounts
+        public ReadOnlyCollection<BankAccountViewModel> Accounts
         {
-            get { return new ReadOnlyCollection<BankAccount>(accounts.GetAccountsSubset(AccountType)); }
+            get { return new ReadOnlyCollection<BankAccountViewModel>(GetSubset()); }
         }
 
         /// <summary>
@@ -51,6 +51,11 @@ namespace Модуль_13_ДЗ
             }
         }
 
+        private List<BankAccountViewModel> GetSubset()
+        {
+            return accounts.Where(x => x.AccountType == AccountType).ToList();
+        }
+
         /// <summary>
         /// Результат диалога
         /// </summary>
@@ -68,11 +73,11 @@ namespace Модуль_13_ДЗ
             }
         }
 
+        private BankAccountViewModel selectedAccount;
         /// <summary>
         /// Выбранный счет получатель
         /// </summary>
-        private BankAccount selectedAccount;
-        public BankAccount SelectedAccount
+        public BankAccountViewModel SelectedAccount
         {
             get
             {
@@ -89,10 +94,10 @@ namespace Модуль_13_ДЗ
             }
         }
 
+        private RelayCommand okCommand;
         /// <summary>
         /// Команда закрытия при положительном результате диалога
         /// </summary>
-        private RelayCommand okCommand;
         public RelayCommand OkCommand
         {
             get

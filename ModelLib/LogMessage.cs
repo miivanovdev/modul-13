@@ -10,6 +10,7 @@ namespace ModelLib
     {
         public DateTime Time { get; set; }
         public string Message { get; set; }
+        public int MessageId { get; set; }
 
         public LogMessage() { }
 

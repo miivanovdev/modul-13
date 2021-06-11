@@ -7,7 +7,7 @@
         xmlns:local="clr-namespace:Модуль_13_ДЗ"
         local:DialogCloser.DialogResult="{Binding DialogResult}"
         mc:Ignorable="d"
-        Title="ClientInputDialog" MinHeight="150" MinWidth="200" Height="200" Width="400">
+        Title="ClientInputDialog" MinHeight="150" MinWidth="200" Height="230" Width="400">
     <Window.Resources>
 
         <Style TargetType="TextBox">
@@ -67,14 +67,27 @@
                         </TextBox.Text>
                     </TextBox>
                 </StackPanel>
-                
+
+                <StackPanel DockPanel.Dock="Top">
+                    <TextBlock Text="Сумма:"/>
+                    <TextBox>
+                        <TextBox.Text>
+                            <Binding Path="Client.Amount" NotifyOnValidationError="True">
+                                <Binding.ValidationRules>
+                                    <DataErrorValidationRule />
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox.Text>
+                    </TextBox>
+                </StackPanel>
+
                 <StackPanel DockPanel.Dock="Top" HorizontalAlignment="Right" VerticalAlignment="Top" Orientation="Horizontal" Margin="0 15 0 0">
                     
                         <Button IsDefault="True" MinWidth="60" Margin="0,0,10,0" Height="25">
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="Click">
                                     <i:InvokeCommandAction
-                            Command="{Binding OkCommand}"/>
+                                        Command="{Binding OkCommand}"/>
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>
                             OK

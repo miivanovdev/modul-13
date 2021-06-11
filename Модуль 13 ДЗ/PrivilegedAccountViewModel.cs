@@ -1,20 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using ModelLib;
 
-namespace ModelLib
+namespace Модуль_13_ДЗ
 {
-    public class PrivilegedAccount : BankAccount
+    public class PrivilegedAccountViewModel : BankAccountViewModel
     {
-        public PrivilegedAccount() { }
-
-        public PrivilegedAccount(decimal amount, decimal interestRate, int ownerId, string ownerName, int departmentId, int minTerm, DateTime dateTime)
-            : base(amount, interestRate, ownerId, ownerName, departmentId, minTerm, dateTime)
+        public PrivilegedAccountViewModel(BankAccount bankAccount)
+            : base(bankAccount)
         {
 
         }
 
-        public override AccountType Type
+        public override AccountType AccountType
         {
             get { return AccountType.PrivilegedAccount; }
         }

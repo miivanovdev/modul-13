@@ -1,22 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using ModelLib;
 
-namespace ModelLib
+namespace Модуль_13_ДЗ
 {
-    public class PhysicalAccount : BankAccount
+    public class PhysicalAccountViewModel : BankAccountViewModel
     {
-        public PhysicalAccount() { }
+        public PhysicalAccountViewModel(BankAccount bankAccount)
+                    :base(bankAccount)
+        { }        
 
-        public PhysicalAccount(decimal amount, decimal interestRate, int ownerId, string ownerName, int departmentId, int minTerm, DateTime dateTime)
-            : base(amount, interestRate, ownerId, ownerName, departmentId, minTerm, dateTime)
-        {
-            
-        }
-
-        public override AccountType Type
+        public override AccountType AccountType
         {
             get { return AccountType.PhysicalAccount; }
         }

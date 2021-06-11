@@ -68,7 +68,19 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="DataService.cs" />
+    <Compile Include="AllBankAccountViewModel.cs" />
+    <Compile Include="AllBankDepartmentViewModel.cs" />
+    <Compile Include="AllClientViewModel.cs" />
+    <Compile Include="BankAccountViewModel.cs" />
+    <Compile Include="BankDepartmentViewModel.cs" />
+    <Compile Include="ClientViewModel.cs" />
+    <Compile Include="FileRepository.cs" />
+    <Compile Include="IndividualAccountViewModel.cs" />
+    <Compile Include="MainViewModel.cs" />
+    <Compile Include="PhysicalAccountViewModel.cs" />
+    <Compile Include="PrivilegedAccountViewModel.cs" />
+    <Compile Include="SqlBankAccountRepository.cs" />
+    <Compile Include="SqlClientRepository.cs" />
     <Compile Include="Dialog\ClientInputDialog.xaml.cs">
       <DependentUpon>ClientInputDialog.xaml</DependentUpon>
     </Compile>
@@ -84,14 +96,16 @@
     <Compile Include="Dialog\DialogViewModel.cs" />
     <Compile Include="EnumHelper.cs" />
     <Compile Include="EnumToCollectionConverter .cs" />
-    <Compile Include="ClientInputMediator.cs" />
+    <Compile Include="SqlHelper.cs" />
+    <Compile Include="SqlLogRepository.cs" />
     <Compile Include="TransactionMediator.cs" />
     <Compile Include="ValueDescription.cs" />
     <Compile Include="RelayCommand.cs" />
-    <Compile Include="ViewModel.cs" />
+    <Compile Include="SqlBankDepartmentRepository.cs" />
     <Compile Include="Dialog\DialogWindow.xaml.cs">
       <DependentUpon>DialogWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="VisibilitySetter.cs" />
     <Page Include="Dialog\ClientInputDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

@@ -43,21 +43,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Model\AccountType.cs" />
-    <Compile Include="Model\BankAccount.cs" />
-    <Compile Include="Model\BankAccountListExt.cs" />
-    <Compile Include="Model\BankDepartment.cs" />
-    <Compile Include="Model\Client.cs" />
-    <Compile Include="Model\IndividualAccount.cs" />
-    <Compile Include="Model\IndividualDepartment.cs" />
-    <Compile Include="Model\ITransactable.cs" />
-    <Compile Include="Model\LogMessage.cs" />
-    <Compile Include="Model\ObservableObject.cs" />
-    <Compile Include="Model\PhysicalAccount.cs" />
-    <Compile Include="Model\PhysicalDepartment.cs" />
-    <Compile Include="Model\PrivilegedAccount.cs" />
-    <Compile Include="Model\PrivilegedDepartment.cs" />
-    <Compile Include="Model\TransactionFailureException.cs" />
+    <Compile Include="AccountType.cs" />
+    <Compile Include="BankAccount.cs" />
+    <Compile Include="BankDepartment.cs" />
+    <Compile Include="Client.cs" />
+    <Compile Include="IRepository.cs" />
+    <Compile Include="ITransactable.cs" />
+    <Compile Include="LogMessage.cs" />
+    <Compile Include="ObservableObject.cs" />
+    <Compile Include="TransactionFailureException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

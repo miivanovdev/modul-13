@@ -20,8 +20,7 @@ namespace Модуль_13_ДЗ
 
         public override void Transaction()
         {
-            try
-            {
+            
                 if (Sender.BadHistory)
                     throw new TransactionFailureException($"Клиент {Sender.Name} заблокирован!");
 
@@ -46,15 +45,7 @@ namespace Модуль_13_ДЗ
                         Reciever.Put(dialogVM.Amount);
                     }
                 }
-            }
-            catch(TransactionFailureException ex)
-            {
-                MessageBox.Show(ex.Info);
-            }
-            catch(Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
+           
             
         }
     }
