@@ -71,8 +71,11 @@ namespace Модуль_13_ДЗ
 
             SqlDataReader dataReader = SqlHelper.ExecuteReader(ConnectionString, SelectAllCommand, CommandType.StoredProcedure);
 
-            while (dataReader.Read()) 
-                bankDepartments.Add(ReadOne(dataReader));
+            if(dataReader.HasRows)
+            {
+                while (dataReader.Read())
+                    bankDepartments.Add(ReadOne(dataReader));
+            }           
             
             dataReader.Close();
 

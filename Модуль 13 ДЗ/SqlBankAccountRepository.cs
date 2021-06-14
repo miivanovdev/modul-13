@@ -80,10 +80,14 @@ namespace Модуль_13_ДЗ
 
             List<BankAccount>  Accounts = new List<BankAccount>();
 
-            while (dataReader.Read())
+            if(dataReader.HasRows)
             {
-                Accounts.Add(ReadOne(dataReader));
+                while (dataReader.Read())
+                {
+                    Accounts.Add(ReadOne(dataReader));
+                }
             }
+            
             dataReader.Close();
 
             return Accounts;
@@ -108,10 +112,7 @@ namespace Модуль_13_ДЗ
                                                                 CommandType.StoredProcedure,
                                                                 new SqlParameter[] {
                                                                 new SqlParameter("@Amount", item.Amount),
-                                                                new SqlParameter("@Delay", item.Delay),
-                                                                new SqlParameter("@InterestRate", item.InterestRate),
-                                                                new SqlParameter("@MinTerm", item.MinTerm),
-                                                                new SqlParameter("@BadHistory", item.BadHistory)});
+                                                                new SqlParameter("@Id", item.AccountId)});
             if (rowAffected == 0)
                 throw new Exception("Не удалось обновить запись!");
         }

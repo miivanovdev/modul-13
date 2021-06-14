@@ -216,54 +216,6 @@ namespace Модуль_13_ДЗ
         /// </summary>
         public bool BadHistory { get; set; } = false;
 
-        private event Action<object, decimal> amountAdded;
-        /// <summary>
-        /// Событие внесенния суммы на счет
-        /// </summary>
-        public event Action<object, decimal> AmountAdded
-        {
-            add
-            {
-                if (amountAdded != null && amountAdded.GetInvocationList().Contains(value))
-                    return;
-
-                amountAdded += value;
-            }
-            remove { amountAdded -= value; }
-        }
-
-        private event Action<object, decimal> amountWithdrawed;
-        /// <summary>
-        /// Событие снятия суммы со счета
-        /// </summary>
-        public event Action<object, decimal> AmountWithdrawed
-        {
-            add
-            {
-                if (amountWithdrawed != null && amountWithdrawed.GetInvocationList().Contains(value))
-                    return;
-
-                amountWithdrawed += value;
-            }
-            remove { amountWithdrawed -= value; }
-        }
-
-        private event Action<object, ITransactable, decimal> amountTransact;
-        /// <summary>
-        /// Событие перевода суммы со счета
-        /// </summary>
-        public event Action<object, ITransactable, decimal> AmountTransact
-        {
-            add
-            {
-                if (amountTransact != null && amountTransact.GetInvocationList().Contains(value))
-                    return;
-
-                amountTransact += value;
-            }
-            remove { amountTransact -= value; }
-        }
-
         /// <summary>
         /// Подсчет дохода
         /// </summary>
@@ -284,8 +236,6 @@ namespace Модуль_13_ДЗ
         {
             Amount += amount;
 
-            amountAdded?.Invoke(this, amount);
-
             NotifyPropertyChanged(nameof(Amount));
             NotifyPropertyChanged(nameof(Income));
         }
@@ -297,15 +247,6 @@ namespace Модуль_13_ДЗ
         public void Withdraw(decimal amount, ITransactable reciever = null)
         {
             Amount -= amount;
-
-            if (reciever != null)
-            {
-                amountTransact?.Invoke(this, reciever, amount);
-            }
-            else
-            {
-                amountWithdrawed?.Invoke(this, amount);
-            }
 
             NotifyPropertyChanged(nameof(Amount));
             NotifyPropertyChanged(nameof(Income));

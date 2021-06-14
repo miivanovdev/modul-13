@@ -47,11 +47,14 @@ namespace Модуль_13_ДЗ
             
             SqlDataReader dataReader = SqlHelper.ExecuteReader(ConnectionString, SelectAllCommand, CommandType.StoredProcedure);                
 
-            while (dataReader.Read())
+            if(dataReader.HasRows)
             {
-                Client client = ReadOne(dataReader);
-                list.Add(client);
-            }
+                while (dataReader.Read())
+                {
+                    Client client = ReadOne(dataReader);
+                    list.Add(client);
+                }
+            }           
 
             dataReader.Close();
             

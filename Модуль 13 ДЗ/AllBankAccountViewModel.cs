@@ -98,7 +98,7 @@ namespace Модуль_13_ДЗ
             Accounts = new List<BankAccountViewModel>();
 
             foreach (var l in list)
-                Accounts.Add(new BankAccountViewModel(l));
+                Accounts.Add(WrapOne(l));
         }
 
 
@@ -200,7 +200,8 @@ namespace Модуль_13_ДЗ
                 SelectedClient.Amount = 0;
                 Accounts.Add(WrapOne(newAccount));
                 NotifyPropertyChanged(nameof(AccountsView));
-                //Log.Add(new LogMessage($"Открыт счет {newAccount.OwnerName} {newAccount.OwnerId} Type:{newAccount.AccountType}"));
+                
+                accountChangedEvent?.Invoke(this, new LogMessage($"Открыт счет {newAccount.OwnerName} {newAccount.OwnerId} Type:{newAccount.AccountType}"));
             }
             catch (TransactionFailureException ex)
             {
@@ -249,6 +250,7 @@ namespace Модуль_13_ДЗ
                 var mediator = new AccountToClientMediator(SelectedClient, SelectedAccount, true);
                 mediator.Transaction();
                 Repository.Update(SelectedAccount.BankAccount);
+                accountChangedEvent?.Invoke(this, mediator.LogMessage);
             }
             catch (TransactionFailureException ex)
             {
@@ -298,6 +300,7 @@ namespace Модуль_13_ДЗ
                 var mediator = new AccountToClientMediator(SelectedClient, SelectedAccount);
                 mediator.Transaction();
                 Repository.Update(SelectedAccount.BankAccount);
+                accountChangedEvent?.Invoke(this, mediator.LogMessage);
             }
             catch (TransactionFailureException ex)
             {
@@ -325,7 +328,8 @@ namespace Модуль_13_ДЗ
 
         private bool CanTransact(object o)
         {
-            return SelectedAccount != null && SelectedAccount.CanTransact;
+            return SelectedAccount != null && 
+                   SelectedAccount.CanTransact;
         }
 
         /// <summary>
@@ -340,6 +344,7 @@ namespace Модуль_13_ДЗ
                 mediator.Transaction();
                 Repository.Update(SelectedAccount.BankAccount);
                 Repository.Update(mediator.RecieverAccount.BankAccount);
+                accountChangedEvent?.Invoke(this, mediator.LogMessage);
             }        
             catch (TransactionFailureException ex)
             {
@@ -378,15 +383,13 @@ namespace Модуль_13_ДЗ
                 if (!Accounts.Remove(SelectedAccount))
                     throw new Exception($"Не удалось удалить {SelectedAccount.Name}");
 
+                accountChangedEvent?.Invoke(this, new LogMessage($"Закрыт счет {SelectedAccount.OwnerName} {SelectedAccount.OwnerId} Type:{SelectedAccount.AccountType}"));
                 NotifyPropertyChanged(nameof(AccountsView));
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }
-                
-
-            //Log.Add(new LogMessage($"Закрыт счет {SelectedAccount.OwnerName} {SelectedAccount.OwnerId} Type:{SelectedAccount.AccountType}"));
         }
 
         /// <summary>
@@ -400,23 +403,15 @@ namespace Модуль_13_ДЗ
                    SelectedDepartment != null &&
                    SelectedAccount.CanClose;
         }
-        
-        protected virtual void LogAdding(object sender, decimal amount)
-        {
-            var account = sender as ITransactable;
-            Log.Add(new LogMessage($"{account.Name} пополнен на сумму: {amount}"));
-        }
 
-        protected virtual void LogWithdrawing(object sender, decimal amount)
+        private event Action<object, LogMessage> accountChangedEvent;
+        /// <summary>
+        /// Событие изменения состояния счета
+        /// </summary>
+        public event Action<object, LogMessage> AccountChangedEvent
         {
-            var account = sender as ITransactable;
-            Log.Add(new LogMessage($"{account.Name} снята сумма: {amount}"));
-        }
-
-        protected virtual void LogTransact(object sender, ITransactable accountReciever, decimal amount)
-        {
-            var accountSender = sender as ITransactable;
-            Log.Add(new LogMessage($"{accountSender.Name} перевод на счет {accountReciever.Name} на сумму: {amount}"));
+            add { accountChangedEvent += value; }
+            remove { accountChangedEvent -= value; }
         }
     }
 }

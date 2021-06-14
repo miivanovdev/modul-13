@@ -50,11 +50,14 @@ namespace Модуль_13_ДЗ
 
             SqlDataReader dataReader = SqlHelper.ExecuteReader(ConnectionString, SelectAllCommand, CommandType.StoredProcedure);
 
-            while (dataReader.Read())
+            if(dataReader.HasRows)
             {
-                LogMessage logMessage = ReadOne(dataReader);
-                list.Add(logMessage);
-            }
+                while (dataReader.Read())
+                {
+                    LogMessage logMessage = ReadOne(dataReader);
+                    list.Add(logMessage);
+                }
+            }            
 
             dataReader.Close();
 
@@ -78,16 +81,15 @@ namespace Модуль_13_ДЗ
 
         public void Create(LogMessage item)
         {
-            SqlDataReader DataReader = SqlHelper.ExecuteReader(ConnectionString,
-                                                                InsertCommand,
-                                                                CommandType.StoredProcedure,
-                                                                new SqlParameter[] {
-                                                                new SqlParameter("@Message", item.Message),
-                                                                new SqlParameter("@Time", item.Time)});
+            int id = (int)SqlHelper.ExecuteScalar(ConnectionString,
+                                                InsertCommand,
+                                                CommandType.StoredProcedure,
+                                                new SqlParameter[] {
+                                                new SqlParameter("@Message", item.Message),
+                                                new SqlParameter("@Time", item.Time)});
                                                                 
 
-            item.MessageId = (int)DataReader["MessageId"];
-            DataReader.Close();
+            item.MessageId = id;
         }
 
         public void Delete(int id)

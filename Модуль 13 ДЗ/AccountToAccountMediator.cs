@@ -38,6 +38,8 @@ namespace Модуль_13_ДЗ
 
                 Sender.Withdraw(transactionViewModel.Amount, Reciever);
                 Reciever.Put(transactionViewModel.Amount);
+
+                LogMessage = new LogMessage($"Перевод со счета {Sender.Name} на счет {Reciever.Name} на сумму: {transactionViewModel.Amount}");
             }
         }
     }

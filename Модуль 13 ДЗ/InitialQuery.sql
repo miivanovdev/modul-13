@@ -184,4 +184,20 @@ create procedure getAllLog
 as
 select * from Log
 
+go
+create procedure deleteLog
+(
+	@Id int
+)
+as
+delete from [Log] where MessageId = @Id
+
+go
+create procedure selectLog
+(
+	@Id int
+)
+as
+select * from [Log] where MessageId = @Id
+
 exec getAllClients

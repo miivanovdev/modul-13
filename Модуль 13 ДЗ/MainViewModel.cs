@@ -20,11 +20,15 @@ namespace Модуль_13_ДЗ
 
             AllBankAccountViewModel = new AllBankAccountViewModel(new SqlBankAccountRepository(builder.ConnectionString, "getAllAccounts", "selectAccount", "updateAccount", "deleteAccount", "createAccount"));
 
+            LogViewModel = new LogViewModel(new SqlLogRepository(builder.ConnectionString, "getAllLog", "selectLog", "", "deleteLog", "createLog"));
+
             AllBankAccountViewModel.SelectedClient = AllClientViewModel.SelectedClient;
             AllBankAccountViewModel.SelectedDepartment = AllBankDepartmentViewModel.SelectedDepartment;
 
             AllClientViewModel.OnClientSelectionChange += AllBankAccountViewModel.SelectionChange;
             AllBankDepartmentViewModel.OnDepartmentSelectionChange += AllBankAccountViewModel.SelectionChange;
+
+            AllBankAccountViewModel.AccountChangedEvent += LogViewModel.WriteLog;
         }
 
         public AllBankAccountViewModel AllBankAccountViewModel { get; set; }
@@ -32,6 +36,8 @@ namespace Модуль_13_ДЗ
         public AllBankDepartmentViewModel AllBankDepartmentViewModel { get; set; }
 
         public AllClientViewModel AllClientViewModel { get; set; }
+
+        public LogViewModel LogViewModel { get; set; } 
 
         private RelayCommand closeCommand;
 

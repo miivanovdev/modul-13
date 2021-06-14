@@ -76,6 +76,7 @@
     <Compile Include="ClientViewModel.cs" />
     <Compile Include="FileRepository.cs" />
     <Compile Include="IndividualAccountViewModel.cs" />
+    <Compile Include="LogViewModel.cs" />
     <Compile Include="MainViewModel.cs" />
     <Compile Include="PhysicalAccountViewModel.cs" />
     <Compile Include="PrivilegedAccountViewModel.cs" />
@@ -105,7 +106,6 @@
     <Compile Include="Dialog\DialogWindow.xaml.cs">
       <DependentUpon>DialogWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="VisibilitySetter.cs" />
     <Page Include="Dialog\ClientInputDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

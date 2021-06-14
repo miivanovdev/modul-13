@@ -348,7 +348,7 @@
                 История
             </TabItem.Header>
             <TabItem.Content>
-                <ListView ItemsSource="{Binding Log}"
+                <ListView ItemsSource="{Binding LogViewModel.Log}"
                               IsSynchronizedWithCurrentItem="True"
                               >
                     <ListView.View>
