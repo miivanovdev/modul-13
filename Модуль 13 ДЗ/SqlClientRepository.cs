@@ -95,6 +95,7 @@ namespace Модуль_13_ДЗ
                                                                 UpdateCommand,
                                                                 CommandType.StoredProcedure,
                                                                 new SqlParameter[] {
+                                                                new SqlParameter("@ClientId", item.ClientId),
                                                                 new SqlParameter("@FirstName", item.FirstName),
                                                                 new SqlParameter("@SecondName", item.SecondName),
                                                                 new SqlParameter("@Surname", item.Surname),

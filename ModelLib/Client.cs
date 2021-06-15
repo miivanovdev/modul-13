@@ -26,13 +26,7 @@ namespace ModelLib
         public int ClientId
         {
             get { return clientId; }
-            set
-            {
-                if (id < value)
-                    id = value;
-
-                clientId = value;
-            }
+            set { clientId = value; }
         }
 
         /// <summary>
@@ -45,26 +39,6 @@ namespace ModelLib
         /// </summary>
         public bool BadHistory { get; set; }
 
-        /// <summary>
-        /// Последний использованный идентификатор
-        /// </summary>
-        private static int id;
-
-        /// <summary>
-        /// Выдать новый идентификатор
-        /// </summary>
-        /// <returns></returns>
-        private static int NextId()
-        {
-            id++;
-            return id;
-        }
-
-        static Client()
-        {
-            id = 0;
-        }
-
         public Client() { }
 
         public Client(string firsName, string surname, string secondName, decimal amount, bool badHistory = false)
@@ -74,7 +48,6 @@ namespace ModelLib
             SecondName = secondName;
             Amount = amount;
             BadHistory = badHistory;
-            ClientId = NextId();
         }     
         
     }

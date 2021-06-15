@@ -4,7 +4,7 @@ using System.ComponentModel;
 
 namespace Модуль_13_ДЗ
 {
-    public class ClientViewModel : ObservableObject, ITransactable, IDataErrorInfo
+    public class ClientViewModel : ObservableObject, ITransactable, IDataErrorInfo, IEditableObject
     {
         public ClientViewModel(Client client)
         {
@@ -208,6 +208,47 @@ namespace Модуль_13_ДЗ
 
                 return Error;
             }
+        }
+
+        private Client OrigClient { get; set; }
+
+        public bool HasChanges
+        {
+            get
+            {
+                if (OrigClient == null)
+                    return false;
+
+                if (FirstName   != OrigClient.FirstName     ||
+                    SecondName  != OrigClient.SecondName    ||
+                    Surname     != OrigClient.Surname       ||
+                    BadHistory  != OrigClient.BadHistory    ||
+                    Amount      != OrigClient.Amount)
+                    return true;
+
+                return false;
+            }
+        }
+
+        public void BeginEdit()
+        {
+            if(OrigClient == null)
+                OrigClient = new Client(FirstName, SecondName, Surname, Amount, BadHistory);
+        }
+
+        public void EndEdit()
+        {
+            OrigClient = null;
+        }
+
+        public void CancelEdit()
+        {
+            FirstName   = OrigClient.FirstName;
+            SecondName  = OrigClient.SecondName;
+            Surname     = OrigClient.Surname;
+            BadHistory  = OrigClient.BadHistory;
+            Amount      = OrigClient.Amount;
+            OrigClient = null;
         }
     }
 }

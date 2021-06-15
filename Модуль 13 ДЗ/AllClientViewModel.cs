@@ -124,7 +124,6 @@ namespace Модуль_13_ДЗ
             
         }
 
-        
         private RelayCommand removeClientCommand;
         /// <summary>
         /// Команда удаления клиента
@@ -171,6 +170,63 @@ namespace Модуль_13_ДЗ
             {
                 MessageBox.Show(ex.Message);
             }            
+        }
+
+        private RelayCommand updateClientBeginCommand;
+        /// <summary>
+        /// Команда при входе в режима редактирования
+        /// </summary>
+        public RelayCommand UpdateClientBeginCommand
+        {
+            get
+            {
+                return updateClientBeginCommand ??
+                (updateClientBeginCommand = new RelayCommand(new Action<object>(RowEditBegin)));
+            }
+        }
+
+        public void RowEditBegin(object args)
+        {
+            SelectedClient.BeginEdit();
+        }
+
+        private RelayCommand updateClientCommitCommand;
+        /// <summary>
+        /// Команда при выходе из режима редактирования
+        /// </summary>
+        public RelayCommand UpdateClientCommitCommand
+        {
+            get
+            {
+                return updateClientCommitCommand ??
+                (updateClientCommitCommand = new RelayCommand(new Action<object>(RowEditEnding)));
+            }
+        }
+        
+        private void RowEditEnding(object args)
+        {
+            if (SelectedClient.HasChanges)
+            {
+                var result = MessageBox.Show(App.Current.MainWindow, "Вы хотите сохранить изменения?", $"Изменения клиента {SelectedClient.Name}", MessageBoxButton.YesNo);
+
+                if (result == MessageBoxResult.Yes)
+                {
+                    try
+                    {
+                        Repository.Update(SelectedClient.Client);
+                        SelectedClient.EndEdit();
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message);
+                        SelectedClient.CancelEdit();
+                    }
+                }
+                else
+                {
+                    SelectedClient.CancelEdit();
+                }
+            }
         }
     }
 }
