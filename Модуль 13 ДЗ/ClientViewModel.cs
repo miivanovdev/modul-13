@@ -4,6 +4,9 @@ using System.ComponentModel;
 
 namespace Модуль_13_ДЗ
 {
+    /// <summary>
+    /// Модель представления клиента
+    /// </summary>
     public class ClientViewModel : ObservableObject, ITransactable, IDataErrorInfo, IEditableObject
     {
         public ClientViewModel(Client client)
@@ -11,8 +14,15 @@ namespace Модуль_13_ДЗ
             Client = client;
         }
 
+        /// <summary>
+        /// Модель клиента
+        /// </summary>
         public Client Client { get; private set; }
 
+        /// <summary>
+        /// Флаг указывающий на наличие у клиента 
+        /// открытых счетов
+        /// </summary>
         public bool HaveAnAccounts { get; set; }
 
         /// <summary>
@@ -123,7 +133,7 @@ namespace Модуль_13_ДЗ
         /// </summary>
         /// <param name="amount"></param>
         /// <param name="reciever"></param>
-        public void Withdraw(decimal amount, ITransactable reciever)
+        public void Withdraw(decimal amount)
         {
             Amount -= amount;
             NotifyPropertyChanged(nameof(Amount));
@@ -210,8 +220,16 @@ namespace Модуль_13_ДЗ
             }
         }
 
+        /// <summary>
+        /// Оригинал клиента использующий для отката 
+        /// "грязной записи" данных при редактировании
+        /// </summary>
         private Client OrigClient { get; set; }
 
+        /// <summary>
+        /// Флаг указывающий на наличие изменений 
+        /// в данных клиента
+        /// </summary>
         public bool HasChanges
         {
             get
@@ -230,17 +248,26 @@ namespace Модуль_13_ДЗ
             }
         }
 
+        /// <summary>
+        /// Метод подготавливающий режим редактирования
+        /// </summary>
         public void BeginEdit()
         {
             if(OrigClient == null)
                 OrigClient = new Client(FirstName, SecondName, Surname, Amount, BadHistory);
         }
 
+        /// <summary>
+        /// Метод завершающий режим редактирования
+        /// </summary>
         public void EndEdit()
         {
             OrigClient = null;
         }
 
+        /// <summary>
+        /// Метод отменяющий режим редактирования
+        /// </summary>
         public void CancelEdit()
         {
             FirstName   = OrigClient.FirstName;

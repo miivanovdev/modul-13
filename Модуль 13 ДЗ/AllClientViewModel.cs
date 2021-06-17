@@ -7,8 +7,15 @@ using ModelLib;
 
 namespace Модуль_13_ДЗ
 {
+    /// <summary>
+    /// Модель представление всех клиентов
+    /// </summary>
     public class AllClientViewModel : ObservableObject
     {
+        /// <summary>
+        /// Конструктор обеспечивающий загрузгу 
+        /// </summary>
+        /// <param name="repository"></param>
         public AllClientViewModel(IRepository<Client> repository)
         {
             Repository = repository;
@@ -25,8 +32,14 @@ namespace Модуль_13_ДЗ
             }
         }
 
+        /// <summary>
+        /// Коллекция моделей представлений клиентов
+        /// </summary>
         public ObservableCollection<ClientViewModel> Clients { get; set; }
 
+        /// <summary>
+        /// Репозиторий клиентов
+        /// </summary>
         private readonly IRepository<Client> Repository;
 
         private event Action<object> onClientSelectionChange;
@@ -35,10 +48,7 @@ namespace Модуль_13_ДЗ
         /// </summary>
         public event Action<object> OnClientSelectionChange
         {
-            add
-            {
-                onClientSelectionChange += value;
-            }
+            add { onClientSelectionChange += value; }
             remove { onClientSelectionChange -= value; }
         }
 
@@ -63,6 +73,11 @@ namespace Модуль_13_ДЗ
             }
         }
 
+        /// <summary>
+        /// Метод оборачивает коллекцию моделей клиентов
+        /// в модель представление
+        /// </summary>
+        /// <param name="list"></param>
         public void WrapIntoViewModel(IEnumerable<Client> list)
         {
             Clients = new ObservableCollection<ClientViewModel>();
@@ -203,6 +218,11 @@ namespace Модуль_13_ДЗ
             }
         }
         
+        /// <summary>
+        /// Метод отвечающий за сохранение изменений 
+        /// данных клиента, если такие имеются
+        /// </summary>
+        /// <param name="args"></param>
         private void RowEditEnding(object args)
         {
             if (SelectedClient.HasChanges)

@@ -11,13 +11,6 @@ namespace Модуль_13_ДЗ
 {
     class SqlLogRepository : IRepository<LogMessage>
     {
-        private string SelectAllCommand { get; set; }
-        private string SelectOneCommand { get; set; }
-        private string UpdateCommand { get; set; }
-        private string DeleteCommand { get; set; }
-        private string InsertCommand { get; set; }
-        private string ConnectionString { get; set; }
-
         public SqlLogRepository(string connectionString, string selectAllCommand, string selectOneCommand, string updateCommand, string deleteCommand, string insertCommand)
         {
             ConnectionString = connectionString;
@@ -28,6 +21,43 @@ namespace Модуль_13_ДЗ
             InsertCommand = insertCommand;
         }
 
+        /// <summary>
+        /// Команда выбора всех счетов
+        /// </summary>
+        private readonly string SelectAllCommand;
+
+        /// <summary>
+        /// Команда выбора одного счета
+        /// </summary>
+        private readonly string SelectOneCommand;
+
+        /// <summary>
+        /// Команда обновления счета
+        /// </summary>
+        private readonly string UpdateCommand;
+
+        /// <summary>
+        /// Команда удаления счета
+        /// </summary>
+        private readonly string DeleteCommand;
+
+        /// <summary>
+        /// Команда вставки счета
+        /// </summary>
+        private readonly string InsertCommand;
+
+        /// <summary>
+        /// Строка подключения
+        /// </summary>
+        private readonly string ConnectionString;
+
+
+        /// <summary>
+        /// Метод привязывающий данные из БД
+        /// к модели
+        /// </summary>
+        /// <param name="reader"></param>
+        /// <returns></returns>
         private LogMessage ReadOne(SqlDataReader reader)
         {
             LogMessage logMessage = new LogMessage();
@@ -44,6 +74,10 @@ namespace Модуль_13_ДЗ
             return logMessage;
         }
 
+        /// <summary>
+        /// Метод получения коллекции сообщений логов
+        /// </summary>
+        /// <returns></returns>
         public IEnumerable<LogMessage> GetList()
         {
             List<LogMessage> list = new List<LogMessage>();
@@ -64,6 +98,11 @@ namespace Модуль_13_ДЗ
             return list;
         }
 
+        /// <summary>
+        /// Метод получения одной записи данных логов
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public LogMessage GetOne(int id)
         {
             SqlDataReader dataReader = SqlHelper.ExecuteReader(ConnectionString,
@@ -79,6 +118,11 @@ namespace Модуль_13_ДЗ
             return logMessage;
         }
 
+        /// <summary>
+        /// Метод создания записи о созданном
+        /// сообщении лога в БД
+        /// </summary>
+        /// <param name="item"></param>
         public void Create(LogMessage item)
         {
             int id = (int)SqlHelper.ExecuteScalar(ConnectionString,
@@ -92,6 +136,11 @@ namespace Модуль_13_ДЗ
             item.MessageId = id;
         }
 
+        /// <summary>
+        /// Метод удаления записи об
+        /// удаленном сообщении лога из БД
+        /// </summary>
+        /// <param name="id"></param>
         public void Delete(int id)
         {
             int rowAffected = SqlHelper.ExecuteNonQuery(ConnectionString,
@@ -102,10 +151,23 @@ namespace Модуль_13_ДЗ
                 throw new Exception("Не удалось удалить запись!");
         }
 
+        /// <summary>
+        /// Метод обновления записи сообщения лога
+        /// </summary>
+        /// <param name="item"></param>
         public void Update(LogMessage item)
         {
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Метод обновления двух элементов
+        /// </summary>
+        /// <param name="item1"></param>
+        /// <param name="item2"></param>
+        public void UpdateBoth(LogMessage item1, LogMessage item2)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

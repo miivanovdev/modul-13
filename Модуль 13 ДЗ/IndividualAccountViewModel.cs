@@ -2,6 +2,9 @@
 
 namespace Модуль_13_ДЗ
 {
+    /// <summary>
+    /// Модель представления индивидуальных счетов
+    /// </summary>
     public class IndividualAccountViewModel : BankAccountViewModel
     {
         public IndividualAccountViewModel(BankAccount bankAccount)
@@ -10,16 +13,22 @@ namespace Модуль_13_ДЗ
             
         }
 
+        /// <summary>
+        /// Свойство указывающая на тип счета
+        /// </summary>
         public override AccountType AccountType
         {
             get { return AccountType.IndividualAccount; }
         }
 
+        /// <summary>
+        /// Наименование счета
+        /// </summary>
         public override string Name
         {
             get { return $"Индивидуальный счет {OwnerName} Id {OwnerId}"; }
         }
-               
+             
         public override bool CanAdded
         {
             get

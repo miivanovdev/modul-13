@@ -170,5 +170,10 @@ namespace Модуль_13_ДЗ
         {
             throw new NotImplementedException();
         }
+
+        public void UpdateBoth(Client item1, Client item2)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

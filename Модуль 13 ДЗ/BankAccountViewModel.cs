@@ -4,6 +4,9 @@ using ModelLib;
 
 namespace Модуль_13_ДЗ
 {
+    /// <summary>
+    /// Модель представление счета
+    /// </summary>
     public class BankAccountViewModel : ObservableObject, ITransactable
     {
         public BankAccountViewModel(BankAccount bankAccount)
@@ -12,6 +15,9 @@ namespace Модуль_13_ДЗ
             CurrentDate = DateTime.Now;
         }
 
+        /// <summary>
+        /// Модель счета
+        /// </summary>
         public BankAccount BankAccount { get; private set; }
 
         /// <summary>
@@ -244,7 +250,7 @@ namespace Модуль_13_ДЗ
         /// Списать со счета
         /// </summary>
         /// <param name="amount"></param>
-        public void Withdraw(decimal amount, ITransactable reciever = null)
+        public void Withdraw(decimal amount)
         {
             Amount -= amount;
 

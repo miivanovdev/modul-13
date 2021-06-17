@@ -100,7 +100,9 @@ create procedure createClient
 	@BadHistory BIT
 )
 as
-insert into Clients ( [FirstName], [SecondName], [Surname], [Amount], [BadHistory]) VALUES (@FirstName, @SecondName, @Surname, @Amount, @BadHistory)
+insert into Clients ( [FirstName], [SecondName], [Surname], [Amount], [BadHistory]) 
+output INSERTED.ClientId
+VALUES (@FirstName, @SecondName, @Surname, @Amount, @BadHistory)
 
 go
 create procedure deleteClient
@@ -151,7 +153,7 @@ create procedure updateAccount
 	@Amount money
 )
 as
-update Accounts set CurrentDate = @CurrentDate, Amount = @Amount where AccountId = @Id
+update Accounts set Amount = @Amount where AccountId = @Id
 
 go
 create procedure createAccount
@@ -171,13 +173,15 @@ output INSERTED.AccountId
 VALUES (@DepartmentId, @OwnerId, @OwnerName, @InterestRate, @Amount, @MinTerm, @CreatedDate, @AccountType, 0)
 
 go
-create procedure getAllLog
+create procedure createLog
 (
 	@Message NVARCHAR (200),
     @Time DATETIME
 )
 as
-insert into [Log] ([Message], [Time]) values (@Message, @Time)
+insert into [Log] ([Message], [Time]) 
+output INSERTED.MessageId
+values (@Message, @Time)
 
 go
 create procedure getAllLog
@@ -200,4 +204,3 @@ create procedure selectLog
 as
 select * from [Log] where MessageId = @Id
 
-exec getAllClients

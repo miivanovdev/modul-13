@@ -7,6 +7,9 @@ using ModelLib;
 
 namespace Модуль_13_ДЗ
 {
+    /// <summary>
+    /// Модель представление счета
+    /// </summary>
     public class BankDepartmentViewModel : ObservableObject
     {
         public BankDepartmentViewModel(BankDepartment bankDepartment)
@@ -14,6 +17,9 @@ namespace Модуль_13_ДЗ
             BankDepartment = bankDepartment;
         }
 
+        /// <summary>
+        /// Модель счета
+        /// </summary>
         private BankDepartment BankDepartment { get; set; }
 
         /// <summary>

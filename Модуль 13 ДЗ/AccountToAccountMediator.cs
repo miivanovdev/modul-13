@@ -10,9 +10,20 @@ namespace Модуль_13_ДЗ
     /// </summary>
     class AccountToAccountMediator : TransactionMediator
     {
+        /// <summary>
+        /// Коллекция счетов на которые возможен перевод
+        /// </summary>
         public List<BankAccountViewModel> Accounts { get; private set; }
 
+        /// <summary>
+        /// Счет получателя
+        /// </summary>
         public BankAccountViewModel RecieverAccount { get; set; }
+
+        /// <summary>
+        /// Сумма транзакции
+        /// </summary>
+        public decimal TransactionAmount { get; private set; }
 
         public AccountToAccountMediator(List<BankAccountViewModel> accounts, ITransactable sender)
         {
@@ -20,6 +31,9 @@ namespace Модуль_13_ДЗ
             Sender = sender;
         }
                 
+        /// <summary>
+        /// Метод проводящий транзакцию
+        /// </summary>
         public override void Transaction()
         {            
             if (Accounts == null || Sender == null || Accounts.Count == 0)
@@ -33,14 +47,21 @@ namespace Модуль_13_ДЗ
 
             if (dialogTransaction.ShowDialog() == true)
             {
+                TransactionAmount = transactionViewModel.Amount;
                 Reciever = transactionViewModel.SelectedAccount;
                 RecieverAccount = transactionViewModel.SelectedAccount;
 
-                Sender.Withdraw(transactionViewModel.Amount, Reciever);
-                Reciever.Put(transactionViewModel.Amount);
+                Sender.Withdraw(TransactionAmount);
+                Reciever.Put(TransactionAmount);
 
                 LogMessage = new LogMessage($"Перевод со счета {Sender.Name} на счет {Reciever.Name} на сумму: {transactionViewModel.Amount}");
             }
+        }
+
+        public void Rollback()
+        {
+            Sender.Put(TransactionAmount);
+            Reciever.Withdraw(TransactionAmount);
         }
     }
 }

@@ -9,6 +9,9 @@ namespace Модуль_13_ДЗ
     /// </summary>
     class AccountToClientMediator : TransactionMediator
     {
+        /// <summary>
+        /// Флаг указывающий на операцию снятия со счета
+        /// </summary>
         public bool IsWithdraw { get; private set; }
 
         public AccountToClientMediator(ITransactable client, ITransactable account, bool isWithdraw = false)
@@ -18,6 +21,9 @@ namespace Модуль_13_ДЗ
             Reciever = account;            
         }
 
+        /// <summary>
+        /// Метод проводящий транзакцию
+        /// </summary>
         public override void Transaction()
         {
             if (Sender.BadHistory)

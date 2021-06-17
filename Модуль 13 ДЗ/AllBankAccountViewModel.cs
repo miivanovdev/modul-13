@@ -10,13 +10,20 @@ using ModelLib;
 
 namespace Модуль_13_ДЗ
 {
+    /// <summary>
+    /// Модель представление всех счетов
+    /// </summary>
     public class AllBankAccountViewModel : ObservableObject
     {
+        /// <summary>
+        /// Конструктор обеспечивает загрузку данных из БД
+        /// и обертку их в модель представление
+        /// </summary>
+        /// <param name="repository"></param>
         public AllBankAccountViewModel(IRepository<BankAccount> repository)
         {
             try
             {
-
                 Repository = repository;
                 WrapIntoViewModel(Repository.GetList());
             }
@@ -27,10 +34,19 @@ namespace Модуль_13_ДЗ
             }
         }
 
+        /// <summary>
+        /// Репозиторий счетов
+        /// </summary>
         private readonly IRepository<BankAccount> Repository;
 
+        /// <summary>
+        /// Коллекция счетов
+        /// </summary>
         public List<BankAccountViewModel> Accounts { get; set; }
 
+        /// <summary>
+        /// Отфильтрованное по департаменту и клиенту представление счетов
+        /// </summary>
         public ObservableCollection<BankAccountViewModel> AccountsView
         {
             get
@@ -60,9 +76,10 @@ namespace Модуль_13_ДЗ
             }
         }
 
-        public ObservableCollection<LogMessage> Log { get; set; }
-
         private BankDepartmentViewModel selectedDepartment;
+        /// <summary>
+        /// Выбранный департамент
+        /// </summary>
         public BankDepartmentViewModel SelectedDepartment
         {
             get { return selectedDepartment; }
@@ -78,6 +95,9 @@ namespace Модуль_13_ДЗ
         }
 
         private ClientViewModel selectedClient;
+        /// <summary>
+        /// Выбранный клиент
+        /// </summary>
         public ClientViewModel SelectedClient
         {
             get { return selectedClient; }
@@ -93,6 +113,11 @@ namespace Модуль_13_ДЗ
             }
         }
 
+        /// <summary>
+        /// Метод оборачивающий коллекцию моделей счетов 
+        /// в их модель представление
+        /// </summary>
+        /// <param name="list"></param>
         public void WrapIntoViewModel(IEnumerable<BankAccount> list)
         {
             Accounts = new List<BankAccountViewModel>();
@@ -101,7 +126,12 @@ namespace Модуль_13_ДЗ
                 Accounts.Add(WrapOne(l));
         }
 
-
+        /// <summary>
+        /// Метод оборачивающий модель в
+        /// соответствующую модель представление
+        /// </summary>
+        /// <param name="bankAccount"></param>
+        /// <returns></returns>
         public BankAccountViewModel WrapOne(BankAccount bankAccount)
         {
             BankAccountViewModel accountViewModel = null;
@@ -131,6 +161,10 @@ namespace Модуль_13_ДЗ
             return accountViewModel;
         }
 
+        /// <summary>
+        /// Метод реагирующий на смену клиента/департамента
+        /// </summary>
+        /// <param name="sender"></param>
         public void SelectionChange(object sender)
         {
             if(sender is ClientViewModel)
@@ -146,11 +180,11 @@ namespace Модуль_13_ДЗ
             }            
         }        
 
+       
+        private RelayCommand openAccountCommand;
         /// <summary>
         /// Команда открытия счета
         /// </summary>
-        private RelayCommand openAccountCommand;
-
         public RelayCommand OpenAccountCommand
         {
             get
@@ -213,11 +247,10 @@ namespace Модуль_13_ДЗ
             }
         }
 
+        private RelayCommand withdrawCommand;
         /// <summary>
         /// Команда для списания средств со счета
         /// </summary>
-        private RelayCommand withdrawCommand;
-
         public RelayCommand WithdrawCommand
         {
             get
@@ -263,11 +296,10 @@ namespace Модуль_13_ДЗ
 
         }
 
+        private RelayCommand addCommand;
         /// <summary>
         /// Команда внесения средств на счет
         /// </summary>
-        private RelayCommand addCommand;
-
         public RelayCommand AddCommand
         {
             get
@@ -338,29 +370,26 @@ namespace Модуль_13_ДЗ
         /// <param name="sender"></param>
         private void Transact(object sender)
         {
+            var mediator = new AccountToAccountMediator(Accounts.Where(x => x != SelectedAccount).ToList(), SelectedAccount);
+
             try
-            {
-                var mediator = new AccountToAccountMediator(Accounts.Where(x => x != SelectedAccount).ToList(), SelectedAccount);
+            {    
                 mediator.Transaction();
-                Repository.Update(SelectedAccount.BankAccount);
-                Repository.Update(mediator.RecieverAccount.BankAccount);
+                Repository.UpdateBoth(SelectedAccount.BankAccount, mediator.RecieverAccount.BankAccount);
                 accountChangedEvent?.Invoke(this, mediator.LogMessage);
             }        
-            catch (TransactionFailureException ex)
-            {
-                MessageBox.Show(ex.Info);
-            }
             catch (Exception ex)
             {
+                mediator.Rollback();
                 MessageBox.Show(ex.Message);
             }        
         }
 
-        /// <summary>
-        /// Команда для списания средств со счета
-        /// </summary>
+        
         private RelayCommand closeAccountCommand;
-
+        /// <summary>
+        /// Команда для закрытия счета
+        /// </summary>
         public RelayCommand CloseAccountCommand
         {
             get

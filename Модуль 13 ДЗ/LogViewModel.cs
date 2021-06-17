@@ -8,6 +8,9 @@ using ModelLib;
 
 namespace Модуль_13_ДЗ
 {
+    /// <summary>
+    /// Модель представление журнала логов операций
+    /// </summary>
     public class LogViewModel
     {
         public LogViewModel(IRepository<LogMessage> repository)
@@ -18,10 +21,21 @@ namespace Модуль_13_ДЗ
             Log.AddRange(Repository.GetList());
         }
 
+        /// <summary>
+        /// Коллекция сообщения логов
+        /// </summary>
         public List<LogMessage> Log { get; set; }
 
+        /// <summary>
+        /// Репозиторий лога оперции
+        /// </summary>
         private readonly IRepository<LogMessage> Repository;
 
+        /// <summary>
+        /// Метод записи сообщения в лог
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="logMessage"></param>
         public void WriteLog(object sender, LogMessage logMessage)
         {
             try

@@ -4,8 +4,14 @@ using System.Data.Common;
 
 namespace Модуль_13_ДЗ
 {
+    /// <summary>
+    /// Главная модель-представление
+    /// </summary>
     public class MainViewModel
     {
+        /// <summary>
+        /// Конструктор инкапсулирует создание основных элементов
+        /// </summary>
         public MainViewModel()
         {
             DbConnectionStringBuilder builder = new DbConnectionStringBuilder();
@@ -31,16 +37,30 @@ namespace Модуль_13_ДЗ
             AllBankAccountViewModel.AccountChangedEvent += LogViewModel.WriteLog;
         }
 
+        /// <summary>
+        /// Модель представление всех счетов
+        /// </summary>
         public AllBankAccountViewModel AllBankAccountViewModel { get; set; }
 
+        /// <summary>
+        /// Модель представление всех департаментов
+        /// </summary>
         public AllBankDepartmentViewModel AllBankDepartmentViewModel { get; set; }
 
+        /// <summary>
+        /// Модель представление всех клиентов
+        /// </summary>
         public AllClientViewModel AllClientViewModel { get; set; }
 
+        /// <summary>
+        /// Модель представление журнала логгов
+        /// </summary>
         public LogViewModel LogViewModel { get; set; } 
 
         private RelayCommand closeCommand;
-
+        /// <summary>
+        /// Команда при закрытии приложения
+        /// </summary>
         public RelayCommand CloseCommand
         {
             get

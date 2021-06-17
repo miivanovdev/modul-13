@@ -16,13 +16,6 @@ namespace Модуль_13_ДЗ
 {
     public class SqlBankDepartmentRepository : IRepository<BankDepartment>
     {
-        private string SelectAllCommand { get; set; }
-        private string SelectOneCommand { get; set; }
-        private string UpdateCommand { get; set; }
-        private string DeleteCommand { get; set; }
-        private string InsertCommand { get; set; }
-        private string ConnectionString { get; set; }
-
         public SqlBankDepartmentRepository(string connectionString, string selectAllCommand, string selectOneCommand, string updateCommand, string deleteCommand, string insertCommand)
         {
             ConnectionString = connectionString;
@@ -33,6 +26,42 @@ namespace Модуль_13_ДЗ
             InsertCommand = insertCommand;
         }
 
+        /// <summary>
+        /// Команда выбора всех счетов
+        /// </summary>
+        private readonly string SelectAllCommand;
+
+        /// <summary>
+        /// Команда выбора одного счета
+        /// </summary>
+        private readonly string SelectOneCommand;
+
+        /// <summary>
+        /// Команда обновления счета
+        /// </summary>
+        private readonly string UpdateCommand;
+
+        /// <summary>
+        /// Команда удаления счета
+        /// </summary>
+        private readonly string DeleteCommand;
+
+        /// <summary>
+        /// Команда вставки счета
+        /// </summary>
+        private readonly string InsertCommand;
+
+        /// <summary>
+        /// Строка подключения
+        /// </summary>
+        private readonly string ConnectionString;
+
+        /// <summary>
+        /// Метод привязывающий данные из БД
+        /// к модели
+        /// </summary>
+        /// <param name="reader"></param>
+        /// <returns></returns>
         private BankDepartment ReadOne(SqlDataReader reader)
         {
             BankDepartment department = new BankDepartment();
@@ -48,7 +77,12 @@ namespace Модуль_13_ДЗ
 
             return department;
         }
-        
+
+        /// <summary>
+        /// Метод получения одной записи данных департамента
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public BankDepartment GetOne(int id)
         {
             SqlDataReader dataReader = SqlHelper.ExecuteReader(ConnectionString,
@@ -64,7 +98,10 @@ namespace Модуль_13_ДЗ
             return bankDepartment;
         }
 
-        
+        /// <summary>
+        /// Метод получения коллекции записей данных департаментов
+        /// </summary>
+        /// <returns></returns>
         public IEnumerable<BankDepartment> GetList()
         {
             List<BankDepartment> bankDepartments = new List<BankDepartment>();
@@ -80,19 +117,43 @@ namespace Модуль_13_ДЗ
             dataReader.Close();
 
             return bankDepartments;
-        }        
+        }
 
+        /// <summary>
+        /// Метод создания записи о созданном
+        /// департаменте в БД
+        /// </summary>
+        /// <param name="item"></param>
         public void Create(BankDepartment item)
         {
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Метод обновления записи о департаменте
+        /// </summary>
+        /// <param name="item"></param>
         public void Update(BankDepartment item)
         {
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Метод удаления записи об
+        /// удаленном департаменте из БД
+        /// </summary>
+        /// <param name="id"></param>
         public void Delete(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Метод обновление двух элементов
+        /// </summary>
+        /// <param name="item1"></param>
+        /// <param name="item2"></param>
+        public void UpdateBoth(BankDepartment item1, BankDepartment item2)
         {
             throw new NotImplementedException();
         }
