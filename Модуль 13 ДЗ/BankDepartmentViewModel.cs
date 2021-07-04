@@ -12,7 +12,7 @@ namespace Модуль_13_ДЗ
     /// </summary>
     public class BankDepartmentViewModel : ObservableObject
     {
-        public BankDepartmentViewModel(BankDepartment bankDepartment)
+        public BankDepartmentViewModel(Departments bankDepartment)
         {
             BankDepartment = bankDepartment;
         }
@@ -20,7 +20,7 @@ namespace Модуль_13_ДЗ
         /// <summary>
         /// Модель счета
         /// </summary>
-        private BankDepartment BankDepartment { get; set; }
+        private Departments BankDepartment { get; set; }
 
         /// <summary>
         /// Наименование департамента
@@ -40,7 +40,7 @@ namespace Модуль_13_ДЗ
         /// <summary>
         /// Тип департамента
         /// </summary>
-        public AccountType AccountType { get { return BankDepartment.AccountType; } }
+        public AccountType AccountType { get { return BankDepartment.Type; } }
 
         /// <summary>
         /// Ставка по вкладам
@@ -105,7 +105,7 @@ namespace Модуль_13_ДЗ
         /// <summary>
         /// Идентификатор департамента
         /// </summary>
-        public int DepartmentId { get { return BankDepartment.DepartmentId; } }
+        public int DepartmentId { get { return BankDepartment.Id; } }
 
     }
 }

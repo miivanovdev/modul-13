@@ -149,11 +149,15 @@ namespace Модуль_13_ДЗ
         }
 
         /// <summary>
-        /// Метод обновление двух элементов
+        /// Метод обновления нескольких элементов
         /// </summary>
-        /// <param name="item1"></param>
-        /// <param name="item2"></param>
-        public void UpdateBoth(BankDepartment item1, BankDepartment item2)
+        /// <param name="items"></param>
+        public void UpdateRange(BankDepartment[] items)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Delete(int id, byte[] timestamp)
         {
             throw new NotImplementedException();
         }

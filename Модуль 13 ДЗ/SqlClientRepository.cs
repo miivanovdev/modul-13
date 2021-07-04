@@ -168,11 +168,16 @@ namespace Модуль_13_ДЗ
         }
 
         /// <summary>
-        /// Метод обновления двух элементов
+        /// Метод обновления нескольких элементов
         /// </summary>
         /// <param name="item1"></param>
         /// <param name="item2"></param>
-        public void UpdateBoth(Client item1, Client item2)
+        public void UpdateRange(Client[] items)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Delete(int id, byte[] timestamp)
         {
             throw new NotImplementedException();
         }

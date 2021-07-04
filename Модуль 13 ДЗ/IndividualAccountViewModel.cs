@@ -7,7 +7,7 @@ namespace Модуль_13_ДЗ
     /// </summary>
     public class IndividualAccountViewModel : BankAccountViewModel
     {
-        public IndividualAccountViewModel(BankAccount bankAccount)
+        public IndividualAccountViewModel(Accounts bankAccount)
             : base(bankAccount)
         {
             

@@ -1,6 +1,5 @@
 ﻿using System;
-using System.Configuration;
-using System.Data.Common;
+using System.Data.Entity;
 
 namespace Модуль_13_ДЗ
 {
@@ -14,20 +13,16 @@ namespace Модуль_13_ДЗ
         /// </summary>
         public MainViewModel()
         {
-            DbConnectionStringBuilder builder = new DbConnectionStringBuilder();
-            builder.Add("Data Source", ConfigurationManager.AppSettings["DataSource"]);
-            builder.Add("Initial Catalog", ConfigurationManager.AppSettings["InitialCatalog"]);
-            builder.Add("Integrated Security", Convert.ToBoolean(ConfigurationManager.AppSettings["IntegratedSecurity"]));
-            builder.Add("Pooling", Convert.ToBoolean(ConfigurationManager.AppSettings["Pooling"]));
-                        
-            AllClientViewModel = new AllClientViewModel(new SqlClientRepository(builder.ConnectionString, "getAllClients", "selectClient", "updateClient", "deleteClient", "createClient"));
+            BankEntities BankEntities = new BankEntities();
+            Database.SetInitializer(new DataInitializer());
 
-            AllBankDepartmentViewModel = new AllBankDepartmentViewModel(new SqlBankDepartmentRepository(builder.ConnectionString, "getAllDepartments", "", "", "", ""));
+            AllClientViewModel = new AllClientViewModel(new ClientEntitiesRepository(BankEntities));
 
-            AllBankAccountViewModel = new AllBankAccountViewModel(new SqlBankAccountRepository(builder.ConnectionString, "getAllAccounts", "selectAccount", "updateAccount", "deleteAccount", "createAccount"));
+            AllBankDepartmentViewModel = new AllBankDepartmentViewModel(new DepartmentsEntityRepository(BankEntities));
 
-            LogViewModel = new LogViewModel(new SqlLogRepository(builder.ConnectionString, "getAllLog", "selectLog", "", "deleteLog", "createLog"));
+            AllBankAccountViewModel = new AllBankAccountViewModel(new AccountsEntityRepository(BankEntities));
 
+            LogViewModel = new LogViewModel(new LogEntityRepository(BankEntities));
             AllBankAccountViewModel.SelectedClient = AllClientViewModel.SelectedClient;
             AllBankAccountViewModel.SelectedDepartment = AllBankDepartmentViewModel.SelectedDepartment;
 

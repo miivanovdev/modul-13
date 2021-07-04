@@ -173,11 +173,10 @@ namespace Модуль_13_ДЗ
         }
 
         /// <summary>
-        /// Метод обновления записи о счетах
-        /// при переводе между ними
+        /// Метод обновления нескольких элементов
         /// </summary>
-        /// <param name="item"></param>
-        public void UpdateBoth(BankAccount item1, BankAccount item2)
+        /// <param name="items"></param>
+        public void UpdateRange(BankAccount[] items)
         {
             using (SqlConnection connection = new SqlConnection(ConnectionString))
             {
@@ -191,27 +190,19 @@ namespace Модуль_13_ДЗ
 
                 try
                 {
-                    // выполняем две отдельные команды
-                    command.Parameters.AddRange(new SqlParameter[] {
-                                                new SqlParameter("@Amount", item1.Amount),
-                                                new SqlParameter("@Id", item1.AccountId)});
+                    foreach(var i in items)
+                    {
+                        command.Parameters.Clear();
+                        command.Parameters.AddRange(new SqlParameter[] {
+                                                    new SqlParameter("@Amount", i.Amount),
+                                                    new SqlParameter("@Id", i.AccountId)});
 
-                    int rowAffected = command.ExecuteNonQuery();
+                        int rowAffected = command.ExecuteNonQuery();
 
-                    if (rowAffected == 0)
-                        throw new Exception("Не удалось обновить запись!");
-
-                    command.Parameters.Clear();
-                    command.Parameters.AddRange(new SqlParameter[] {
-                                                new SqlParameter("@Amount", item2.Amount),
-                                                new SqlParameter("@Id", item2.AccountId)});
-
-                    rowAffected += command.ExecuteNonQuery();
-
-                    if (rowAffected < 2)
-                        throw new Exception("Не удалось обновить запись!");
-
-                    // подтверждаем транзакцию
+                        if (rowAffected == 0)
+                            throw new Exception("Не удалось обновить запись!");
+                    }
+                   
                     transaction.Commit();
                 }
                 catch (Exception ex)
@@ -221,7 +212,12 @@ namespace Модуль_13_ДЗ
                     connection.Close();
                     throw ex;
                 }
-            }            
+            }
+        }
+
+        public void Delete(int id, byte[] timestamp)
+        {
+            throw new NotImplementedException();
         }
     }
 }

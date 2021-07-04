@@ -16,7 +16,7 @@ namespace Модуль_13_ДЗ
         /// Конструктор обеспечивающий загрузгу 
         /// </summary>
         /// <param name="repository"></param>
-        public AllClientViewModel(IRepository<Client> repository)
+        public AllClientViewModel(IRepository<Clients> repository)
         {
             Repository = repository;
 
@@ -40,7 +40,7 @@ namespace Модуль_13_ДЗ
         /// <summary>
         /// Репозиторий клиентов
         /// </summary>
-        private readonly IRepository<Client> Repository;
+        private readonly IRepository<Clients> Repository;
 
         private event Action<object> onClientSelectionChange;
         /// <summary>
@@ -78,7 +78,7 @@ namespace Модуль_13_ДЗ
         /// в модель представление
         /// </summary>
         /// <param name="list"></param>
-        public void WrapIntoViewModel(IEnumerable<Client> list)
+        public void WrapIntoViewModel(IEnumerable<Clients> list)
         {
             Clients = new ObservableCollection<ClientViewModel>();
 

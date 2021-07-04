@@ -20,7 +20,7 @@ namespace Модуль_13_ДЗ
         /// и обертку их в модель представление
         /// </summary>
         /// <param name="repository"></param>
-        public AllBankAccountViewModel(IRepository<BankAccount> repository)
+        public AllBankAccountViewModel(IRepository<Accounts> repository)
         {
             try
             {
@@ -37,7 +37,7 @@ namespace Модуль_13_ДЗ
         /// <summary>
         /// Репозиторий счетов
         /// </summary>
-        private readonly IRepository<BankAccount> Repository;
+        private readonly IRepository<Accounts> Repository;
 
         /// <summary>
         /// Коллекция счетов
@@ -118,7 +118,7 @@ namespace Модуль_13_ДЗ
         /// в их модель представление
         /// </summary>
         /// <param name="list"></param>
-        public void WrapIntoViewModel(IEnumerable<BankAccount> list)
+        public void WrapIntoViewModel(IEnumerable<Accounts> list)
         {
             Accounts = new List<BankAccountViewModel>();
 
@@ -132,11 +132,11 @@ namespace Модуль_13_ДЗ
         /// </summary>
         /// <param name="bankAccount"></param>
         /// <returns></returns>
-        public BankAccountViewModel WrapOne(BankAccount bankAccount)
+        public BankAccountViewModel WrapOne(Accounts bankAccount)
         {
             BankAccountViewModel accountViewModel = null;
 
-            switch (bankAccount.AccountType)
+            switch (bankAccount.Type)
             {
                 case AccountType.Basic:
                      accountViewModel = new BankAccountViewModel(bankAccount);
@@ -221,21 +221,21 @@ namespace Модуль_13_ДЗ
                 if (SelectedClient.AmountAvailable < SelectedDepartment.MinAmount)
                     throw new TransactionFailureException($"У клиента {SelectedClient.Name} недостаточно средств {SelectedClient.Amount}, минимальная сумма вклада {SelectedDepartment.MinAmount}");
 
-                BankAccount newAccount = newAccount = new BankAccount(SelectedClient.ClientId,
+                Accounts newAccount = newAccount = new Accounts(SelectedClient.ClientId,
                                                                       SelectedClient.Name,
                                                                       SelectedClient.Amount,
                                                                       SelectedDepartment.InterestRate,
                                                                       SelectedDepartment.DepartmentId,
                                                                       SelectedDepartment.MinTerm,
                                                                       SelectedDepartment.Delay,
-                                                                      SelectedDepartment.AccountType);
+                                                                      (int)SelectedDepartment.AccountType);
                 Repository.Create(newAccount);
 
                 SelectedClient.Amount = 0;
                 Accounts.Add(WrapOne(newAccount));
                 NotifyPropertyChanged(nameof(AccountsView));
                 
-                accountChangedEvent?.Invoke(this, new LogMessage($"Открыт счет {newAccount.OwnerName} {newAccount.OwnerId} Type:{newAccount.AccountType}"));
+                accountChangedEvent?.Invoke(this, new Log($"Открыт счет {newAccount.OwnerName} {newAccount.OwnerId} Type:{newAccount.AccountType}"));
             }
             catch (TransactionFailureException ex)
             {
@@ -283,7 +283,7 @@ namespace Модуль_13_ДЗ
                 var mediator = new AccountToClientMediator(SelectedClient, SelectedAccount, true);
                 mediator.Transaction();
                 Repository.Update(SelectedAccount.BankAccount);
-                accountChangedEvent?.Invoke(this, mediator.LogMessage);
+                accountChangedEvent?.Invoke(this, mediator.Log);
             }
             catch (TransactionFailureException ex)
             {
@@ -332,7 +332,7 @@ namespace Модуль_13_ДЗ
                 var mediator = new AccountToClientMediator(SelectedClient, SelectedAccount);
                 mediator.Transaction();
                 Repository.Update(SelectedAccount.BankAccount);
-                accountChangedEvent?.Invoke(this, mediator.LogMessage);
+                accountChangedEvent?.Invoke(this, mediator.Log);
             }
             catch (TransactionFailureException ex)
             {
@@ -375,8 +375,8 @@ namespace Модуль_13_ДЗ
             try
             {    
                 mediator.Transaction();
-                Repository.UpdateBoth(SelectedAccount.BankAccount, mediator.RecieverAccount.BankAccount);
-                accountChangedEvent?.Invoke(this, mediator.LogMessage);
+                Repository.UpdateRange(new Accounts[]{ SelectedAccount.BankAccount, mediator.RecieverAccount.BankAccount });
+                accountChangedEvent?.Invoke(this, mediator.Log);
             }        
             catch (Exception ex)
             {
@@ -412,7 +412,7 @@ namespace Модуль_13_ДЗ
                 if (!Accounts.Remove(SelectedAccount))
                     throw new Exception($"Не удалось удалить {SelectedAccount.Name}");
 
-                accountChangedEvent?.Invoke(this, new LogMessage($"Закрыт счет {SelectedAccount.OwnerName} {SelectedAccount.OwnerId} Type:{SelectedAccount.AccountType}"));
+                accountChangedEvent?.Invoke(this, new Log($"Закрыт счет {SelectedAccount.OwnerName} {SelectedAccount.OwnerId} Type:{SelectedAccount.AccountType}"));
                 NotifyPropertyChanged(nameof(AccountsView));
             }
             catch (Exception ex)
@@ -433,11 +433,11 @@ namespace Модуль_13_ДЗ
                    SelectedAccount.CanClose;
         }
 
-        private event Action<object, LogMessage> accountChangedEvent;
+        private event Action<object, Log> accountChangedEvent;
         /// <summary>
         /// Событие изменения состояния счета
         /// </summary>
-        public event Action<object, LogMessage> AccountChangedEvent
+        public event Action<object, Log> AccountChangedEvent
         {
             add { accountChangedEvent += value; }
             remove { accountChangedEvent -= value; }

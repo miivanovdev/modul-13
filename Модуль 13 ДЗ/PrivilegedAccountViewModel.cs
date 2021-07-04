@@ -4,7 +4,7 @@ namespace Модуль_13_ДЗ
 {
     public class PrivilegedAccountViewModel : BankAccountViewModel
     {
-        public PrivilegedAccountViewModel(BankAccount bankAccount)
+        public PrivilegedAccountViewModel(Accounts bankAccount)
             : base(bankAccount)
         {
 

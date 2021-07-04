@@ -159,13 +159,13 @@ namespace Модуль_13_ДЗ
         {
             throw new NotImplementedException();
         }
+                
+        public void UpdateRange(LogMessage[] items)
+        {
+            throw new NotImplementedException();
+        }
 
-        /// <summary>
-        /// Метод обновления двух элементов
-        /// </summary>
-        /// <param name="item1"></param>
-        /// <param name="item2"></param>
-        public void UpdateBoth(LogMessage item1, LogMessage item2)
+        public void Delete(int id, byte[] timestamp)
         {
             throw new NotImplementedException();
         }

@@ -13,10 +13,10 @@ namespace Модуль_13_ДЗ
     /// </summary>
     public class LogViewModel
     {
-        public LogViewModel(IRepository<LogMessage> repository)
+        public LogViewModel(IRepository<Log> repository)
         {
             Repository = repository;
-            Log = new List<LogMessage>();
+            Log = new List<Log>();
 
             Log.AddRange(Repository.GetList());
         }
@@ -24,19 +24,19 @@ namespace Модуль_13_ДЗ
         /// <summary>
         /// Коллекция сообщения логов
         /// </summary>
-        public List<LogMessage> Log { get; set; }
+        public List<Log> Log { get; set; }
 
         /// <summary>
         /// Репозиторий лога оперции
         /// </summary>
-        private readonly IRepository<LogMessage> Repository;
+        private readonly IRepository<Log> Repository;
 
         /// <summary>
         /// Метод записи сообщения в лог
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="logMessage"></param>
-        public void WriteLog(object sender, LogMessage logMessage)
+        public void WriteLog(object sender, Log logMessage)
         {
             try
             {

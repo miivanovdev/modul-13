@@ -7,7 +7,7 @@ namespace Модуль_13_ДЗ
     {
         public ClientInputViewModel()
         {
-            Client = new ClientViewModel(new Client());
+            Client = new ClientViewModel(new Clients());
         }
 
         public ClientViewModel Client { get; set; }

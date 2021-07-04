@@ -9,7 +9,7 @@ namespace Модуль_13_ДЗ
     /// </summary>
     public class ClientViewModel : ObservableObject, ITransactable, IDataErrorInfo, IEditableObject
     {
-        public ClientViewModel(Client client)
+        public ClientViewModel(Clients client)
         {
             Client = client;
         }
@@ -17,7 +17,7 @@ namespace Модуль_13_ДЗ
         /// <summary>
         /// Модель клиента
         /// </summary>
-        public Client Client { get; private set; }
+        public Clients Client { get; private set; }
 
         /// <summary>
         /// Флаг указывающий на наличие у клиента 
@@ -78,7 +78,7 @@ namespace Модуль_13_ДЗ
         /// </summary>
         public int ClientId
         {
-            get { return Client.ClientId; }
+            get { return Client.Id; }
         }
 
         /// <summary>
@@ -224,7 +224,7 @@ namespace Модуль_13_ДЗ
         /// Оригинал клиента использующий для отката 
         /// "грязной записи" данных при редактировании
         /// </summary>
-        private Client OrigClient { get; set; }
+        private Clients OrigClient { get; set; }
 
         /// <summary>
         /// Флаг указывающий на наличие изменений 
@@ -254,7 +254,7 @@ namespace Модуль_13_ДЗ
         public void BeginEdit()
         {
             if(OrigClient == null)
-                OrigClient = new Client(FirstName, SecondName, Surname, Amount, BadHistory);
+                OrigClient = new Clients(FirstName, SecondName, Surname, Amount, BadHistory);
         }
 
         /// <summary>

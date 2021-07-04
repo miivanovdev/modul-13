@@ -9,7 +9,7 @@ namespace Модуль_13_ДЗ
     /// </summary>
     public class BankAccountViewModel : ObservableObject, ITransactable
     {
-        public BankAccountViewModel(BankAccount bankAccount)
+        public BankAccountViewModel(Accounts bankAccount)
         {
             BankAccount = bankAccount;
             CurrentDate = DateTime.Now;
@@ -18,12 +18,12 @@ namespace Модуль_13_ДЗ
         /// <summary>
         /// Модель счета
         /// </summary>
-        public BankAccount BankAccount { get; private set; }
+        public Accounts BankAccount { get; private set; }
 
         /// <summary>
         /// Идентификатор счета
         /// </summary>
-        public int AccountId { get { return BankAccount.AccountId; }  }
+        public int AccountId { get { return BankAccount.Id; }  }
 
         /// <summary>
         /// Идентификатор владельца
@@ -96,7 +96,7 @@ namespace Модуль_13_ДЗ
         /// </summary>
         public virtual AccountType AccountType
         {
-            get { return AccountType.Basic; }
+            get { return BankAccount.Type; }
         }
 
         /// <summary>

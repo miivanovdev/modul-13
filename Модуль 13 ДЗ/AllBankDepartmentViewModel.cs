@@ -17,7 +17,7 @@ namespace Модуль_13_ДЗ
         /// из БД и обертку их в модель представление
         /// </summary>
         /// <param name="repository"></param>
-        public AllBankDepartmentViewModel(IRepository<BankDepartment> repository)
+        public AllBankDepartmentViewModel(IRepository<Departments> repository)
         {
             Repository = repository;
 
@@ -36,7 +36,7 @@ namespace Модуль_13_ДЗ
         /// <summary>
         /// Репозиторий департаментов
         /// </summary>
-        private readonly IRepository<BankDepartment> Repository;
+        private readonly IRepository<Departments> Repository;
 
         /// <summary>
         /// Коллекция моделей представления департаментов
@@ -69,7 +69,7 @@ namespace Модуль_13_ДЗ
         /// Метод оборачивающий коллекцию моделей в модели представления
         /// </summary>
         /// <param name="list"></param>
-        public void WrapIntoViewModel(IEnumerable<BankDepartment> list)
+        public void WrapIntoViewModel(IEnumerable<Departments> list)
         {
             Departments = new List<BankDepartmentViewModel>();
 

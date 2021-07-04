@@ -4,7 +4,7 @@ namespace Модуль_13_ДЗ
 {
     public class PhysicalAccountViewModel : BankAccountViewModel
     {
-        public PhysicalAccountViewModel(BankAccount bankAccount)
+        public PhysicalAccountViewModel(Accounts bankAccount)
                     :base(bankAccount)
         { }        
 

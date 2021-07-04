@@ -54,14 +54,14 @@ namespace Модуль_13_ДЗ
                 Sender.Withdraw(TransactionAmount);
                 Reciever.Put(TransactionAmount);
 
-                LogMessage = new LogMessage($"Перевод со счета {Sender.Name} на счет {Reciever.Name} на сумму: {transactionViewModel.Amount}");
+                Log = new Log($"Перевод со счета {Sender.Name} на счет {Reciever.Name} на сумму: {transactionViewModel.Amount}");
             }
         }
 
         public void Rollback()
         {
             Sender.Put(TransactionAmount);
-            Reciever.Withdraw(TransactionAmount);
+            Reciever?.Withdraw(TransactionAmount);
         }
     }
 }
