@@ -380,7 +380,7 @@ namespace Модуль_13_ДЗ
             }        
             catch (Exception ex)
             {
-                mediator.Rollback();
+                Repository.Rollback();
                 MessageBox.Show(ex.Message);
             }        
         }

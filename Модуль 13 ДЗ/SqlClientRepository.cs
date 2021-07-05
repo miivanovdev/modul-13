@@ -181,5 +181,10 @@ namespace Модуль_13_ДЗ
         {
             throw new NotImplementedException();
         }
+
+        public void Rollback()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

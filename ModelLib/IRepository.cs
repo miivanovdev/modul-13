@@ -13,5 +13,6 @@ namespace ModelLib
         void UpdateRange(T[] items);            // обновление нескольких объектов
         void Delete(int id);                    // удаление объекта по id
         void Delete(int id, byte[] timestamp);  // удаление объекта по id и 
+        void Rollback();                        // откатить текущие изменения
     }
 }
