@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ModelLib;
 
-namespace Модуль_13_ДЗ
+namespace Модуль_13_ДЗ.ViewModels
 {
     /// <summary>
     /// Модель представление счета

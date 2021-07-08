@@ -1,6 +1,6 @@
 ﻿using ModelLib;
 
-namespace Модуль_13_ДЗ
+namespace Модуль_13_ДЗ.ViewModels
 {
     /// <summary>
     /// Модель представления индивидуальных счетов

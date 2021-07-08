@@ -1,4 +1,4 @@
-namespace Модуль_13_ДЗ
+namespace ModelLib
 {
     using System;
     using System.Collections.Generic;

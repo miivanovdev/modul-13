@@ -2,7 +2,7 @@
 using ModelLib;
 using System.ComponentModel;
 
-namespace Модуль_13_ДЗ
+namespace Модуль_13_ДЗ.ViewModels
 {
     /// <summary>
     /// Модель представления клиента

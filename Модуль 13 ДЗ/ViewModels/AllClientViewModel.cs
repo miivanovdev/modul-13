@@ -5,7 +5,7 @@ using System.Windows;
 using System.Collections.ObjectModel;
 using ModelLib;
 
-namespace Модуль_13_ДЗ
+namespace Модуль_13_ДЗ.ViewModels
 {
     /// <summary>
     /// Модель представление всех клиентов

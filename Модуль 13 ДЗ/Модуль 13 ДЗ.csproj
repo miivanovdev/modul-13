@@ -80,36 +80,32 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Accounts.cs" />
-    <Compile Include="AccountsEntityRepository.cs" />
-    <Compile Include="AllBankAccountViewModel.cs" />
-    <Compile Include="AllBankDepartmentViewModel.cs" />
-    <Compile Include="AllClientViewModel.cs" />
-    <Compile Include="BankAccountViewModel.cs" />
-    <Compile Include="BankDepartmentViewModel.cs" />
+    <Compile Include="Repos\AccountsEntityRepository.cs" />
+    <Compile Include="AccountToAccountMediator.cs" />
+    <Compile Include="ViewModels\AllBankAccountViewModel.cs" />
+    <Compile Include="ViewModels\AllBankDepartmentViewModel.cs" />
+    <Compile Include="ViewModels\AllClientViewModel.cs" />
+    <Compile Include="ViewModels\BankAccountViewModel.cs" />
+    <Compile Include="ViewModels\BankDepartmentViewModel.cs" />
     <Compile Include="BankEntities.cs" />
-    <Compile Include="BaseRepository.cs" />
-    <Compile Include="ClientEntitiesRepository.cs" />
-    <Compile Include="Clients.cs" />
-    <Compile Include="ClientViewModel.cs" />
+    <Compile Include="Repos\BaseRepository.cs" />
+    <Compile Include="Repos\ClientEntitiesRepository.cs" />
+    <Compile Include="ViewModels\ClientViewModel.cs" />
     <Compile Include="DataInitializer.cs" />
-    <Compile Include="Departments.cs" />
-    <Compile Include="DepartmentsEntityRepository.cs" />
-    <Compile Include="EntityBase.cs" />
-    <Compile Include="IndividualAccountViewModel.cs" />
-    <Compile Include="Log.cs" />
-    <Compile Include="LogsEntityRepository.cs" />
-    <Compile Include="LogViewModel.cs" />
+    <Compile Include="Repos\DepartmentsEntityRepository.cs" />
+    <Compile Include="ViewModels\IndividualAccountViewModel.cs" />
+    <Compile Include="Repos\LogsEntityRepository.cs" />
+    <Compile Include="ViewModels\LogViewModel.cs" />
     <Compile Include="MainViewModel.cs" />
     <Compile Include="Migrations\202107021132444_Initial.cs" />
     <Compile Include="Migrations\202107021132444_Initial.designer.cs">
       <DependentUpon>202107021132444_Initial.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
-    <Compile Include="PhysicalAccountViewModel.cs" />
-    <Compile Include="PrivilegedAccountViewModel.cs" />
-    <Compile Include="SqlBankAccountRepository.cs" />
-    <Compile Include="SqlClientRepository.cs" />
+    <Compile Include="ViewModels\PhysicalAccountViewModel.cs" />
+    <Compile Include="ViewModels\PrivilegedAccountViewModel.cs" />
+    <Compile Include="AdoRepos\SqlBankAccountRepository.cs" />
+    <Compile Include="AdoRepos\SqlClientRepository.cs" />
     <Compile Include="Dialog\ClientInputDialog.xaml.cs">
       <DependentUpon>ClientInputDialog.xaml</DependentUpon>
     </Compile>
@@ -118,19 +114,17 @@
       <DependentUpon>DialogTransaction.xaml</DependentUpon>
     </Compile>
     <Compile Include="Dialog\TransactionViewModel.cs" />
-    <Compile Include="AccountToAccountMediator.cs" />
     <Compile Include="AccountToClientMediator.cs" />
     <Compile Include="DialogCloser.cs" />
     <Compile Include="Dialog\DialogDataModel.cs" />
     <Compile Include="Dialog\DialogViewModel.cs" />
     <Compile Include="EnumHelper.cs" />
     <Compile Include="EnumToCollectionConverter .cs" />
-    <Compile Include="SqlHelper.cs" />
-    <Compile Include="SqlLogRepository.cs" />
-    <Compile Include="TransactionMediator.cs" />
+    <Compile Include="AdoRepos\SqlHelper.cs" />
+    <Compile Include="AdoRepos\SqlLogRepository.cs" />
     <Compile Include="ValueDescription.cs" />
     <Compile Include="RelayCommand.cs" />
-    <Compile Include="SqlBankDepartmentRepository.cs" />
+    <Compile Include="AdoRepos\SqlBankDepartmentRepository.cs" />
     <Compile Include="Dialog\DialogWindow.xaml.cs">
       <DependentUpon>DialogWindow.xaml</DependentUpon>
     </Compile>

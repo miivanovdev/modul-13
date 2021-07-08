@@ -5,7 +5,7 @@ using System.Linq;
 using System.Windows;
 using ModelLib;
 
-namespace Модуль_13_ДЗ
+namespace Модуль_13_ДЗ.ViewModels
 {
     /// <summary>
     /// Модель представлениие всех департаментов

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using ModelLib;
 
-namespace Модуль_13_ДЗ
+namespace Модуль_13_ДЗ.ViewModels
 {
     /// <summary>
     /// Модель представление журнала логов операций

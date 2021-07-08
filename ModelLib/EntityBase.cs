@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace Модуль_13_ДЗ
+namespace ModelLib
 {
     public class EntityBase
     {

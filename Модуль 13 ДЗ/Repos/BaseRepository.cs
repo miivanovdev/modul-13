@@ -80,15 +80,15 @@ namespace Модуль_13_ДЗ
             }
             catch(DbUpdateException ex)
             {
-                throw;
+                throw ex;
             }
             catch (CommitFailedException ex)
             {
-                throw;
+                throw ex;
             }
             catch (Exception ex)
             {
-                throw;
+                throw ex;
             }
         }
 

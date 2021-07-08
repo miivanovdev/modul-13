@@ -1,11 +1,10 @@
-namespace Модуль_13_ДЗ
+namespace ModelLib
 {
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
-    using ModelLib;
 
     public partial class Accounts : EntityBase
     {

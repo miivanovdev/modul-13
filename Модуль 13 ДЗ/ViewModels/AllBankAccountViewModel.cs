@@ -8,7 +8,7 @@ using System.Windows;
 using System.Configuration;
 using ModelLib;
 
-namespace Модуль_13_ДЗ
+namespace Модуль_13_ДЗ.ViewModels
 {
     /// <summary>
     /// Модель представление всех счетов
