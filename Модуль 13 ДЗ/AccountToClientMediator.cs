@@ -43,13 +43,13 @@ namespace Модуль_13_ДЗ
                 {
                     Sender.Put(dialogVM.Amount);
                     Reciever.Withdraw(dialogVM.Amount);
-                    Log = new Log($"{Sender.Name} снял со счета {Reciever.Name} сумму: {dialogVM.Amount}");
+                    Log = $"{Sender.Name} снял со счета {Reciever.Name} сумму: {dialogVM.Amount}";
                 }
                 else
                 {
                     Sender.Withdraw(dialogVM.Amount);
                     Reciever.Put(dialogVM.Amount);
-                    Log = new Log($"{Sender.Name} пополнил счет {Reciever.Name} на сумму: {dialogVM.Amount}");
+                    Log = $"{Sender.Name} пополнил счет {Reciever.Name} на сумму: {dialogVM.Amount}";
                 }
             }          
         }

@@ -9,7 +9,7 @@ namespace Модуль_13_ДЗ
     {        
         protected ITransactable Reciever { get; set; }
         protected ITransactable Sender { get; set; }
-        public Log Log { get; set; }
+        public string Log { get; set; }
 
         /// <summary>
         /// Осуществить транзакцию

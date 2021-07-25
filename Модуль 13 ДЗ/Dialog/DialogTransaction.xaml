@@ -31,17 +31,17 @@
 
         <Border Padding="5">
             <StackPanel Grid.Row="0">
-                <TextBlock Text="Тип счета:"/>
-                <ComboBox x:Name="accountTypeCb"
-                      ItemsSource="{Binding Path=AccountType, Converter={local:EnumToCollectionConverter}, Mode=OneTime}"
-                      SelectedValuePath="Value"
-                      DisplayMemberPath="Description"
-                      SelectedValue="{Binding Path=AccountType}"
+                <TextBlock Text="Департамент:"/>
+                <ComboBox x:Name="departmentsCb"
+                      ItemsSource="{Binding Path=Departments}"
+                      SelectedValuePath="Name"
+                      DisplayMemberPath="Name"
+                      SelectedItem = "{Binding SelectedDepartment}" 
                       SelectedIndex="0"/>
 
                 <TextBlock Text="Счет:"/>
                 <ComboBox x:Name="accountCb"
-                  ItemsSource="{Binding Accounts}"
+                  ItemsSource="{Binding AccountViews}"
                   SelectedItem="{Binding SelectedAccount}"
                   DisplayMemberPath="Name" 
                   SelectedValuePath="Name"/>

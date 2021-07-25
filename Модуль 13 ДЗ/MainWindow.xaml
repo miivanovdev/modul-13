@@ -16,6 +16,9 @@
 
     <Window.Resources>
 
+        <CollectionViewSource x:Key="departmentscb" Source="{Binding AllDepartmentsViewModel.Departments}"/>
+        <CollectionViewSource x:Key="accountTypescb" Source="{Binding AllAccountTypesViewModel.AccountTypes}"/>
+        
         <Style TargetType="DataGrid">
             <!-- Make the border and grid lines a little less imposing -->
             <Setter Property="BorderBrush" Value="#DDDDDD" />
@@ -225,62 +228,53 @@
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition/>
+                                <RowDefinition/>
                         </Grid.RowDefinitions>
                         
                         
                         <StackPanel Grid.Column="0" Margin="2 0 0 0">                                
                             <TextBlock Text="Департамент"/>
                             <ComboBox  x:Name="department"  
-                                      ItemsSource="{Binding AllBankDepartmentViewModel.Departments}"
+                                      ItemsSource="{Binding AllDepartmentsViewModel.Departments}"
                                       DisplayMemberPath="Name" 
                                       SelectedValuePath="Name"
-                                      SelectedItem="{Binding AllBankDepartmentViewModel.SelectedDepartment, Mode=TwoWay}" 
+                                      SelectedItem="{Binding AllDepartmentsViewModel.SelectedDepartment, Mode=TwoWay}" 
                                       Margin="0 5 0 0"
                                       HorizontalContentAlignment="Stretch"
                                       Height="22"
                             />
                             
                         </StackPanel>
-
-                        <StackPanel Grid.Column="1" Margin="2 0 0 0">
-                            <TextBlock  Text="Наименование"/>
-                                <TextBox Padding="2" ToolTip="Ставка по вкладам" Text="{Binding ElementName = department, Path = SelectedItem.Name}" IsReadOnly="True" Style="{StaticResource bxStyle}"/>
-                        </StackPanel>
-
-                        <StackPanel Grid.Column ="2">
-                            <TextBlock  Text="Ставка по вкладам"/>
+                        
+                        <StackPanel Grid.Column ="1">
+                            <TextBlock  Text="Ставка"/>
                                 <TextBox Padding="2" ToolTip="Ставка по вкладам" Text="{Binding ElementName = department, Path = SelectedItem.InterestRate}" IsReadOnly="True" Style="{StaticResource bxStyle}"/>
                         </StackPanel>
 
-                        <StackPanel Grid.Row="1" Grid.Column="0" Margin="2 0 0 0">
-                            <TextBlock Text="Минимальная сумма вклада"/>
+                        <StackPanel Grid.Row="0" Grid.Column="2" Margin="2 0 0 0">
+                            <TextBlock Text="Мин. сумма вклада"/>
                                 <TextBox Padding="2" ToolTip="Минимальная сумма вклада" Text="{Binding ElementName = department, Path = SelectedItem.MinAmount}" IsReadOnly="True" Style="{StaticResource bxStyle}"/>
                         </StackPanel>
 
-                        <StackPanel Grid.Row="1"  Grid.Column ="1">
-                            <TextBlock Text="Минимальный срок вклада"/>
+                        <StackPanel Grid.Row="0"  Grid.Column ="3">
+                            <TextBlock Text="Мин. срок вклада"/>
                                 <TextBox Padding="2"  ToolTip="Минимальный срок вклада" Text="{Binding ElementName = department, Path = SelectedItem.MinTerm}" IsReadOnly="True" Style="{StaticResource bxStyle}"/>
                         </StackPanel>
 
-                        <StackPanel Grid.Row="1"  Grid.Column ="2">
-                            <TextBlock Text="Отсрочка"/>
-                            <TextBox Padding="2"  ToolTip="Минимальный срок вклада" Text="{Binding ElementName = department, Path = SelectedItem.Delay}" IsReadOnly="True" Style="{StaticResource bxStyle}"/>
-                        </StackPanel>
                     </Grid>
 
 
-                        <DataGrid x:Name="clients" 
-                      DockPanel.Dock="Top" 
-                      ItemsSource="{Binding AllClientViewModel.Clients}"
-                      SelectedItem="{Binding AllClientViewModel.SelectedClient, Mode=TwoWay}"
-                      SelectionMode="Single"
-                      IsSynchronizedWithCurrentItem="True"
-                      AutoGenerateColumns="False"
-                      CanUserAddRows="False">
+                    <DataGrid x:Name="clients" 
+                              DockPanel.Dock="Top" 
+                              ItemsSource="{Binding AllClientsViewModel.Clients}"
+                              SelectedItem="{Binding AllClientsViewModel.SelectedClient, Mode=TwoWay}"
+                              SelectionMode="Single"
+                              IsSynchronizedWithCurrentItem="True"
+                              AutoGenerateColumns="False"
+                              CanUserAddRows="False">
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="Имя" Binding="{Binding Path=FirstName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="100"/>
                                 <DataGridTextColumn Header="Фамилия" Binding="{Binding Path = Surname, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="100"/>
@@ -290,19 +284,19 @@
                             </DataGrid.Columns>
                             <DataGrid.ContextMenu>
                                 <ContextMenu>
-                                    <MenuItem Header="Добавить клиента" Command="{Binding AllClientViewModel.AddClientCommand}"/>
-                                    <MenuItem Header="Удаление клиента" Command="{Binding AllClientViewModel.RemoveClientCommand}"/>
+                                    <MenuItem Header="Добавить клиента" Command="{Binding AllClientsViewModel.AddClientCommand}"/>
+                                    <MenuItem Header="Удаление клиента" Command="{Binding AllClientsViewModel.RemoveClientCommand}"/>
                                 </ContextMenu>
                             </DataGrid.ContextMenu>
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="RowEditEnding">
-                                    <i:InvokeCommandAction Command="{Binding AllClientViewModel.UpdateClientCommitCommand}"/>
+                                    <i:InvokeCommandAction Command="{Binding AllClientsViewModel.UpdateClientCommitCommand}"/>
                                 </i:EventTrigger>
                                 <i:EventTrigger EventName="BeginningEdit">
-                                    <i:InvokeCommandAction Command="{Binding AllClientViewModel.UpdateClientBeginCommand}"/>
+                                    <i:InvokeCommandAction Command="{Binding AllClientsViewModel.UpdateClientBeginCommand}"/>
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>
-                        </DataGrid>
+                    </DataGrid>
 
 
                 </DockPanel>
@@ -310,8 +304,8 @@
 
                         <DataGrid x:Name="accounts" 
                                   DockPanel.Dock="Top" 
-                                  ItemsSource="{Binding AllBankAccountViewModel.AccountsView}"
-                                  SelectedItem="{Binding AllBankAccountViewModel.SelectedAccount, Mode=TwoWay}"
+                                  ItemsSource="{Binding AllAccountsViewModel.AccountsView}"
+                                  SelectedItem="{Binding AllAccountsViewModel.SelectedAccount, Mode=TwoWay}"
                                   SelectionMode="Single"
                                   IsSynchronizedWithCurrentItem="True"
                                   AutoGenerateColumns="False" 
@@ -323,6 +317,8 @@
                                 <DataGridTextColumn Header="Дата создания" Binding="{Binding CreatedDate}" IsReadOnly="True" Width="100"/>
                                 <DataGridTextColumn Header="Начальная сумма" Binding="{Binding Amount}" IsReadOnly="True" Width="105"/>
                                 <DataGridTextColumn Header="Ставка" Binding="{Binding InterestRate}" IsReadOnly="True" Width="100"/>
+                                <DataGridComboBoxColumn Header="Тип счета" SelectedValueBinding="{Binding AccountTypesId}" SelectedValuePath="AccountTypesId" DisplayMemberPath="Name" 
+                                                        ItemsSource="{Binding Source={StaticResource accountTypescb}}" />
                                 <DataGridTextColumn Header="Месяцев" Binding="{Binding MonthPassed}" IsReadOnly="True" Width="100"/>
                                 <DataGridTemplateColumn Header="Текущая дата" Width="100" IsReadOnly="True">
                                     <DataGridTemplateColumn.CellTemplate>
@@ -340,11 +336,11 @@
                             </DataGrid.Columns>
                             <DataGrid.ContextMenu>
                             <ContextMenu>
-                                    <MenuItem Header="Открыть счет" Command="{Binding AllBankAccountViewModel.OpenAccountCommand}" />
-                                    <MenuItem Header="Закрыть счет" Command="{Binding AllBankAccountViewModel.CloseAccountCommand}" />
-                                    <MenuItem Header="Снять со счета" Command="{Binding AllBankAccountViewModel.WithdrawCommand}" />
-                                    <MenuItem Header="Внести на счет" Command="{Binding AllBankAccountViewModel.AddCommand}" />
-                                    <MenuItem Header="Перевод на счет" Command="{Binding AllBankAccountViewModel.TransactCommand}" />
+                                    <MenuItem Header="Открыть счет" Command="{Binding AllAccountsViewModel.OpenAccountCommand}" />
+                                    <MenuItem Header="Закрыть счет" Command="{Binding AllAccountsViewModel.CloseAccountCommand}" />
+                                    <MenuItem Header="Снять со счета" Command="{Binding AllAccountsViewModel.WithdrawCommand}" />
+                                    <MenuItem Header="Внести на счет" Command="{Binding AllAccountsViewModel.AddCommand}" />
+                                    <MenuItem Header="Перевод на счет" Command="{Binding AllAccountsViewModel.TransactCommand}" />
                             </ContextMenu>
                         </DataGrid.ContextMenu>
                     </DataGrid>
@@ -354,15 +350,99 @@
         </TabItem>
         <TabItem>
             <TabItem.Header>
+                Типы счетов
+            </TabItem.Header>
+            <TabItem.Content>                                   
+                    
+                <StackPanel Grid.Column="1">
+                    <Border Padding="5" BorderThickness="1" BorderBrush="AntiqueWhite" CornerRadius="10">
+
+                        <DataGrid x:Name="accountTypes"
+                                  ItemsSource="{Binding AllAccountTypesViewModel.AccountTypes}"
+                                  SelectedItem="{Binding AllAccountTypesViewModel.SelectedType, Mode=TwoWay}"
+                                  SelectionMode="Single"
+                                  IsSynchronizedWithCurrentItem="True"
+                                  AutoGenerateColumns="False"
+                                  CanUserAddRows="False">
+                            <DataGrid.Resources>
+                                <Style TargetType="{x:Type CheckBox}" x:Key="CheckBoxAddStyle">
+                                    <Style.Setters>
+                                        <Setter Property="HorizontalAlignment" Value="Center"/>
+                                    </Style.Setters>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding CanAdded}" Value="False">
+                                            <Setter Property="IsEnabled" Value="False" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                                <Style TargetType="{x:Type CheckBox}" x:Key="CheckBoxWithdrawStyle">
+                                    <Style.Setters>
+                                        <Setter Property="HorizontalAlignment" Value="Center"/>
+                                    </Style.Setters>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding CanWithdrawed}" Value="False">
+                                            <Setter Property="IsEnabled" Value="False" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                                <Style TargetType="{x:Type CheckBox}" x:Key="CheckBoxCloseStyle">
+                                    <Style.Setters>
+                                        <Setter Property="HorizontalAlignment" Value="Center"/>
+                                    </Style.Setters>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding CanClose}" Value="False">
+                                            <Setter Property="IsEnabled" Value="False" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </DataGrid.Resources>
+                            <DataGrid.Columns>
+                                <DataGridTextColumn     Header="Наименование счета"                  Binding="{Binding Path = Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="100"/>
+                                <DataGridComboBoxColumn Header="Департамент" SelectedValueBinding="{Binding DepartmentsRefId}" SelectedValuePath="DepartmentId" DisplayMemberPath="Name" 
+                                                        ItemsSource="{Binding Source={StaticResource departmentscb}}" />
+
+                                <DataGridCheckBoxColumn Header="Капитализация"                       Binding="{Binding Path = IsCapitalized, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="100"/>
+                                <DataGridCheckBoxColumn Header="Пересмотр условий"                   Binding="{Binding Path = AllowedRevision, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="100"/>
+                                <DataGridCheckBoxColumn Header="Доступно пополнение"                 Binding="{Binding Path = CanAdded, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="100"/>
+                                <DataGridCheckBoxColumn Header="Пополнение доступно после мин.срока" Binding="{Binding Path = AddingDependsOnMinTerm, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" EditingElementStyle="{StaticResource CheckBoxAddStyle}" Width="100"/>
+                                <DataGridCheckBoxColumn Header="Доступно списание"                   Binding="{Binding Path = CanWithdrawed, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="100"/>
+                                <DataGridCheckBoxColumn Header="Списание доступно после мин.срока"   Binding="{Binding Path = WithdrawingDependsOnMinTerm, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" EditingElementStyle="{StaticResource CheckBoxWithdrawStyle}"  Width="100"/>
+                                <DataGridCheckBoxColumn Header="Доступно закрытие"                   Binding="{Binding Path = CanClose, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="100"/>
+                                <DataGridCheckBoxColumn Header="Закрытие доступно после мин.срока"   Binding="{Binding Path = ClosingDependsOnMinTerm, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" EditingElementStyle="{StaticResource CheckBoxCloseStyle}" Width="100"/>
+                            </DataGrid.Columns>                                                        
+                            <DataGrid.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem Header="Добавить тип счета" Command="{Binding AllAccountTypesViewModel.AddTypeCommand}"/>
+                                    <MenuItem Header="Удаленить тип счета" Command="{Binding AllAccountTypesViewModel.RemoveTypeCommand}"/>
+                                </ContextMenu>
+                            </DataGrid.ContextMenu>
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="RowEditEnding">
+                                    <i:InvokeCommandAction Command="{Binding AllAccountTypesViewModel.UpdateTypeCommitCommand}"/>
+                                </i:EventTrigger>
+                                <i:EventTrigger EventName="BeginningEdit">
+                                    <i:InvokeCommandAction Command="{Binding AllAccountTypesViewModel.UpdateTypeBeginCommand}"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+
+                        </DataGrid>
+                    </Border>
+                </StackPanel>                    
+                
+                
+            </TabItem.Content>
+        </TabItem>
+        <TabItem>
+            <TabItem.Header>
                 История
             </TabItem.Header>
             <TabItem.Content>
-                <ListView ItemsSource="{Binding LogViewModel.Log}"
+                <ListView ItemsSource="{Binding AllLogsViewModel.Log}"
                               IsSynchronizedWithCurrentItem="True"
                               >
                     <ListView.View>
                         <GridView>
-                            <GridViewColumn Header="Событие" DisplayMemberBinding="{Binding Message}" Width="650"/>
+                            <GridViewColumn Header="Событие" DisplayMemberBinding="{Binding LogMessage}" Width="650"/>
                             <GridViewColumn Header="Время" DisplayMemberBinding="{Binding Time}"/>
                         </GridView>
                     </ListView.View>

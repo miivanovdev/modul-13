@@ -5,11 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using ModelLib;
 
-namespace Модуль_13_ДЗ
+namespace Модуль_13_ДЗ.Repos
 {
     class LogEntityRepository : BaseRepository<Log>
     {
-        public LogEntityRepository(BankEntities context)
+        public LogEntityRepository(BankContext context)
             :base(context)
         {
             

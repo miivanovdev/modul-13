@@ -4,11 +4,11 @@ using System.Linq;
 using System.Data.Entity;
 using ModelLib;
 
-namespace Модуль_13_ДЗ
+namespace Модуль_13_ДЗ.Repos
 {
     public class ClientEntitiesRepository : BaseRepository<Clients>
     {
-        public ClientEntitiesRepository(BankEntities context)
+        public ClientEntitiesRepository(BankContext context)
             : base(context)
         {
             

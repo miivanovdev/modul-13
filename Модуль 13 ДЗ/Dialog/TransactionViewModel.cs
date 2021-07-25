@@ -11,9 +11,14 @@ namespace Модуль_13_ДЗ
 {
     public class TransactionViewModel : ObservableObject
     {
-        public TransactionViewModel(List<BankAccountViewModel> accounts, decimal CurrentAmount)
+        public TransactionViewModel(List<DepartmentsViewModel> departments, List<AccountsViewModel> accounts, decimal CurrentAmount)
         {
-            this.accounts = new List<BankAccountViewModel>(accounts);
+            if (accounts == null || departments == null || CurrentAmount == 0)
+                throw new TransactionFailureException("Неверно переданы счета или отсутствует счет отправитель!");
+
+            this.Departments = departments;
+            SelectedDepartment = departments.First();
+            this.Accounts = accounts;
             Data = new DialogDataModel("Перевод", CurrentAmount, true);
         }
 
@@ -24,37 +29,39 @@ namespace Модуль_13_ДЗ
         /// <summary>
         /// Все счета
         /// </summary>
-        private List<BankAccountViewModel> accounts;
+        private List<AccountsViewModel> Accounts;
+
+        public List<DepartmentsViewModel> Departments { get; private set; }
 
         /// <summary>
         /// Отфильтрованные счета
         /// </summary>
-        public ReadOnlyCollection<BankAccountViewModel> Accounts
+        public ReadOnlyCollection<AccountsViewModel> AccountViews
         {
-            get { return new ReadOnlyCollection<BankAccountViewModel>(GetSubset()); }
+            get { return new ReadOnlyCollection<AccountsViewModel>(GetSubset()); }
         }
 
         /// <summary>
-        /// Фильтр по типу счета
+        /// Фильтр по департаменту
         /// </summary>
-        private AccountType accountType;
-        public AccountType AccountType
+        private DepartmentsViewModel selectedDepartment;
+        public DepartmentsViewModel SelectedDepartment
         {
-            get { return accountType; }
+            get { return selectedDepartment; }
             set
             {
-                if (accountType != value)
+                if (selectedDepartment != value)
                 {
-                    accountType = value;
-                    NotifyPropertyChanged(nameof(AccountType));
-                    NotifyPropertyChanged(nameof(Accounts));
+                    selectedDepartment = value;
+                    NotifyPropertyChanged(nameof(SelectedDepartment));
+                    NotifyPropertyChanged(nameof(AccountViews));
                 }
             }
         }
 
-        private List<BankAccountViewModel> GetSubset()
+        private List<AccountsViewModel> GetSubset()
         {
-            return accounts.Where(x => x.AccountType == AccountType).ToList();
+            return Accounts.Where(x => x.DepartmentId == SelectedDepartment.DepartmentId).ToList();
         }
 
         /// <summary>
@@ -74,11 +81,11 @@ namespace Модуль_13_ДЗ
             }
         }
 
-        private BankAccountViewModel selectedAccount;
+        private AccountsViewModel selectedAccount;
         /// <summary>
         /// Выбранный счет получатель
         /// </summary>
-        public BankAccountViewModel SelectedAccount
+        public AccountsViewModel SelectedAccount
         {
             get
             {

@@ -6,15 +6,24 @@ using System.Threading.Tasks;
 using System.Data.Entity;
 using ModelLib;
 
-namespace Модуль_13_ДЗ
+namespace Модуль_13_ДЗ.Repos
 {
     class AccountsEntityRepository : BaseRepository<Accounts>
     {
-        public AccountsEntityRepository(BankEntities context)
+        public AccountsEntityRepository(BankContext context)
             : base(context)
         {
             
         }
 
+        /// <summary>
+        /// Жадная загрузка счета вместе 
+        /// с его типом счета
+        /// </summary>
+        /// <returns></returns>
+        public override IEnumerable<Accounts> GetList()
+        {
+            return context.Accounts.Include(a => a.AccountTypes).ToList();
+        }
     }
 }

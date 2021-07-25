@@ -5,11 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using ModelLib;
 
-namespace Модуль_13_ДЗ
+namespace Модуль_13_ДЗ.Repos
 {
     class DepartmentsEntityRepository : BaseRepository<Departments>
     {
-        public DepartmentsEntityRepository(BankEntities context)
+        public DepartmentsEntityRepository(BankContext context)
             : base(context)
         {
             

@@ -7,31 +7,24 @@ namespace ModelLib
     using System.Data.Entity.Spatial;
 
     public partial class Accounts : EntityBase
-    {
-        public Accounts(int ownerId, string ownerName, decimal amount, decimal interestRate,
-                        int departmentId, int minTerm, int delay, int accountType)
-        {
-            OwnerId         = ownerId;
-            OwnerName       = OwnerName;
-            Amount          = amount;
-            InterestRate    = interestRate;
-            DepartmentId    = departmentId;
-            MinTerm         = minTerm;
-            Delay           = delay;
-            AccountType     = accountType;
-        }
-
+    {        
         public Accounts() { }
-                
+             
         [Index("IDX_AccountDepartmentOwnerId", IsUnique = false, Order = 1)]
-        public int DepartmentId { get; set; }
+        public int? DepartmentsRefId { get; set; }
+
+        [ForeignKey("DepartmentsRefId")]
+        public virtual Departments Departments { get; set; }
         
         [Index("IDX_AccountDepartmentOwnerId", IsUnique = false, Order = 2)]
-        public int OwnerId { get; set; }
+        public int ClientsRefId { get; set; }
+
+        [ForeignKey("ClientsRefId")]
+        public virtual Clients Clients { get; set; }
         
         [Required]
         [StringLength(50)]
-        public string OwnerName { get; set; }
+        public string ClientsName { get; set; }
 
         [Column(TypeName = "money")]
         public decimal Amount { get; set; }
@@ -43,15 +36,13 @@ namespace ModelLib
 
         [Column(TypeName = "money")]
         public decimal InterestRate { get; set; }
+                
+        public bool BadHistory { get; set; }        
 
-        public int AccountType { get; set; }
+        public int AccountTypesId { get; set; }
 
-        public bool BadHistory { get; set; }
-
-        public int Delay { get; set; }
-
-        [NotMapped]
-        public AccountType Type { get { return (AccountType)AccountType; } }
+        [ForeignKey("AccountTypesId")]
+        public virtual AccountTypes AccountTypes { get; set; }
     }
 
 }

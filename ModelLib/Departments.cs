@@ -13,6 +13,7 @@ namespace ModelLib
         public Departments()
         {
             Accounts = new HashSet<Accounts>();
+            AccountTypes = new HashSet<AccountTypes>();
         }
                 
         [Required]
@@ -22,21 +23,17 @@ namespace ModelLib
         [Column(TypeName = "money")]
         public decimal MinAmount { get; set; }
 
-        public int Delay { get; set; }
-
         public int MinTerm { get; set; }
 
         [Column(TypeName = "money")]
         public decimal InterestRate { get; set; }
 
-        public int AccountType { get; set; }
-
-        [NotMapped]
-        public AccountType Type { get { return (AccountType)AccountType; } }
-
         public bool IsBasic { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Accounts> Accounts { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<AccountTypes> AccountTypes { get; set; }
     }
 }

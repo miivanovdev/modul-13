@@ -6,16 +6,19 @@ using System.Data.Entity.Infrastructure;
 using System.Threading.Tasks;
 using ModelLib;
 
-namespace Модуль_13_ДЗ
+namespace Модуль_13_ДЗ.Repos
 {
     public class BaseRepository<T> : IDisposable, IRepository<T> where T : EntityBase, new()
     {
-        private readonly BankEntities dbContext;
+        private readonly BankContext dbContext;
         private readonly DbSet<T> table;
-        protected BankEntities context => dbContext;
+        protected BankContext context => dbContext;
 
-        public BaseRepository(BankEntities db)
+        public BaseRepository(BankContext db)
         {
+            if (db == null)
+                throw new ArgumentNullException("BankContext");
+
             dbContext = db;
             table = dbContext.Set<T>();
         }

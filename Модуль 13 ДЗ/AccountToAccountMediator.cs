@@ -11,26 +11,23 @@ namespace Модуль_13_ДЗ
     /// Посдердник операции транзакции со счета на счет 
     /// </summary>
     class AccountToAccountMediator : TransactionMediator
-    {
-        /// <summary>
-        /// Коллекция счетов на которые возможен перевод
-        /// </summary>
-        public List<BankAccountViewModel> Accounts { get; private set; }
+    {        
+        private readonly TransactionViewModel transactionViewModel;
 
         /// <summary>
         /// Счет получателя
         /// </summary>
-        public BankAccountViewModel RecieverAccount { get; set; }
+        public AccountsViewModel RecieverAccount { get; set; }
 
         /// <summary>
         /// Сумма транзакции
         /// </summary>
         public decimal TransactionAmount { get; private set; }
 
-        public AccountToAccountMediator(List<BankAccountViewModel> accounts, ITransactable sender)
+        public AccountToAccountMediator(List<DepartmentsViewModel> departments, List<AccountsViewModel> accounts, ITransactable sender)
         {
-            Accounts = accounts;
             Sender = sender;
+            transactionViewModel = new TransactionViewModel(departments, accounts, sender.AmountAvailable);
         }
                 
         /// <summary>
@@ -38,10 +35,8 @@ namespace Модуль_13_ДЗ
         /// </summary>
         public override void Transaction()
         {            
-            if (Accounts == null || Sender == null || Accounts.Count == 0)
-                throw new TransactionFailureException("Неверно переданы счета или отсутствует счет отправитель!");
+            
 
-            TransactionViewModel transactionViewModel = new TransactionViewModel(Accounts, Sender.AmountAvailable);
             DialogTransaction dialogTransaction = new DialogTransaction(transactionViewModel);
 
             if (transactionViewModel == null || dialogTransaction == null)
@@ -56,7 +51,7 @@ namespace Модуль_13_ДЗ
                 Sender.Withdraw(TransactionAmount);
                 Reciever.Put(TransactionAmount);
 
-                Log = new Log($"Перевод со счета {Sender.Name} на счет {Reciever.Name} на сумму: {transactionViewModel.Amount}");
+                Log = $"Перевод со счета {Sender.Name} на счет {Reciever.Name} на сумму: {transactionViewModel.Amount}";
             }
         }
 

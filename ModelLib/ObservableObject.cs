@@ -12,7 +12,7 @@ namespace ModelLib
         /// Оповещение подписавшихся объектов
         /// </summary>
         /// <param name="propertyName">Изменеяемое свойство</param>
-        protected void NotifyPropertyChanged([CallerMemberName] string propertyName = null)
+        protected virtual void NotifyPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }

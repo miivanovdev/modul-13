@@ -8,10 +8,10 @@ namespace Модуль_13_ДЗ
     {
         public ClientInputViewModel()
         {
-            Client = new ClientViewModel(new Clients());
+            Client = new ClientsViewModel(new Clients());
         }
 
-        public ClientViewModel Client { get; set; }
+        public ClientsViewModel Client { get; set; }
 
         private bool? dialogResult;
 
