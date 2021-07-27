@@ -14,14 +14,12 @@ namespace Модуль_13_ДЗ
         /// <summary>
         /// Конструктор инкапсулирует создание основных элементов
         /// </summary>
-        public MainWindowViewModel(BankContext bankContext, DataInitializer dataInitializer, IWindow window)
+        public MainWindowViewModel(BankContext bankContext, DataInitializer dataInitializer)
         {
             BankContext = bankContext;
             Database.SetInitializer(dataInitializer);
-            this.window = window;
         }
 
-        private readonly IWindow window;
         private readonly BankContext BankContext;
 
         /// <summary>

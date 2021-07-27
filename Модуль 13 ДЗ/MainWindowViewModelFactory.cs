@@ -44,7 +44,7 @@ namespace Модуль_13_ДЗ
                 throw new ArgumentNullException("window");
             }
 
-            var vm = new MainWindowViewModel(this.context, this.dataInitializer, window);
+            var vm = new MainWindowViewModel(this.context, this.dataInitializer);
 
             vm.AllClientsViewModel = new AllClientsViewModel(
                                             new ClientsService(
