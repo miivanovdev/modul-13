@@ -4,8 +4,14 @@ using System.Windows.Input;
 
 namespace Модуль_13_ДЗ
 {
+    /// <summary>
+    /// Адаптер главного окна приложения
+    /// </summary>
     public class MainWindowAdapter : WindowAdapter
     {
+        /// <summary>
+        /// Фабрика модели представления
+        /// </summary>
         private readonly IMainWindowViewModelFactory vmFactory;
         private bool initialized;
 
@@ -22,24 +28,40 @@ namespace Модуль_13_ДЗ
 
         #region IWindow Members
 
+        /// <summary>
+        /// Закрыть окно
+        /// </summary>
         public override void Close()
         {
             this.EnsureInitialized();
             base.Close();
         }
 
+        /// <summary>
+        /// Создать окно
+        /// </summary>
+        /// <param name="viewModel"></param>
+        /// <param name="window"></param>
+        /// <returns></returns>
         public override IWindow CreateChild(object viewModel, Window window)
         {
             this.EnsureInitialized();
             return base.CreateChild(viewModel, window);
         }
 
+        /// <summary>
+        /// Показать окно
+        /// </summary>
         public override void Show()
         {
             this.EnsureInitialized();
             base.Show();
         }
 
+        /// <summary>
+        /// Показать окно как дилоговое
+        /// </summary>
+        /// <returns></returns>
         public override bool? ShowDialog()
         {
             this.EnsureInitialized();
@@ -47,7 +69,10 @@ namespace Модуль_13_ДЗ
         }
 
         #endregion
-
+        /// <summary>
+        /// Привязать клавиши
+        /// </summary>
+        /// <param name="vm"></param>
         private void DeclareKeyBindings(MainWindowViewModel vm)
         {
             /*
@@ -58,6 +83,9 @@ namespace Модуль_13_ДЗ
             */
         }
 
+        /// <summary>
+        /// Инициализация
+        /// </summary>
         private void EnsureInitialized()
         {
             if (this.initialized)

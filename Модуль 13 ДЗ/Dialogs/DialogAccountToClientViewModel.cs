@@ -11,6 +11,10 @@ using ModelLib;
 
 namespace Модуль_13_ДЗ.Dialogs
 {
+    /// <summary>
+    /// Модель представление для диалога
+    /// взаимодействия между клиентом и счетом
+    /// </summary>
     public class DialogAccountToClientViewModel : ObservableObject
     {
         public DialogAccountToClientViewModel(AccountsViewModel selectedAccount, ClientsViewModel selectedClient, bool isWithdraw = false)
@@ -20,12 +24,24 @@ namespace Модуль_13_ДЗ.Dialogs
             SelectedClient = selectedClient;
         }
 
+        /// <summary>
+        /// Выбранный счет
+        /// </summary>
         public AccountsViewModel SelectedAccount { get; private set; }
 
+        /// <summary>
+        /// Выбранный клиент
+        /// </summary>
         public ClientsViewModel SelectedClient { get; private set; }
 
+        /// <summary>
+        /// Модель данных диалогового окна
+        /// </summary>
         public DialogAccountToClientModel Data { get; set; }
 
+        /// <summary>
+        /// Сумма перевода
+        /// </summary>
         public decimal Amount
         {
             get
@@ -35,7 +51,9 @@ namespace Модуль_13_ДЗ.Dialogs
         }
 
         private bool? dialogResult;
-
+        /// <summary>
+        /// Флаг закрытия диалога
+        /// </summary>
         public bool? DialogResult
         {
             get { return dialogResult; }
@@ -50,7 +68,9 @@ namespace Модуль_13_ДЗ.Dialogs
         }
         
         private RelayCommand okCommand;
-
+        /// <summary>
+        /// Команда закрытия дилога
+        /// </summary>
         public RelayCommand OkCommand
         {
             get
@@ -62,11 +82,20 @@ namespace Модуль_13_ДЗ.Dialogs
             }
         }
 
+        /// <summary>
+        /// Метод при закрытии диалога
+        /// </summary>
+        /// <param name="o"></param>
         private void OkClose(object o)
         {
             DialogResult = true;
         }
 
+        /// <summary>
+        /// Доступность команды закрытия
+        /// </summary>
+        /// <param name="o"></param>
+        /// <returns></returns>
         private bool CanClose(object o)
         {
             return Data.IsValid; 

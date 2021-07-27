@@ -4,6 +4,9 @@ using Модуль_13_ДЗ.ViewModels;
 
 namespace Модуль_13_ДЗ.Dialogs
 {
+    /// <summary>
+    /// Модель-представление ввода клиента
+    /// </summary>
     public class ClientInputViewModel : ObservableObject
     {
         public ClientInputViewModel()
@@ -11,10 +14,15 @@ namespace Модуль_13_ДЗ.Dialogs
             Client = new ClientsViewModel(new Clients());
         }
 
+        /// <summary>
+        /// Модель представление клиента
+        /// </summary>
         public ClientsViewModel Client { get; set; }
 
         private bool? dialogResult;
-
+        /// <summary>
+        /// Флаг закрытия окна диалога
+        /// </summary>
         public bool? DialogResult
         {
             get { return dialogResult; }
@@ -29,7 +37,9 @@ namespace Модуль_13_ДЗ.Dialogs
         }
 
         private RelayCommand okCommand;
-
+        /// <summary>
+        /// Команда закрытия окна
+        /// </summary>
         public RelayCommand OkCommand
         {
             get
@@ -40,12 +50,20 @@ namespace Модуль_13_ДЗ.Dialogs
                 ));
             }
         }
-
+        /// <summary>
+        /// Метод закрытия окна
+        /// </summary>
+        /// <param name="o"></param>
         private void OkClose(object o)
         {
             DialogResult = true;
         }
 
+        /// <summary>
+        /// Проверка доступности закрытия
+        /// </summary>
+        /// <param name="o"></param>
+        /// <returns></returns>
         private bool CanClose(object o)
         {
             return Client.Error == string.Empty;

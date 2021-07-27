@@ -6,6 +6,9 @@ namespace ModelLib
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
+    /// <summary>
+    /// Модель счета
+    /// </summary>
     public partial class Accounts : EntityBase
     {        
         public Accounts() { }

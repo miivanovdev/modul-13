@@ -7,6 +7,9 @@ using ModelLib;
 
 namespace Модуль_13_ДЗ.Repos
 {
+    /// <summary>
+    /// Хранилище типа счета
+    /// </summary>
     public class AccountTypesEntityRepository : BaseRepository<AccountTypes>
     {
         public AccountTypesEntityRepository(BankContext context)

@@ -8,6 +8,9 @@ using ModelLib;
 
 namespace Модуль_13_ДЗ.DataServices
 {
+    /// <summary>
+    /// Сервис логов
+    /// </summary>
     public class LogsDataService : ILogsService
     {
         public LogsDataService(IRepository<Log> repository)
@@ -15,6 +18,9 @@ namespace Модуль_13_ДЗ.DataServices
             this.repository = repository;
         }
 
+        /// <summary>
+        /// Интерфейс взаимодействия с хранилищем
+        /// </summary>
         private readonly IRepository<Log> repository;
 
         public LogViewModel Create(string message)
@@ -29,14 +35,18 @@ namespace Модуль_13_ДЗ.DataServices
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Получить списко логов
+        /// </summary>
+        /// <returns></returns>
         public List<LogViewModel> GetList()
         {
             return WrapIntoViewModel(repository.GetList());
         }
 
         /// <summary>
-        /// Фабричный метод создания коллекции
-        /// моделей представления счетов
+        /// Метод оборачивает список моделей
+        /// в их модель-представление
         /// </summary>
         /// <param name="list"></param>
         /// <returns></returns>
@@ -50,6 +60,12 @@ namespace Модуль_13_ДЗ.DataServices
             return logs;
         }
 
+        /// <summary>
+        /// Метод оборачивает модель
+        /// в её модель-представление
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
         private LogViewModel WrapOne(Log item)
         {
             return new LogViewModel(item);

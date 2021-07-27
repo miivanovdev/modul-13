@@ -7,6 +7,9 @@ using System.Windows;
 
 namespace Модуль_13_ДЗ
 {
+    /// <summary>
+    /// Контейнер приложения банка
+    /// </summary>
     public class BankAppClientContainer
     {
         public IWindow ResolveWindow()

@@ -8,6 +8,9 @@ using Модуль_13_ДЗ.ViewModels;
 
 namespace Модуль_13_ДЗ.DataServices
 {
+    /// <summary>
+    /// Сервис типов счетов
+    /// </summary>
     public class AccountTypesService : IAccountTypesService
     {
         public AccountTypesService(IRepository<AccountTypes> repository)
@@ -15,8 +18,15 @@ namespace Модуль_13_ДЗ.DataServices
             this.repository = repository;
         }
 
+        /// <summary>
+        /// Интерфейс взаймодействия с хранилищем
+        /// </summary>
         private readonly IRepository<AccountTypes> repository;
 
+        /// <summary>
+        /// Создать тип счета
+        /// </summary>
+        /// <returns></returns>
         public AccountTypesViewModel Create()
         {
             AccountTypes item = new AccountTypes(); //фабрика
@@ -25,6 +35,10 @@ namespace Модуль_13_ДЗ.DataServices
             return WrapOne(item);
         }
 
+        /// <summary>
+        /// Получить список типов счетов
+        /// </summary>
+        /// <returns></returns>
         public List<AccountTypesViewModel> GetList()
         {
             return WrapIntoViewModel(repository.GetList());
@@ -45,21 +59,39 @@ namespace Модуль_13_ДЗ.DataServices
             return Types;
         }
 
+        /// <summary>
+        /// Метод оборачивает модель в модель-представление
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
         private AccountTypesViewModel WrapOne(AccountTypes item)
         {
             return new AccountTypesViewModel(item);
         }
 
+        /// <summary>
+        /// Получить тип счета по идентификатору
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public AccountTypesViewModel GetOne(int id)
         {
             return new AccountTypesViewModel(repository.GetOne(id));
         }
 
+        /// <summary>
+        /// Обновить тип счета
+        /// </summary>
+        /// <param name="item"></param>
         public void Update(AccountTypesViewModel item)
         {
             repository.Update(item.AccountTypes);
         }
 
+        /// <summary>
+        /// Обновить несколько типов счетов
+        /// </summary>
+        /// <param name="items"></param>
         public void UpdateRange(AccountTypesViewModel[] items)
         {
             List<AccountTypes> itemsModel = new List<AccountTypes>();
@@ -70,11 +102,18 @@ namespace Модуль_13_ДЗ.DataServices
             repository.UpdateRange(itemsModel.ToArray());
         }
 
+        /// <summary>
+        /// Удалить тип счета по идентификатору
+        /// </summary>
+        /// <param name="id"></param>
         public void Delete(int id)
         {
             repository.Delete(id);
         }
 
+        /// <summary>
+        /// Откатить транзакцию
+        /// </summary>
         public void Rollback()
         {
             repository.Rollback();

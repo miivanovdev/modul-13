@@ -10,6 +10,10 @@ using ModelLib;
 
 namespace Модуль_13_ДЗ
 {
+    /// <summary>
+    /// Класс создает базу данных, в случае её отсутствия
+    /// и заполняет её начальными данными
+    /// </summary>
     public class DataInitializer : CreateDatabaseIfNotExists<BankContext>
     {
         protected override void Seed(BankContext context)

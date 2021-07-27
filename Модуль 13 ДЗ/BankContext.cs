@@ -12,11 +12,29 @@
             : base("name=BankEntities")
         {
         }
-
+        /// <summary>
+        /// Таблица счетов
+        /// </summary>
         public virtual DbSet<Accounts> Accounts { get; set; }
+
+        /// <summary>
+        /// Таблица клиентов
+        /// </summary>
         public virtual DbSet<Clients> Clients { get; set; }
+
+        /// <summary>
+        /// Таблица департаментов
+        /// </summary>
         public virtual DbSet<Departments> Departments { get; set; }
+        
+        /// <summary>
+        /// Таблица типов счетов
+        /// </summary>
         public virtual DbSet<AccountTypes> AccountTypes { get; set; }
+
+        /// <summary>
+        /// Таблица логов
+        /// </summary>
         public virtual DbSet<Log> Log { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)

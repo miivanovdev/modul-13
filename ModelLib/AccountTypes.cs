@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace ModelLib
 {
+    /// <summary>
+    /// Модель типа счета
+    /// </summary>
     public class AccountTypes : EntityBase
     {
         /// <summary>

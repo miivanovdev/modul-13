@@ -9,6 +9,9 @@ using Модуль_13_ДЗ.DataServices;
 
 namespace Модуль_13_ДЗ.ViewModels
 {
+    /// <summary>
+    /// Представление всех типов счетов
+    /// </summary>
     public class AllAccountTypesViewModel : ObservableObject, IAllAccountTypesViewModel
     {
         /// <summary>
@@ -146,6 +149,10 @@ namespace Модуль_13_ДЗ.ViewModels
             }
         }
 
+        /// <summary>
+        /// Метод начала редактирования строки
+        /// </summary>
+        /// <param name="args"></param>
         public void RowEditBegin(object args)
         {
             SelectedType.BeginEdit();

@@ -7,6 +7,9 @@ using System.Windows;
 
 namespace Модуль_13_ДЗ.Mediators
 {
+    /// <summary>
+    /// Нулевой объект диалога
+    /// </summary>
     public class NullObjectDialog : WindowAdapter
     {
         public NullObjectDialog()

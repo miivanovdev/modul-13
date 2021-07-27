@@ -6,6 +6,9 @@ using Модуль_13_ДЗ.Mediators;
 
 namespace Модуль_13_ДЗ
 {
+    /// <summary>
+    /// Фабрика главной модели представления
+    /// </summary>
     public class MainWindowViewModelFactory : IMainWindowViewModelFactory
     {
         private readonly BankContext context;
@@ -29,7 +32,11 @@ namespace Модуль_13_ДЗ
         }
 
         #region IViewModelFactory Members
-
+        /// <summary>
+        /// Создает главную модель-представление
+        /// </summary>
+        /// <param name="window"></param>
+        /// <returns></returns>
         public MainWindowViewModel Create(IWindow window)
         {
             if (window == null)

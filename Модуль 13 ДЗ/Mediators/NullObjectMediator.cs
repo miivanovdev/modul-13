@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace Модуль_13_ДЗ.Mediators
 {
+    /// <summary>
+    /// Нулевой объект посредника
+    /// </summary>
     public class NullObjectMediator : TransactionMediator
     {
         public NullObjectMediator(IWindow window)

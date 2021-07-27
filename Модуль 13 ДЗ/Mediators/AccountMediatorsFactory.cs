@@ -8,6 +8,9 @@ using Модуль_13_ДЗ.Dialogs;
 
 namespace Модуль_13_ДЗ.Mediators
 {
+    /// <summary>
+    /// Фабрика посредников
+    /// </summary>
     public class AccountMediatorsFactory : IAccountMediatorsFactory
     {
         public AccountMediatorsFactory(IWindow window, List<DepartmentsViewModel> departments)
@@ -21,6 +24,13 @@ namespace Модуль_13_ДЗ.Mediators
 
         public List<AccountsViewModel> Accounts { get; set; }
 
+        /// <summary>
+        /// Метод создает посредника
+        /// </summary>
+        /// <param name="dialogType"></param>
+        /// <param name="selectedAccount"></param>
+        /// <param name="selectedClient"></param>
+        /// <returns></returns>
         public TransactionMediator Create(string dialogType, AccountsViewModel selectedAccount, ClientsViewModel selectedClient = null)
         {
             switch(dialogType)

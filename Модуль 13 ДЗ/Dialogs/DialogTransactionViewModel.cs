@@ -21,10 +21,19 @@ namespace Модуль_13_ДЗ.Dialogs
             Data = new DialogAccountToClientModel(sender.AmountAvailable, true);
             SenderAccount = sender;
         }
+        /// <summary>
+        /// Счет отправителя
+        /// </summary>
         public AccountsViewModel SenderAccount { get; set; }
 
+        /// <summary>
+        /// Сумма перевода
+        /// </summary>
         public decimal Amount { get { return Data.Amount; } }
 
+        /// <summary>
+        /// Модель представления ввода
+        /// </summary>
         public DialogAccountToClientModel Data { get; set; }
 
         /// <summary>
@@ -60,6 +69,12 @@ namespace Модуль_13_ДЗ.Dialogs
             }
         }
 
+        /// <summary>
+        /// Отфильтровывает список
+        /// по департаменту исключая
+        /// счет отправитель
+        /// </summary>
+        /// <returns></returns>
         private List<AccountsViewModel> GetSubset()
         {
             return Accounts.Where(x => x.DepartmentId == SelectedDepartment.DepartmentId && x != SenderAccount).ToList();
