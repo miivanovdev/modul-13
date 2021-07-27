@@ -5,18 +5,26 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using Модуль_13_ДЗ.ViewModels;
 using ModelLib;
 
-namespace Модуль_13_ДЗ
-{
-    public class DialogViewModel : ObservableObject
-    {
-        public DialogDataModel Data { get; set; }
 
-        public DialogViewModel(string label, decimal totalAmount, bool isWithdraw)
+namespace Модуль_13_ДЗ.Dialogs
+{
+    public class DialogAccountToClientViewModel : ObservableObject
+    {
+        public DialogAccountToClientViewModel(AccountsViewModel selectedAccount, ClientsViewModel selectedClient, bool isWithdraw = false)
         {
-            Data = new DialogDataModel(label, totalAmount, isWithdraw);
+            Data = new DialogAccountToClientModel(selectedAccount.AmountAvailable, isWithdraw);
+            SelectedAccount = selectedAccount;
+            SelectedClient = selectedClient;
         }
+
+        public AccountsViewModel SelectedAccount { get; private set; }
+
+        public ClientsViewModel SelectedClient { get; private set; }
+
+        public DialogAccountToClientModel Data { get; set; }
 
         public decimal Amount
         {

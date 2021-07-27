@@ -12,18 +12,16 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace Модуль_13_ДЗ
+namespace Модуль_13_ДЗ.Dialogs
 {
     /// <summary>
-    /// Interaction logic for DialogWindow.xaml
+    /// Interaction logic for DialogAccountInput.xaml
     /// </summary>
-    partial class DialogWindow : Window
+    partial class DialogAccountToClient : Window
     {
-        public DialogWindow(DialogViewModel viewModel, string title)
+        public DialogAccountToClient()
         {
             InitializeComponent();
-            Title = title;
-            DataContext = viewModel;
         }
     }
 }

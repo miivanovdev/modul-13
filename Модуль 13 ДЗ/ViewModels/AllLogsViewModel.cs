@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows;
+using System.Collections.ObjectModel;
 using Модуль_13_ДЗ.DataServices;
+
 
 namespace Модуль_13_ДЗ.ViewModels
 {
@@ -13,13 +15,13 @@ namespace Модуль_13_ДЗ.ViewModels
         public AllLogsViewModel(ILogsService service)
         {
             this.service = service;
-            Log = service.GetList();
+            Log = new ObservableCollection<LogViewModel>(service.GetList());
         }
 
         /// <summary>
         /// Коллекция сообщения логов
         /// </summary>
-        public IList<LogViewModel> Log { get; set; }
+        public ObservableCollection<LogViewModel> Log { get; set; }
 
         /// <summary>
         /// Репозиторий лога оперции

@@ -1,25 +1,28 @@
 ﻿using System;
-using System.Windows;
-using ModelLib;
+using Модуль_13_ДЗ.Dialogs;
 
-namespace Модуль_13_ДЗ
+namespace Модуль_13_ДЗ.Mediators
 {
     /// <summary>
     /// Посредник транзакции между клиентом и счетом
     /// </summary>
-    class AccountToClientMediator : TransactionMediator
+    public class AccountToClientMediator : TransactionMediator
     {
-        /// <summary>
-        /// Флаг указывающий на операцию снятия со счета
-        /// </summary>
-        public bool IsWithdraw { get; private set; }
+        public AccountToClientMediator(IWindow window, DialogAccountToClientViewModel dialogVM, bool isWithdraw = false)
+           : base(window)
+        {
+            if (dialogVM == null)
+                throw new ArgumentNullException("dialogVM");
 
-        public AccountToClientMediator(ITransactable client, ITransactable account, bool isWithdraw = false)
-        {            
-            IsWithdraw = isWithdraw;            
-            Sender = client;
-            Reciever = account;            
+            this.dialogVM = dialogVM;
+
+            Sender = dialogVM.SelectedClient;
+            Reciever = dialogVM.SelectedAccount;
         }
+
+        private readonly DialogAccountToClientViewModel dialogVM;
+
+        public bool IsWithdraw { get { return dialogVM.Data.IsWithdraw; } }
 
         /// <summary>
         /// Метод проводящий транзакцию
@@ -31,13 +34,9 @@ namespace Модуль_13_ДЗ
 
             if (Reciever.BadHistory)
                 throw new TransactionFailureException($"Счет {Reciever.Name} заблокирован!");
+                       
 
-            string label = IsWithdraw ? "Снятие со счета" : "Пополнение счета";
-
-            DialogViewModel dialogVM = new DialogViewModel(label, Reciever.AmountAvailable, IsWithdraw);
-            DialogWindow dialogWindow = new DialogWindow(dialogVM, label);
-
-            if (dialogWindow.ShowDialog() == true)
+            if (window.ShowDialog() == true)
             {
                 if (IsWithdraw)
                 {
@@ -52,6 +51,11 @@ namespace Модуль_13_ДЗ
                     Log = $"{Sender.Name} пополнил счет {Reciever.Name} на сумму: {dialogVM.Amount}";
                 }
             }          
+        }
+
+        public override object GetReciever()
+        {
+            return dialogVM.SelectedAccount;
         }
     }
 }

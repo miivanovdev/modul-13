@@ -8,6 +8,7 @@ using System.Windows;
 using System.Configuration;
 using ModelLib;
 using Модуль_13_ДЗ.DataServices;
+using Модуль_13_ДЗ.Mediators;
 
 namespace Модуль_13_ДЗ.ViewModels
 {
@@ -21,11 +22,15 @@ namespace Модуль_13_ДЗ.ViewModels
         /// и обертку их в модель представление
         /// </summary>
         /// <param name="repository"></param>
-        public AllAccountsViewModel(IAccountsService service, List<DepartmentsViewModel> departments)
+        public AllAccountsViewModel(IAccountsService service, IAccountMediatorsFactory mediatorsFactory)
         {
-            this.departments = departments;
+            if (service == null || mediatorsFactory == null)
+                throw new ArgumentNullException(service == null ? "service" : "mediatorsFactory");
+
             this.serivce = service;
+            MediatorsFactory = mediatorsFactory;
             Accounts = serivce.GetList();
+            MediatorsFactory.Accounts = Accounts;
         }
 
         /// <summary>
@@ -34,11 +39,14 @@ namespace Модуль_13_ДЗ.ViewModels
         private readonly IAccountsService serivce;
 
         /// <summary>
+        /// Фабрика посредников
+        /// </summary>
+        private IAccountMediatorsFactory MediatorsFactory { get; set; } 
+
+        /// <summary>
         /// Коллекция счетов
         /// </summary>
         public List<AccountsViewModel> Accounts { get; set; }
-
-        private readonly List<DepartmentsViewModel> departments;
 
         /// <summary>
         /// Отфильтрованное по департаменту и клиенту представление счетов
@@ -176,7 +184,7 @@ namespace Модуль_13_ДЗ.ViewModels
                                                                 SelectedDepartment.InterestRate,
                                                                 SelectedDepartment.DepartmentId,
                                                                 SelectedDepartment.MinTerm,
-                                                                SelectedDepartment.Departments.AccountTypes.First().Id);
+                                                                SelectedDepartment.DefaultAccountType);
                 
                 SelectedClient.Amount = 0;
                 
@@ -227,7 +235,7 @@ namespace Модуль_13_ДЗ.ViewModels
         {
             try
             {
-                var mediator = new AccountToClientMediator(SelectedClient, SelectedAccount, true);
+                var mediator = MediatorsFactory.Create(nameof(Withdraw), SelectedAccount, SelectedClient);
                 mediator.Transaction();
                 serivce.Update(SelectedAccount);
                 accountChangedEvent?.Invoke(this, mediator.Log);
@@ -243,16 +251,16 @@ namespace Модуль_13_ДЗ.ViewModels
 
         }
 
-        private RelayCommand addCommand;
+        private RelayCommand depositCommand;
         /// <summary>
         /// Команда внесения средств на счет
         /// </summary>
-        public RelayCommand AddCommand
+        public RelayCommand DepositCommand
         {
             get
             {
-                return addCommand ??
-                (addCommand = new RelayCommand(new Action<object>(Add), new Func<object, bool>(AccountCanBeAdd)));
+                return depositCommand ??
+                (depositCommand = new RelayCommand(new Action<object>(Deposit), new Func<object, bool>(AccountCanBeAdd)));
             }
         }
 
@@ -272,11 +280,11 @@ namespace Модуль_13_ДЗ.ViewModels
         /// Вызов поплнения счета
         /// </summary>
         /// <param name="sender"></param>
-        private void Add(object sender)
+        private void Deposit(object sender)
         {
             try
             {
-                var mediator = new AccountToClientMediator(SelectedClient, SelectedAccount);
+                var mediator = MediatorsFactory.Create(nameof(Deposit), SelectedAccount, SelectedClient);
                 mediator.Transaction();
                 serivce.Update(SelectedAccount);
                 accountChangedEvent?.Invoke(this, mediator.Log);
@@ -317,12 +325,12 @@ namespace Модуль_13_ДЗ.ViewModels
         /// <param name="sender"></param>
         private void Transact(object sender)
         {
-            var mediator = new AccountToAccountMediator(departments, Accounts.Where(x => x != SelectedAccount).ToList(), SelectedAccount);
+            var mediator = MediatorsFactory.Create(nameof(Transact), SelectedAccount);
 
             try
             {    
                 mediator.Transaction();
-                serivce.UpdateRange(new AccountsViewModel[]{ SelectedAccount, mediator.RecieverAccount });
+                serivce.UpdateRange(new AccountsViewModel[]{ SelectedAccount, (AccountsViewModel)mediator.GetReciever() });
                 accountChangedEvent?.Invoke(this, mediator.Log);
             }        
             catch (Exception ex)

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Модуль_13_ДЗ.ViewModels;
+using Модуль_13_ДЗ.Dialogs;
 using ModelLib;
 
 namespace Модуль_13_ДЗ.DataServices
@@ -12,7 +13,7 @@ namespace Модуль_13_ДЗ.DataServices
     {
         public AccountsService(IRepository<Accounts> repository)
         {
-            this.repository = repository;  
+            this.repository = repository;
         }
 
         private readonly IRepository<Accounts> repository;

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Input;
-using Модуль_13_ДЗ.Factories;
 
 namespace Модуль_13_ДЗ
 {
@@ -29,10 +28,10 @@ namespace Модуль_13_ДЗ
             base.Close();
         }
 
-        public override IWindow CreateChild(object viewModel)
+        public override IWindow CreateChild(object viewModel, Window window)
         {
             this.EnsureInitialized();
-            return base.CreateChild(viewModel);
+            return base.CreateChild(viewModel, window);
         }
 
         public override void Show()

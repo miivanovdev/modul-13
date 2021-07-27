@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace ModelLib
+namespace Модуль_13_ДЗ.Mediators
 {
     /// <summary>
     /// Исключение возникающее при срыве транзакции

@@ -2,36 +2,37 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ModelLib;
 using Модуль_13_ДЗ.ViewModels;
+using Модуль_13_ДЗ.Mediators;
 
-namespace Модуль_13_ДЗ
+namespace Модуль_13_ДЗ.Dialogs
 {
-    public class TransactionViewModel : ObservableObject
+    public class DialogTransactionViewModel : ObservableObject
     {
-        public TransactionViewModel(List<DepartmentsViewModel> departments, List<AccountsViewModel> accounts, decimal CurrentAmount)
+        public DialogTransactionViewModel(IEnumerable<DepartmentsViewModel> departments, IEnumerable<AccountsViewModel> accounts, AccountsViewModel sender)
         {
-            if (accounts == null || departments == null || CurrentAmount == 0)
+            if (accounts == null || departments == null || sender.AmountAvailable == 0)
                 throw new TransactionFailureException("Неверно переданы счета или отсутствует счет отправитель!");
 
             this.Departments = departments;
             SelectedDepartment = departments.First();
             this.Accounts = accounts;
-            Data = new DialogDataModel("Перевод", CurrentAmount, true);
+            Data = new DialogAccountToClientModel(sender.AmountAvailable, true);
+            SenderAccount = sender;
         }
+        public AccountsViewModel SenderAccount { get; set; }
 
         public decimal Amount { get { return Data.Amount; } }
 
-        public DialogDataModel Data { get; set; }
+        public DialogAccountToClientModel Data { get; set; }
 
         /// <summary>
         /// Все счета
         /// </summary>
-        private List<AccountsViewModel> Accounts;
+        private IEnumerable<AccountsViewModel> Accounts;
 
-        public List<DepartmentsViewModel> Departments { get; private set; }
+        public IEnumerable<DepartmentsViewModel> Departments { get; private set; }
 
         /// <summary>
         /// Отфильтрованные счета
@@ -61,7 +62,7 @@ namespace Модуль_13_ДЗ
 
         private List<AccountsViewModel> GetSubset()
         {
-            return Accounts.Where(x => x.DepartmentId == SelectedDepartment.DepartmentId).ToList();
+            return Accounts.Where(x => x.DepartmentId == SelectedDepartment.DepartmentId && x != SenderAccount).ToList();
         }
 
         /// <summary>
@@ -81,24 +82,24 @@ namespace Модуль_13_ДЗ
             }
         }
 
-        private AccountsViewModel selectedAccount;
+        private AccountsViewModel recieverAccount;
         /// <summary>
         /// Выбранный счет получатель
         /// </summary>
-        public AccountsViewModel SelectedAccount
+        public AccountsViewModel RecieverAccount
         {
             get
             {
-                return selectedAccount;
+                return recieverAccount;
             }
             set
             {
-                if (selectedAccount == value)
+                if (recieverAccount == value)
                     return;
 
-                selectedAccount = value;
-                Data.TotalAmount = selectedAccount.Amount;
-                NotifyPropertyChanged(nameof(SelectedAccount));
+                recieverAccount = value;
+                Data.TotalAmount = recieverAccount.Amount;
+                NotifyPropertyChanged(nameof(RecieverAccount));
             }
         }
 
@@ -133,7 +134,7 @@ namespace Модуль_13_ДЗ
         /// <returns></returns>
         private bool CanClose(object o)
         {
-            return SelectedAccount != null &&
+            return RecieverAccount != null &&
                    Data.IsValid;
         }
     }

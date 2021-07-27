@@ -5,6 +5,7 @@ using System.Windows;
 using System.Collections.ObjectModel;
 using ModelLib;
 using Модуль_13_ДЗ.DataServices;
+using Модуль_13_ДЗ.Dialogs;
 
 namespace Модуль_13_ДЗ.ViewModels
 {

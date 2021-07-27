@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ModelLib
+namespace Модуль_13_ДЗ.Mediators
 {
     /// <summary>
     /// Поведение сущности участника транзакции

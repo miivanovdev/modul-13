@@ -14,23 +14,26 @@ namespace Модуль_13_ДЗ.ViewModels
     {
         public DepartmentsViewModel(Departments bankDepartment)
         {
-            Departments = bankDepartment;
+            departments = bankDepartment;
         }
 
         /// <summary>
         /// Модель счета
         /// </summary>
-        public Departments Departments { get; set; }
+        private readonly Departments departments;
+
+
+        public Departments Departments { get { return departments; } }
 
         /// <summary>
         /// Наименование департамента
         /// </summary>
         public string Name
         {
-            get { return Departments.Name; }
+            get { return departments.Name; }
             set
             {
-                if (Departments.Name == value)
+                if (departments.Name == value)
                     return;
 
                 NotifyPropertyChanged(nameof(Name));
@@ -42,10 +45,10 @@ namespace Модуль_13_ДЗ.ViewModels
         /// </summary>
         public decimal InterestRate
         {
-            get { return Departments.InterestRate; }
+            get { return departments.InterestRate; }
             set
             {
-                if (Departments.InterestRate == value)
+                if (departments.InterestRate == value)
                     return;
 
                 NotifyPropertyChanged(nameof(InterestRate));
@@ -57,10 +60,10 @@ namespace Модуль_13_ДЗ.ViewModels
         /// </summary>
         public int MinTerm
         {
-            get { return Departments.MinTerm; }
+            get { return departments.MinTerm; }
             set
             {
-                if (Departments.MinTerm == value)
+                if (departments.MinTerm == value)
                     return;
 
                 NotifyPropertyChanged(nameof(MinTerm));
@@ -72,10 +75,10 @@ namespace Модуль_13_ДЗ.ViewModels
         /// </summary>
         public decimal MinAmount
         {
-            get { return Departments.MinAmount; }
+            get { return departments.MinAmount; }
             set
             {
-                if (Departments.MinAmount == value)
+                if (departments.MinAmount == value)
                     return;
 
                 NotifyPropertyChanged(nameof(MinAmount));
@@ -85,7 +88,9 @@ namespace Модуль_13_ДЗ.ViewModels
         /// <summary>
         /// Идентификатор департамента
         /// </summary>
-        public int DepartmentId { get { return Departments.Id; } }
+        public int DepartmentId { get { return departments.Id; } }
+
+        public int DefaultAccountType { get { return departments.AccountTypes.First().Id; } }
 
     }
 }

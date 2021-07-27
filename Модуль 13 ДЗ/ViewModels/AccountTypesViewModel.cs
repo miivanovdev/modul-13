@@ -13,20 +13,22 @@ namespace Модуль_13_ДЗ.ViewModels
     {
         public AccountTypesViewModel(AccountTypes accountTypes)
         {
-            AccountTypes = accountTypes;
+            this.accountTypes = accountTypes;
         }
 
-        public AccountTypes AccountTypes { get; set; }
+        private readonly AccountTypes accountTypes;
+
+        public AccountTypes AccountTypes { get { return accountTypes; } }
 
         public int AccountTypesId
         {
-            get { return AccountTypes.Id; }
+            get { return accountTypes.Id; }
             set
             {
-                if (value == AccountTypes.Id)
+                if (value == accountTypes.Id)
                     return;
 
-                AccountTypes.Id = value;
+                accountTypes.Id = value;
 
                 NotifyPropertyChanged(nameof(AccountTypesId));
             }
@@ -34,13 +36,13 @@ namespace Модуль_13_ДЗ.ViewModels
 
         public string Name
         {
-            get { return AccountTypes.Name; }
+            get { return accountTypes.Name; }
             set
             {
-                if (value == AccountTypes.Name)
+                if (value == accountTypes.Name)
                     return;
 
-                AccountTypes.Name = value;
+                accountTypes.Name = value;
                 
                 NotifyPropertyChanged(nameof(Name));
             }
@@ -48,13 +50,13 @@ namespace Модуль_13_ДЗ.ViewModels
 
         public bool CanAdded
         {
-            get { return AccountTypes.CanAdded; }
+            get { return accountTypes.CanAdded; }
             set
             {
-                if (value == AccountTypes.CanAdded)
+                if (value == accountTypes.CanAdded)
                     return;
 
-                AccountTypes.CanAdded = value;
+                accountTypes.CanAdded = value;
 
                 if (value == false)
                     AddingDependsOnMinTerm = false;
@@ -65,13 +67,13 @@ namespace Модуль_13_ДЗ.ViewModels
 
         public bool CanWithdrawed
         {
-            get { return AccountTypes.CanWithdrawed; }
+            get { return accountTypes.CanWithdrawed; }
             set
             {
-                if (value == AccountTypes.CanWithdrawed)
+                if (value == accountTypes.CanWithdrawed)
                     return;
 
-                AccountTypes.CanWithdrawed = value;
+                accountTypes.CanWithdrawed = value;
 
                 if (value == false)
                     WithdrawingDependsOnMinTerm = false;
@@ -82,13 +84,13 @@ namespace Модуль_13_ДЗ.ViewModels
 
         public bool CanClose
         {
-            get { return AccountTypes.CanClose; }
+            get { return accountTypes.CanClose; }
             set
             {
-                if (value == AccountTypes.CanClose)
+                if (value == accountTypes.CanClose)
                     return;
 
-                AccountTypes.CanClose = value;
+                accountTypes.CanClose = value;
 
                 if (value == false)
                     ClosingDependsOnMinTerm = false;
@@ -99,13 +101,13 @@ namespace Модуль_13_ДЗ.ViewModels
 
         public bool AddingDependsOnMinTerm
         {
-            get { return AccountTypes.AddingDependsOnMinTerm; }
+            get { return accountTypes.AddingDependsOnMinTerm; }
             set
             {
-                if (value == AccountTypes.AddingDependsOnMinTerm)
+                if (value == accountTypes.AddingDependsOnMinTerm)
                     return;                    
 
-                AccountTypes.AddingDependsOnMinTerm = value;
+                accountTypes.AddingDependsOnMinTerm = value;
 
                 NotifyPropertyChanged(nameof(AddingDependsOnMinTerm));
             }
@@ -113,13 +115,13 @@ namespace Модуль_13_ДЗ.ViewModels
 
         public bool WithdrawingDependsOnMinTerm
         {
-            get { return AccountTypes.WithdrawingDependsOnMinTerm; }
+            get { return accountTypes.WithdrawingDependsOnMinTerm; }
             set
             {
-                if (value == AccountTypes.WithdrawingDependsOnMinTerm)
+                if (value == accountTypes.WithdrawingDependsOnMinTerm)
                     return;
 
-                AccountTypes.WithdrawingDependsOnMinTerm = value;
+                accountTypes.WithdrawingDependsOnMinTerm = value;
 
                 NotifyPropertyChanged(nameof(WithdrawingDependsOnMinTerm));
             }
@@ -127,13 +129,13 @@ namespace Модуль_13_ДЗ.ViewModels
 
         public bool ClosingDependsOnMinTerm
         {
-            get { return AccountTypes.ClosingDependsOnMinTerm; }
+            get { return accountTypes.ClosingDependsOnMinTerm; }
             set
             {
-                if (value == AccountTypes.ClosingDependsOnMinTerm)
+                if (value == accountTypes.ClosingDependsOnMinTerm)
                     return;
 
-                AccountTypes.ClosingDependsOnMinTerm = value;
+                accountTypes.ClosingDependsOnMinTerm = value;
 
                 NotifyPropertyChanged(nameof(ClosingDependsOnMinTerm));
             }
@@ -141,13 +143,13 @@ namespace Модуль_13_ДЗ.ViewModels
 
         public bool IsCapitalized
         {
-            get { return AccountTypes.IsCapitalized; }
+            get { return accountTypes.IsCapitalized; }
             set
             {
-                if (value == AccountTypes.IsCapitalized)
+                if (value == accountTypes.IsCapitalized)
                     return;
 
-                AccountTypes.IsCapitalized = value;
+                accountTypes.IsCapitalized = value;
 
                 NotifyPropertyChanged(nameof(IsCapitalized));
             }
@@ -155,13 +157,13 @@ namespace Модуль_13_ДЗ.ViewModels
 
         public bool AllowedRevision
         {
-            get { return AccountTypes.AllowedRevision; }
+            get { return accountTypes.AllowedRevision; }
             set
             {
-                if (value == AccountTypes.AllowedRevision)
+                if (value == accountTypes.AllowedRevision)
                     return;
 
-                AccountTypes.AllowedRevision = value;
+                accountTypes.AllowedRevision = value;
 
                 NotifyPropertyChanged(nameof(AllowedRevision));
             }
@@ -169,13 +171,13 @@ namespace Модуль_13_ДЗ.ViewModels
 
         public int? DepartmentsRefId
         {
-            get { return AccountTypes.DepartmentsRefId; }
+            get { return accountTypes.DepartmentsRefId; }
             set
             {
-                if (value == AccountTypes.DepartmentsRefId)
+                if (value == accountTypes.DepartmentsRefId)
                     return;
 
-                AccountTypes.DepartmentsRefId = value;
+                accountTypes.DepartmentsRefId = value;
 
                 NotifyPropertyChanged(nameof(DepartmentsRefId));
             }
@@ -246,7 +248,7 @@ namespace Модуль_13_ДЗ.ViewModels
                     ClosingDependsOnMinTerm         = this.ClosingDependsOnMinTerm,
                     WithdrawingDependsOnMinTerm     = this.WithdrawingDependsOnMinTerm,
                     IsCapitalized                   = this.IsCapitalized,
-                    DepartmentsRefId                = this.AccountTypes.DepartmentsRefId
+                    DepartmentsRefId                = this.accountTypes.DepartmentsRefId
                 };
         }
 
@@ -263,7 +265,7 @@ namespace Модуль_13_ДЗ.ViewModels
             this.ClosingDependsOnMinTerm        = OriginAccountTypes.ClosingDependsOnMinTerm;
             this.WithdrawingDependsOnMinTerm    = OriginAccountTypes.WithdrawingDependsOnMinTerm;
             this.IsCapitalized                  = OriginAccountTypes.IsCapitalized;
-            this.AccountTypes.DepartmentsRefId  = OriginAccountTypes.DepartmentsRefId;
+            this.accountTypes.DepartmentsRefId  = OriginAccountTypes.DepartmentsRefId;
         }
 
         public void EndEdit()

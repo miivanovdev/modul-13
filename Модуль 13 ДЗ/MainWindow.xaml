@@ -6,7 +6,7 @@
         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         xmlns:local="clr-namespace:Модуль_13_ДЗ"
         mc:Ignorable="d"
-        Title="Банк" Height="450" Width="1100">
+        Title="Банк" Height="500" Width="1200">
 
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Closing">
@@ -332,6 +332,7 @@
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellEditingTemplate>
                                 </DataGridTemplateColumn>
+                                <DataGridCheckBoxColumn Header="Плохая история" Binding="{Binding BadHistory}"/>
                                 <DataGridTextColumn Header="Итого" Binding="{Binding Income}" IsReadOnly="True" Width="100"/>
                             </DataGrid.Columns>
                             <DataGrid.ContextMenu>
@@ -339,7 +340,7 @@
                                     <MenuItem Header="Открыть счет" Command="{Binding AllAccountsViewModel.OpenAccountCommand}" />
                                     <MenuItem Header="Закрыть счет" Command="{Binding AllAccountsViewModel.CloseAccountCommand}" />
                                     <MenuItem Header="Снять со счета" Command="{Binding AllAccountsViewModel.WithdrawCommand}" />
-                                    <MenuItem Header="Внести на счет" Command="{Binding AllAccountsViewModel.AddCommand}" />
+                                    <MenuItem Header="Внести на счет" Command="{Binding AllAccountsViewModel.DepositCommand}" />
                                     <MenuItem Header="Перевод на счет" Command="{Binding AllAccountsViewModel.TransactCommand}" />
                             </ContextMenu>
                         </DataGrid.ContextMenu>
@@ -442,7 +443,7 @@
                               >
                     <ListView.View>
                         <GridView>
-                            <GridViewColumn Header="Событие" DisplayMemberBinding="{Binding LogMessage}" Width="650"/>
+                            <GridViewColumn Header="Событие" DisplayMemberBinding="{Binding LogMessage}" Width="800"/>
                             <GridViewColumn Header="Время" DisplayMemberBinding="{Binding Time}"/>
                         </GridView>
                     </ListView.View>

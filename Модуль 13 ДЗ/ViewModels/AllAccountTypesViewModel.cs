@@ -119,7 +119,7 @@ namespace Модуль_13_ДЗ.ViewModels
         {
             try
             {
-                service.Delete(SelectedType.AccountTypes.Id);
+                service.Delete(SelectedType.AccountTypesId);
 
                 if (!AccountTypes.Remove(SelectedType))
                     throw new Exception("Не удалось удалить тип счета!");

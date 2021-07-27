@@ -2,8 +2,9 @@
 using Модуль_13_ДЗ.ViewModels;
 using Модуль_13_ДЗ.DataServices;
 using Модуль_13_ДЗ.Repos;
+using Модуль_13_ДЗ.Mediators;
 
-namespace Модуль_13_ДЗ.Factories
+namespace Модуль_13_ДЗ
 {
     public class MainWindowViewModelFactory : IMainWindowViewModelFactory
     {
@@ -49,14 +50,13 @@ namespace Модуль_13_ДЗ.Factories
             vm.AllAccountsViewModel = new AllAccountsViewModel(
                                             new AccountsService(
                                                 new AccountsEntityRepository(context)),
-                                            vm.AllDepartmentsViewModel.Departments);
+                                            new AccountMediatorsFactory(window, vm.AllDepartmentsViewModel.Departments));
 
             vm.AllAccountTypesViewModel = new AllAccountTypesViewModel(
                                             new AccountTypesService(
                                                 new AccountTypesEntityRepository(context)));
 
             vm.AllLogsViewModel = new AllLogsViewModel(new LogsDataService(new LogEntityRepository(context)));
-
 
             vm.AllAccountsViewModel.SelectedClient = vm.AllClientsViewModel.SelectedClient;
             vm.AllAccountsViewModel.SelectedDepartment = vm.AllDepartmentsViewModel.SelectedDepartment;

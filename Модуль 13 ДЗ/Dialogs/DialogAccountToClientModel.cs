@@ -5,18 +5,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Модуль_13_ДЗ
+namespace Модуль_13_ДЗ.Dialogs
 {
-    public class DialogDataModel : IDataErrorInfo
+    public class DialogAccountToClientModel : IDataErrorInfo
     {
-        public DialogDataModel(string label, decimal totalAmount, bool isWithdraw)
+        public DialogAccountToClientModel(decimal totalAmount, bool isWithdraw)
         {
             TotalAmount = totalAmount;
             IsWithdraw = isWithdraw;
-            Label = label;
         }
 
-        public string Label { get; set; }
         private decimal amount;
         public decimal Amount
         {

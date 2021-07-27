@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using ModelLib;
+using Модуль_13_ДЗ.Mediators;
 
 namespace Модуль_13_ДЗ.ViewModels
 {
@@ -11,34 +12,36 @@ namespace Модуль_13_ДЗ.ViewModels
     {
         public AccountsViewModel(Accounts bankAccount)
         {
-            Accounts = bankAccount;
+            accounts = bankAccount;
             CurrentDate = DateTime.Now;
         }
 
         /// <summary>
         /// Модель счета
         /// </summary>
-        public Accounts Accounts { get; private set; }
+        private readonly Accounts accounts;
+
+        public Accounts Accounts { get { return accounts; } }
 
         /// <summary>
         /// Идентификатор счета
         /// </summary>
-        public int AccountId { get { return Accounts.Id; }  }
+        public int AccountId { get { return accounts.Id; }  }
 
         /// <summary>
         /// Идентификатор владельца
         /// </summary>
-        public int OwnerId { get { return Accounts.ClientsRefId; } }
+        public int OwnerId { get { return accounts.ClientsRefId; } }
 
         /// <summary>
         /// Имя владельца
         /// </summary>
-        public string OwnerName { get { return Accounts.ClientsName; } }
+        public string OwnerName { get { return accounts.ClientsName; } }
 
         /// <summary>
         /// Дата создания
         /// </summary>
-        public DateTime CreatedDate { get { return Accounts.CreatedDate; } }
+        public DateTime CreatedDate { get { return accounts.CreatedDate; } }
                 
         /// <summary>
         /// Минимальный срок вклада в месяцах
@@ -47,14 +50,14 @@ namespace Модуль_13_ДЗ.ViewModels
         {
             get
             {
-                return Accounts.MinTerm;
+                return accounts.MinTerm;
             }
             set
             {
-                if (Accounts.MinTerm == value)
+                if (accounts.MinTerm == value)
                     return;
 
-                Accounts.MinTerm = value;
+                accounts.MinTerm = value;
                 NotifyPropertyChanged(nameof(MinTerm));
                 NotifyPropertyChanged(nameof(Income));
             }
@@ -63,20 +66,20 @@ namespace Модуль_13_ДЗ.ViewModels
         /// <summary>
         /// Идентификатор департамента
         /// </summary>
-        public int? DepartmentId { get { return Accounts.DepartmentsRefId; } }
+        public int? DepartmentId { get { return accounts.DepartmentsRefId; } }
 
         /// <summary>
         /// Идентификатор типа счета
         /// </summary>
         public int AccountTypesId
         {
-            get { return Accounts.AccountTypesId; }
+            get { return accounts.AccountTypesId; }
             set
             {
-                if (value == Accounts.AccountTypesId)
+                if (value == accounts.AccountTypesId)
                     return;
 
-                Accounts.AccountTypesId = value;
+                accounts.AccountTypesId = value;
 
                 NotifyPropertyChanged(nameof(AccountTypesId));
             }
@@ -87,7 +90,7 @@ namespace Модуль_13_ДЗ.ViewModels
         /// </summary>
         public virtual string Name
         {
-            get { return $"{Accounts.AccountTypes.Name} на имя {Accounts.ClientsName} - Id {Accounts.ClientsRefId}"; }
+            get { return $"{accounts.AccountTypes.Name} на имя {accounts.ClientsName} - Id {accounts.ClientsRefId}"; }
         }
 
         /// <summary>
@@ -97,9 +100,9 @@ namespace Модуль_13_ДЗ.ViewModels
         {
             get
             {
-                if(Accounts.AccountTypes.CanWithdrawed)
+                if(accounts.AccountTypes.CanWithdrawed)
                 {
-                    if(Accounts.AccountTypes.WithdrawingDependsOnMinTerm)
+                    if(accounts.AccountTypes.WithdrawingDependsOnMinTerm)
                     {
                         return CreatedDate.AddMonths(MinTerm) <= CurrentDate;
                     }
@@ -118,9 +121,9 @@ namespace Модуль_13_ДЗ.ViewModels
         {
             get
             {
-                if (Accounts.AccountTypes.CanAdded)
+                if (accounts.AccountTypes.CanAdded)
                 {
-                    if (Accounts.AccountTypes.AddingDependsOnMinTerm)
+                    if (accounts.AccountTypes.AddingDependsOnMinTerm)
                     {
                         return CreatedDate.AddMonths(MinTerm) <= CurrentDate;
                     }
@@ -139,9 +142,9 @@ namespace Модуль_13_ДЗ.ViewModels
         {
             get
             {
-                if (Accounts.AccountTypes.CanClose)
+                if (accounts.AccountTypes.CanClose)
                 {
-                    if (Accounts.AccountTypes.ClosingDependsOnMinTerm)
+                    if (accounts.AccountTypes.ClosingDependsOnMinTerm)
                     {
                         return CreatedDate.AddMonths(MinTerm) <= CurrentDate;
                     }
@@ -160,14 +163,14 @@ namespace Модуль_13_ДЗ.ViewModels
         {
             get
             {
-                return Accounts.Amount;
+                return accounts.Amount;
             }
             set
             {
-                if (Accounts.Amount == value)
+                if (accounts.Amount == value)
                     return;
 
-                Accounts.Amount = value;
+                accounts.Amount = value;
                 NotifyPropertyChanged(nameof(Amount));
                 NotifyPropertyChanged(nameof(Income));
             }
@@ -176,7 +179,7 @@ namespace Модуль_13_ДЗ.ViewModels
         /// <summary>
         /// Доступно средств
         /// </summary>
-        public decimal AmountAvailable { get { return Accounts.Amount; } }
+        public decimal AmountAvailable { get { return accounts.Amount; } }
 
         private DateTime currentDate;
         /// <summary>
@@ -204,13 +207,13 @@ namespace Модуль_13_ДЗ.ViewModels
         /// </summary>
         public decimal InterestRate
         {
-            get { return Accounts.InterestRate; }
+            get { return accounts.InterestRate; }
             set
             {
-                if (Accounts.InterestRate == value)
+                if (accounts.InterestRate == value)
                     return;
 
-                Accounts.InterestRate = value;
+                accounts.InterestRate = value;
 
                 NotifyPropertyChanged(nameof(InterestRate));
                 NotifyPropertyChanged(nameof(Income));
@@ -250,7 +253,7 @@ namespace Модуль_13_ДЗ.ViewModels
         /// <returns></returns>
         protected virtual decimal CountIncome()
         {
-            if(Accounts.AccountTypes.IsCapitalized && MonthPassed >= 0)
+            if(accounts.AccountTypes.IsCapitalized && MonthPassed >= 0)
                 return Capitalized(Amount, MonthPassed);
 
             if (MonthPassed == MinTerm || MonthPassed % MinTerm == 0)

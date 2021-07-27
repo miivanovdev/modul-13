@@ -29,9 +29,9 @@ namespace Модуль_13_ДЗ
             this.wpfWindow.Close();
         }
 
-        public virtual IWindow CreateChild(object viewModel)
+        public virtual IWindow CreateChild(object viewModel, Window window)
         {
-            var cw = new Window();
+            var cw = window;
             cw.Owner = this.wpfWindow;
             cw.DataContext = viewModel;
             WindowAdapter.ConfigureBehavior(cw);

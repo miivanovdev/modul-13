@@ -60,12 +60,9 @@
     <Compile Include="Departments.cs" />
     <Compile Include="EntityBase.cs" />
     <Compile Include="IRepository.cs" />
-    <Compile Include="ITransactable.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="ObservableObject.cs" />
-    <Compile Include="TransactionFailureException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TransactionMediator.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

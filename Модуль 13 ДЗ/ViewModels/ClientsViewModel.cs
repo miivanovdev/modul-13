@@ -1,6 +1,7 @@
 ﻿using System;
 using ModelLib;
 using System.ComponentModel;
+using Модуль_13_ДЗ.Mediators;
 
 namespace Модуль_13_ДЗ.ViewModels
 {
@@ -11,13 +12,15 @@ namespace Модуль_13_ДЗ.ViewModels
     {
         public ClientsViewModel(Clients client)
         {
-            Clients = client;
+            clients = client;
         }
 
         /// <summary>
         /// Модель клиента
         /// </summary>
-        public Clients Clients { get; private set; }
+        private readonly Clients clients;
+
+        public Clients Clients { get { return clients; } }
 
         /// <summary>
         /// Флаг указывающий на наличие у клиента 
@@ -30,13 +33,13 @@ namespace Модуль_13_ДЗ.ViewModels
         /// </summary>
         public string FirstName
         {
-            get { return Clients.FirstName; }
+            get { return clients.FirstName; }
             set
             {
-                if (Clients.FirstName == value)
+                if (clients.FirstName == value)
                     return;
 
-                Clients.FirstName = value;
+                clients.FirstName = value;
                 NotifyPropertyChanged(nameof(FirstName));
             }
         }
@@ -46,13 +49,13 @@ namespace Модуль_13_ДЗ.ViewModels
         /// </summary>
         public string Surname
         {
-            get { return Clients.Surname; }
+            get { return clients.Surname; }
             set
             {
-                if (Clients.Surname == value)
+                if (clients.Surname == value)
                     return;
 
-                Clients.Surname = value;
+                clients.Surname = value;
                 NotifyPropertyChanged(nameof(Surname));
             }
         }
@@ -62,13 +65,13 @@ namespace Модуль_13_ДЗ.ViewModels
         /// </summary>
         public string SecondName
         {
-            get { return Clients.SecondName; }
+            get { return clients.SecondName; }
             set
             {
-                if (Clients.SecondName == value)
+                if (clients.SecondName == value)
                     return;
 
-                Clients.SecondName = value;
+                clients.SecondName = value;
                 NotifyPropertyChanged(nameof(SecondName));
             }
         }
@@ -78,7 +81,7 @@ namespace Модуль_13_ДЗ.ViewModels
         /// </summary>
         public int ClientId
         {
-            get { return Clients.Id; }
+            get { return clients.Id; }
         }
 
         /// <summary>
@@ -86,13 +89,13 @@ namespace Модуль_13_ДЗ.ViewModels
         /// </summary>
         public decimal Amount
         {
-            get { return Clients.Amount; }
+            get { return clients.Amount; }
             set
             {
-                if (Clients.Amount == value)
+                if (clients.Amount == value)
                     return;
 
-                Clients.Amount = Math.Abs(value);
+                clients.Amount = Math.Abs(value);
                 NotifyPropertyChanged(nameof(Amount));
             }
         }
@@ -100,20 +103,20 @@ namespace Модуль_13_ДЗ.ViewModels
         /// <summary>
         /// Доступная клиенту сумма
         /// </summary>
-        public decimal AmountAvailable { get { return Clients.Amount; } }
+        public decimal AmountAvailable { get { return clients.Amount; } }
         
         /// <summary>
         /// Клиент заблокирован
         /// </summary>
         public bool BadHistory
         {
-            get { return Clients.BadHistory; }
+            get { return clients.BadHistory; }
             set
             {
-                if (Clients.BadHistory == value)
+                if (clients.BadHistory == value)
                     return;
 
-                Clients.BadHistory = value;
+                clients.BadHistory = value;
                 NotifyPropertyChanged(nameof(BadHistory));
             }
         }

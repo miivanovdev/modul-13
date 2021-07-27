@@ -22,7 +22,7 @@ namespace Модуль_13_ДЗ.ViewModels
 
         RelayCommand OpenAccountCommand { get; }
         RelayCommand WithdrawCommand { get; }
-        RelayCommand AddCommand { get; }
+        RelayCommand DepositCommand { get; }
         RelayCommand TransactCommand { get; }
         RelayCommand CloseAccountCommand { get; }
 
